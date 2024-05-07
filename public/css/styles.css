@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
+
+body {
+    font-family: "Montserrat", sans-serif;
+
+}
+
+
+header {
+    z-index: 999;
+    background-color: white;
+
+    a {
+        font-size: 18px;
+        font-weight: 400;
+        text-align: center;
+        text-decoration: none;
+        color: hwb(2 15% 9%);
+        color: #9b9b9b;
+        display: block;
+    }
+
+    a.active {
+        color: #e72c25;
+    }
+
+    .logo img {
+        max-width: 260px;
+
+        @media (max-width:767px) {
+            max-width: 160px;
+        }
+
+        @media (max-width:575px) {
+            max-width: 110px;
+        }
+    }
+
+    .menus {
+        transition: all 0.5s ease-in-out;
+
+        @media (max-width:991px) {
+            position: fixed;
+            top: 60px;
+            background-color: white;
+            z-index: 999;
+            width: 0;
+            height: 100vh;
+            display: none;
+            left: -100%;
+        }
+
+        ul {
+            list-style: none;
+            @media (max-width:991px) {
+                flex-direction: column;
+                width: 100%;
+                padding-top: 20px;
+            }
+        }
+    }
+
+    .menus.active {
+        transition: all 0.5s ease-in-out;
+        display: block;
+        left: 0;
+        width: 100%;
+    }
+
+    .btn-red {
+        @media (max-width:767px) {
+            font-size: 12px;
+            /* font-weight: 500; */
+            padding: 6px 6px;
+        }
+    }
+
+}
+
+
+
+
