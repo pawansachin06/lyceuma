@@ -3,6 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\UserRoleEnum;
+use App\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,6 +13,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -18,7 +23,10 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use HasTeams;
     use Notifiable;
+    use UuidTrait;
     use TwoFactorAuthenticatable;
+
+    protected $keyType = 'string';
 
     /**
      * The attributes that are mass assignable.
@@ -26,9 +34,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name', 'lastname', 'email', 'password', 'profile_photo_path',
+        'username', 'email_verified_at', 'role', 'phone', 'phone_country',
+        'phone_prefix',
     ];
 
     /**
@@ -41,6 +49,16 @@ class User extends Authenticatable
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
+    ];
+
+     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'role' => UserRoleEnum::class,
     ];
 
     /**
@@ -63,5 +81,47 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function profilePhotoUrl(): Attribute
+    {
+        return Attribute::get(function () {
+
+            $path = $this->profile_photo_path;
+
+            if ($path != null && Storage::disk($this->profilePhotoDisk())->exists($path)) {
+                return Storage::disk($this->profilePhotoDisk())->url($this->profile_photo_path);
+            } elseif ($path != null && !empty($path)) {
+                // Use Photo URL from Social sites link...
+                return $path;
+            } else {
+                //empty path. Use defaultProfilePhotoUrl
+                return $this->defaultProfilePhotoUrl();
+            }
+        });
+    }
+
+    public function isAdmin()
+    {
+        if($this->role == UserRoleEnum::ADMIN){
+            return true;
+        }
+        return false;
+    }
+
+    public function isTeacher()
+    {
+        if($this->role == UserRoleEnum::TEACHER){
+            return true;
+        }
+        return false;
+    }
+
+    public function isStudent()
+    {
+        if($this->role == UserRoleEnum::STUDENT){
+            return true;
+        }
+        return false;
     }
 }

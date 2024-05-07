@@ -1,0 +1,86 @@
+#app-sidebar-checkbox + #app-sidebar-container #app-sidebar-overlay,
+#app-sidenav-checkbox + #app-sidenav-container #app-sidenav-overlay {
+    position: fixed;
+    width: 1px;
+    height: 100%;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#app-sidebar-checkbox:checked + #app-sidebar-container #app-sidebar-overlay,
+#app-sidebar-container #app-sidebar-overlay.active,
+#app-sidenav-checkbox:checked + #app-sidenav-container #app-sidenav-overlay,
+#app-sidenav-container #app-sidenav-overlay.active {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 11;
+    width: 100%;
+    height: 100%;
+    opacity: 100;
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    background-color: rgba(0,0,0,0.45);
+}
+
+#app-sidebar,
+#app-sidenav {
+    flex: none;
+    z-index: 11;
+    position: fixed;
+    left: -17rem;
+    width: 17rem;
+    flex-grow: 1;
+    top: 0;
+    bottom: 0;
+    border-radius: 0 8px 8px 0;
+    transition: transform 0.3s 0s cubic-bezier(0.55, 0, 0.1, 1);
+}
+/*#app-sidebar-checkbox:checked + #app-sidebar-container #app-sidebar {
+    left: 0;
+}*/
+
+#app-sidebar.active,
+#app-sidebar-checkbox:checked + #app-sidebar-container #app-sidebar,
+#app-sidenav.active,
+#app-sidenav-checkbox:checked + #app-sidenav-container #app-sidenav {
+    transform: translate(17rem, 0);
+}
+
+.app-scrollbar {
+    scrollbar-width: thin;
+}
+/*.app-scrollbar::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0);
+}
+.app-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    background-color: rgba(255,255,255,0);
+}
+.app-scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #9ca3af;
+}
+.app-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #4b5563;
+}*/
+
+
+@media(min-width:1024px){
+    #app-sidebar,
+    #app-sidebar.active {
+        transition: none;
+        left: 0 !important;
+        transform: translate(0, 0) !important;
+        border-radius: 0;
+    }
+    #app-sidebar-overlay {
+        display: none;
+    }
+    #app-content {
+        margin-left: 17rem;
+    }
+}

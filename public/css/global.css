@@ -1,0 +1,84 @@
+
+/* auth popup start */
+.auth-popup-box {
+    opacity: 0;
+    z-index: 0;
+    overflow-y: auto;
+    background: rgba(0,0,0,0.5);
+    pointer-events: none;
+    padding: 32px 16px;
+    display: flex;
+    align-items: center;
+    transition: all 200ms ease;
+}
+.auth-popup-box::-webkit-scrollbar-track {
+    height: 0px;
+    width: 0px;
+}
+.auth-popup-box::-webkit-scrollbar {
+    height: 0px;
+    width: 0px;
+}
+.auth-popup-overlay {
+    z-index: 101;
+}
+.auth-popup-center {
+    margin: auto auto;
+    z-index: 102;
+}
+#auth-popup-input:checked + .auth-popup-box {
+    opacity: 1;
+    z-index: 100;
+    pointer-events: auto;
+}
+#auth-popup-input:checked + .auth-popup-box .rx-popup-body {
+    transform: scale(1);
+}
+/* auth popup end */
+
+/* auth card ajax start */
+.auth-card-tabs {
+    display: flex;
+}
+.auth-card-tabs-underline {
+    position: absolute;
+    width: 50%;
+    bottom: -1px;
+    left: 0;
+    transition: all 0.2s;
+}
+#auth-card-tab-login:checked ~ .auth-card-tabs .auth-card-tabs-underline {
+    left: 0;
+}
+#auth-card-tab-register:checked ~ .auth-card-tabs .auth-card-tabs-underline {
+    left: 50%;
+}
+.auth-card-body #auth-card-content-login,
+.auth-card-body #auth-card-content-register {
+    display: none;
+}
+#auth-card-tab-login:checked ~ .auth-card-body #auth-card-content-login {
+    display: block;
+}
+#auth-card-tab-register:checked ~ .auth-card-body #auth-card-content-register {
+    display: block;
+}
+.auth-card-body {
+    z-index: 102;
+    transition: all 400ms ease;
+}
+/* auth card ajax end */
+
+
+
+/* site header start */
+.site-header {
+    z-index: 11;
+}
+/* site header end */
+
+
+
+
+
+
