@@ -1,4 +1,4 @@
-<nav class="sticky top-0 h-14 px-2 flex justify-between bg-white shadow-sm border-gray-100">
+<nav class="sticky top-0 h-14 px-2 flex justify-between bg-white shadow-sm border-gray-100 z-10">
     <a href="{{ route('dashboard') }}" class="flex-none flex flex-row items-center text-xl truncate select-none no-underline text-gray-800 focus:outline focus:outline-primary-500">
         <div class="flex flex-col h-full leading-snug mb-1 justify-center truncate">
             <div class="truncate font-semibold">{{ config('app.name') }}</div>

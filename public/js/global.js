@@ -29,6 +29,11 @@
             submitStatus.textContent = errMsg;
             submitStatus.classList.remove('bg-gray-100');
             submitStatus.classList.add('bg-red-100', 'text-red-800', 'border-red-600');
+            if(err.response.status == 403){
+                if( err.request.responseURL ){
+                    window.location.href = err.request.responseURL;
+                }
+            }
         }).finally(function(){
             submitBtn.disabled = false;
             submitLoader.classList.add('hidden');
@@ -70,6 +75,12 @@
             submitStatus.textContent = errMsg;
             submitStatus.classList.remove('bg-gray-100');
             submitStatus.classList.add('bg-red-100', 'text-red-800', 'border-red-600');
+            if(err.response.status == 403){
+                if( err.request.responseURL ){
+                    window.location.href = err.request.responseURL;
+                }
+            }
+            dev && console.log(err);
         }).finally(function(){
             submitBtn.disabled = false;
             submitLoader.classList.add('hidden');

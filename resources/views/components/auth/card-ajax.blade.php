@@ -21,6 +21,11 @@
             <span class="px-2">{{ __('or continue with email') }}</span>
             <span class="grow border-solid border-0 border-b border-gray-300"></span>
         </div>
+        @session('status')
+            <div class="mb-4 px-3 py-2 rounded-md font-medium border border-solid border-green-400 bg-green-50 text-green-600">
+                {{ $value }}
+            </div>
+        @endsession
         <form id="auth-card-login-form" method="POST" action="{{ route('login') }}">
             @csrf
             <x-float.input id="auth-popup-login-email" name="email" type="text" value="" required label="Email or Username" placeholder="Email" class="mb-5" />

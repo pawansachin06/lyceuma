@@ -25,6 +25,12 @@ class AdminLayout extends Component
                 'icon' => 'icons.home',
                 'title' => 'Dashboard',
             ],
+            [
+                'route' => 'profile.show',
+                'routes' => ['profile.show'],
+                'icon' => 'icons.person',
+                'title' => 'Profile',
+            ],
         ];
 
         return view('layouts.admin', ['navLinks' => $navLinks]);
