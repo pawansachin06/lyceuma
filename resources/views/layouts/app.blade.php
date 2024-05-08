@@ -12,36 +12,40 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
         <!-- Scripts -->
-        <script defer src="/js/lib/axios.min.js?v=1.6.8"></script>
         @vite(['resources/css/app.scss', 'resources/js/app.js'])
 
         <!-- Styles -->
         @livewireStyles
 
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+        @php
+            $version = date('Y-m-d-h-i-s');
+            $stylesArr = [
+                'lib' => '/css/lib.css?v='. $version,
+                'global' => '/css/global.css?v=' . $version,
+                'montserrat' => 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap',
+            ];
+        @endphp
+        @foreach($stylesArr as $stylePath)
+            <link rel="preload" as="style" href="{{ $stylePath }}" />
+            <link rel="stylesheet" href="{{ $stylePath }}" />
+        @endforeach
+
+        <script defer src="/js/lib/axios.min.js?v=1.6.8"></script>
+        <script defer src="/js/base.js?v={{ $version }}"></script>
     </head>
-    <body class="font-sans antialiased">
+    <body class="antialiased bg-gray-100">
         <x-banner />
-
-        <div class="min-h-screen bg-gray-100">
-            <!-- @ livewire('navigation-menu') -->
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
-
+        <x-header />
+        <main class="min-h-screen">{{ $slot }}</main>
         @stack('modals')
+        @php
+            $scriptsArr = [
+                'global' => '/js/global.js?v='. $version,
+            ];
+        @endphp
+        @foreach($scriptsArr as $scriptPath)
+            <script defer src="{{ $scriptPath }}"></script>
+        @endforeach
 
         @livewireScripts
     </body>

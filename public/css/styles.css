@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
 
 body {
@@ -7,6 +8,8 @@ body {
 .form-fields {
     input {
         border: 1px solid rgba(62, 62, 62, .18);
+=======
+>>>>>>> 344c6ee509a06002bcdc9f922ef8c0dea2656983
 
         &:focus {
             box-shadow: none;
