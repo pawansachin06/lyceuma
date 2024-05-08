@@ -2,76 +2,18 @@
 
 body {
     font-family: "Montserrat", sans-serif;
-
 }
 
+.form-fields {
+    input {
+        border: 1px solid rgba(62, 62, 62, .18);
 
-header {
-    z-index: 999;
-    background-color: white;
+        &:focus {
+            box-shadow: none;
+            /* border: none; */
+            outline: none;
+            border: 1px solid rgba(62, 62, 62, .18) !important;
 
-    a {
-        font-size: 18px;
-        font-weight: 400;
-        text-align: center;
-        text-decoration: none;
-        color: hwb(2 15% 9%);
-        color: #9b9b9b;
-        display: block;
-    }
-
-    a.active {
-        color: #e72c25;
-    }
-
-    .logo img {
-        max-width: 260px;
-
-        @media (max-width:767px) {
-            max-width: 160px;
-        }
-
-        @media (max-width:575px) {
-            max-width: 110px;
-        }
-    }
-
-    .menus {
-        transition: all 0.5s ease-in-out;
-
-        @media (max-width:991px) {
-            position: fixed;
-            top: 60px;
-            background-color: white;
-            z-index: 999;
-            width: 0;
-            height: 100vh;
-            display: none;
-            left: -100%;
-        }
-
-        ul {
-            list-style: none;
-            @media (max-width:991px) {
-                flex-direction: column;
-                width: 100%;
-                padding-top: 20px;
-            }
-        }
-    }
-
-    .menus.active {
-        transition: all 0.5s ease-in-out;
-        display: block;
-        left: 0;
-        width: 100%;
-    }
-
-    .btn-red {
-        @media (max-width:767px) {
-            font-size: 12px;
-            /* font-weight: 500; */
-            padding: 6px 6px;
         }
     }
 
@@ -79,4 +21,53 @@ header {
 
 
 
+.swiper-button-prev:after, .swiper-button-next:after {
+    content: "prev";
+    font-size: 14px !important;
+    font-weight: bold;
+    background-color: #FFA235 !important;
+    width: 45px;
+    height: 45px;
+    line-height: 45px !important;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+}
 
+@media (max-width: 640px) {
+    .swiper-button-prev:after, .swiper-button-next:after {
+        font-size: 12px !important;
+        width: 35px !important;
+        height: 35px !important;
+        line-height: 35px !important;
+    }
+}
+
+
+.swiper-button-prev{
+    left: 40px !important;
+    width: 45px !important;
+    height: 45px !important;
+
+    @media (max-width: 640px) {
+        left: 20px !important;
+        width: 35px !important;
+        height: 35px !important;
+    }
+}
+
+.swiper-button-next{
+    right: 40px !important;
+    width: 45px !important;
+    height: 45px !important;
+    line-height: 45px !important;
+
+
+    @media (max-width: 640px) {
+        right: 20px !important;
+        width: 35px !important;
+        height: 35px !important;
+        line-height: 35px !important;
+
+    }
+}

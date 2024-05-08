@@ -10,6 +10,14 @@ $font-family-sans-serif: "Montserrat", system-ui, -apple-system, "Segoe UI", Rob
 
 @import "../../node_modules/bootstrap/scss/reboot";
 
+// import Swiper styles
+@import '../../node_modules/swiper/swiper.scss';
+@import '../../node_modules/swiper/modules/navigation.scss';
+
+
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

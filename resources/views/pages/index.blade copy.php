@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> --}}
-
     @vite('resources/css/app.scss')
 
 </head>
@@ -109,13 +107,13 @@
     </section>
 
 
-    <section class="our-perfection mt-10 w-full h-full overflow-hidden relative">
-        <div class="swiper-container w-full h-full">
+    <section class="our-perfection mt-10 overflow-hidden">
+        <div class="swiper-container">
             <div class="swiper-wrapper">
-                @for ($i = 1; $i <= 3; $i++)
-
+                @for ($i = 1; $i <= 3; $i++) 
                 <div class="swiper-slide bg-[#eafee8] py-10 md:py-20">
-                    <div class="px-2 sm:px-5 md:px-20 2xl:px-40 grid lg:grid-cols-[70%_auto] grid-cols-1 justify-between">
+                    <div
+                        class="px-2 sm:px-5 md:px-20 2xl:px-40 grid lg:grid-cols-[70%_auto] grid-cols-1 justify-between">
                         <div class="content-text">
                             <h2
                                 class="heading md:text-[42px] md:leading-[60px] text-7 leading-8 font-[700] text-[#232323] mb-4 text-center lg:text-start">
@@ -144,13 +142,12 @@
                             <img src="{{ asset('/img/homepage/content1.svg') }}" alt="" class="max-w-full w-full">
                         </div>
                     </div>
-                </div>
-                @endfor
-                
             </div>
-            <!-- If you need navigation buttons -->
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
+            @endfor
+         <div class="swiper-button-prev bg-[#FFA235]"></div>
+         <div class="swiper-button-next"></div>
+
+        </div>
         </div>
     </section>
 
@@ -360,7 +357,6 @@
 
     {{-- alpine js --}}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> --}}
 
     <script>
         let video = document.getElementById("myVideo");
@@ -372,14 +368,14 @@
 
     </script>
 
-    {{-- <script>
-        var swiper = new Swiper(".swiper-container", {
+     <script>
+    var swiper = new Swiper(".mySwiper", {
       navigation: {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev",
       },
     });
-    </script> --}}
+  </script>
 </body>
 
 </html>
