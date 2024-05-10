@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Enums\ModelStatusEnum;
 use App\Enums\UserRoleEnum;
 use App\Models\ExamCategory;
+use App\Models\ExamChapter;
 use App\Models\User;
 use App\Models\ExamType;
 use App\Models\ExamSubject;
@@ -181,16 +183,56 @@ class DatabaseSeeder extends Seeder
         }
 
         $examSubjects = [
-            ['name'=> 'Physics'],
-            ['name'=> 'Chemistry'],
-            ['name'=> 'Mathematics'],
-            ['name'=> 'Zoology'],
-            ['name'=> 'Botany'],
+            [
+                'name'=> 'Physics',
+                'chapters'=> [
+                    ['name'=> '01. Mathematics for Physics',],
+                    ['name'=> '02. Units, Dimensions & Error Analysis',],
+                    ['name'=> '03. Kinematics',],
+                    ['name'=> '04. Newton\'s laws of motion',],
+                    ['name'=> '05. Friction',],
+                    ['name'=> '06. Circular Motion',],
+                    ['name'=> '07. Work, Power & Energy',],
+                    ['name'=> '08. Center of Mass and Conservation of Linear Momentum',],
+                    ['name'=> '09. Rotational Dynamics',],
+                    ['name'=> '10. Gravitation',],
+                    ['name'=> '11. Fluids',],
+                    ['name'=> '12. Simple Harmonic Motion',],
+                    ['name'=> '13. Mechanical Properties of Matter',],
+                    ['name'=> '14. Wave Motion',],
+                    ['name'=> '15. Thermal Expansion and Calorimetry',],
+                    ['name'=> '16. Heat Transfer',],
+                    ['name'=> '17. Kinetic Theory of Gases',],
+                    ['name'=> '18. Thermodynamics',],
+                    ['name'=> '19. Electrostatistics',],
+                ],
+            ],
+            [
+                'name'=> 'Chemistry'
+            ],
+            [
+                'name'=> 'Mathematics'
+            ],
+            [
+                'name'=> 'Zoology'
+            ],
+            [
+                'name'=> 'Botany'
+            ],
         ];
-        foreach ($examSubjects as $examSubject) {
-            ExamSubject::factory()->create([
-                'name' => $examSubject['name'],
+        foreach ($examSubjects as $__examSubject) {
+            $examSubject = ExamSubject::factory()->create([
+                'name' => $__examSubject['name'],
             ]);
+            if(!empty($__examSubject['chapters'])){
+                foreach ($__examSubject['chapters'] as $__examChapter) {
+                    $examChapter = ExamChapter::factory()->create([
+                        'name' => $__examChapter['name'],
+                        'exam_subject_id' => $examSubject['id'],
+                        'status' => ModelStatusEnum::PUBLISHED,
+                    ]);
+                }
+            }
         }
 
 

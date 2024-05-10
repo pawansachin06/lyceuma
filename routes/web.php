@@ -2,12 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ExamTypeController;
+use App\Http\Controllers\ExamChapterController;
+use App\Http\Controllers\ExamPatternController;
+use App\Http\Controllers\ExamSubjectController;
 use App\Http\Controllers\SocialLoginController;
 
 
 Route::get('/', function () {
     return view('pages.index');
 })->name('home');
+
 
 Route::get('/contactus', function () {
     return view('pages.contactUs');
@@ -23,8 +28,25 @@ Route::middleware('guest')->group(function () {
     ]);
 });
 
+
 Route::middleware('auth')->group(function(){
-    Route::resource('users', UserController::class, ['name'=> 'users']);
+    Route::resource('users', UserController::class, [
+        'name'=> 'users'
+    ]);
+    Route::resource('exam-types', ExamTypeController::class, [
+        'name'=> 'exam-types'
+    ]);
+    Route::resource('exam-patterns', ExamPatternController::class, [
+        'name'=> 'exam-patterns'
+    ]);
+    Route::resource('exam-subjects', ExamSubjectController::class, [
+        'name'=> 'exam-subjects'
+    ]);
+    Route::resource('exam-chapters', ExamChapterController::class, [
+        'name'=> 'exam-chapters'
+    ]);
+
+
 });
 
 

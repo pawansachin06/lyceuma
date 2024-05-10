@@ -12,7 +12,8 @@ class ExamPatternController extends Controller
      */
     public function index()
     {
-        //
+        $items = ExamPattern::with('type')->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        return view('exam-patterns.index', ['items' => $items]);
     }
 
     /**

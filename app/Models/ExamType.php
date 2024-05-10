@@ -10,4 +10,7 @@ class ExamType extends Model
 {
     use HasFactory;
     use UuidTrait;
+
+    public $incrementing = false;
+    protected $keyType = 'string';
 }

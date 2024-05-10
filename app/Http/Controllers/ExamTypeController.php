@@ -12,7 +12,8 @@ class ExamTypeController extends Controller
      */
     public function index()
     {
-        //
+        $items = ExamType::latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        return view('exam-types.index', ['items' => $items]);
     }
 
     /**

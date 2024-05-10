@@ -66,7 +66,7 @@
             {{ $items->onEachSide(2)->links() }}
         @else
             <div class="px-2 py-2 rounded border shadow-sm bg-white">
-                <p class="text-center">No records found</p>
+                <p class="mb-0 text-center">No records found</p>
             </div>
         @endif
     </div>

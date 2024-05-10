@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ModelStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +15,10 @@ return new class extends Migration
         Schema::create('exam_chapters', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary;
             $table->string('name');
+            $table->foreignUuid('exam_subject_id')->constrained()->cascadeOnDelete();
             $table->uuid('exam_chapter_id')->nullable();
+            $table->uuid('exam_difficulty_id')->nullable();
+            $table->string('status')->default(ModelStatusEnum::DRAFT);
             $table->timestamps();
         });
     }

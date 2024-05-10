@@ -12,7 +12,8 @@ class ExamSubjectController extends Controller
      */
     public function index()
     {
-        //
+        $items = ExamSubject::latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        return view('exam-subjects.index', ['items'=> $items]);
     }
 
     /**

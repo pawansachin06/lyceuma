@@ -12,7 +12,8 @@ class ExamChapterController extends Controller
      */
     public function index()
     {
-        //
+        $items = ExamChapter::with('subject')->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        return view('exam-chapters.index', ['items'=> $items]);
     }
 
     /**
@@ -44,7 +45,7 @@ class ExamChapterController extends Controller
      */
     public function edit(ExamChapter $examChapter)
     {
-        //
+        return view('exam-chapters.edit');
     }
 
     /**
