@@ -101,6 +101,14 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
+    public function isSuperAdmin()
+    {
+        if($this->role == UserRoleEnum::SUPERADMIN){
+            return true;
+        }
+        return false;
+    }
+
     public function isAdmin()
     {
         if($this->role == UserRoleEnum::ADMIN){
@@ -109,13 +117,21 @@ class User extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
-    public function isTeacher()
+    public function isEditor()
     {
-        if($this->role == UserRoleEnum::TEACHER){
+        if($this->role == UserRoleEnum::EDITOR){
             return true;
         }
         return false;
     }
+
+    // public function isTeacher()
+    // {
+    //     if($this->role == UserRoleEnum::TEACHER){
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     public function isStudent()
     {

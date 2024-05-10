@@ -1,11 +1,23 @@
 @props([
     'variant' => 'primary',
     'size' => '',
+    'href' => '',
+    'type' => '',
 ])
 @php
-    $classes = ' inline-flex gap-2 items-center justify-center px-4 py-2 border border-transparent rounded-md font-semibold uppercase tracking-widest transition-colors focus:outline focus:outline-offset-2';
+    $classes = ' inline-flex gap-2 items-center justify-center border border-transparent rounded-md font-semibold tracking-wide transition-colors focus:outline focus:outline-offset-2';
+
+    if( !empty($href) ){
+        $type = '';
+        $classes .= ' no-underline';
+    }
+
     if($size == 'lg') {
-        $classes .= ' text-lg';
+        $classes .= ' text-lg px-4 py-2';
+    } elseif($size == 'sm') {
+        $classes .= ' text-sm px-2 py-1';
+    } else {
+        $classes .= ' text-base px-4 py-2';
     }
 
     if($variant == 'primary'){
@@ -18,10 +30,10 @@
 
 
 @endphp
-<button {{ $attributes->merge(['type' => 'submit', 'class' => $classes ]) }}>
+<{{ !empty($href) ? 'a' : 'button' }} {{ $attributes->merge(['class' => $classes, 'href'=> $href ]) }}>
     <span data-js="btn-text">{{ $slot }}</span>
     <svg  data-js="btn-loader" xmlns="http://www.w3.org/2000/svg" fill="none" class="animate-spin hidden shrink-0 w-4 h-4" viewBox="0 0 24 24" width="24" height="24">
         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
     </svg>
-</button>
+</{{ !empty($href) ? 'a' : 'button' }}>

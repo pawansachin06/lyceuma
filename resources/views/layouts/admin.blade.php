@@ -1,11 +1,19 @@
-<!DOCTYPE html>
+@props([
+    'aos' => 0,
+    'swiper' => 0,
+    'sweetalert' => 0,
+    'tinymce' => 0,
+    'ckeditor' => 0,
+    'title' => config('app.name', 'Laravel'),
+    'description' => '',
+])<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $title }} | {{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,6 +29,7 @@
     $version = date('Y-m-d-h-i-s');
     $stylesArr = [
         'lib' => '/css/lib.css?v='. $version,
+        'toastify' => '/css/lib/toastify.min.css?v=1.12.0',
         'global' => '/css/admin/global.css?v=' . $version,
         'montserrat' => 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap',
     ];
@@ -88,9 +97,11 @@
     @stack('modals')
     @php
     $scriptsArr = [
+        'sweetalert' => !empty($sweetalert) ? '/js/lib/sweetalert2.min.js?v=11.9.0' : '',
         'global' => '/js/global.js?v='. $version,
     ];
     @endphp
+    <script defer src="/js/lib/toastify.min.js?v=1.12.0"></script>
     @foreach($scriptsArr as $scriptPath)
     <script defer src="{{ $scriptPath }}"></script>
     @endforeach

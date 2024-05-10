@@ -28,7 +28,7 @@
         @endsession
         <form id="auth-card-login-form" method="POST" action="{{ route('login') }}">
             @csrf
-            <x-float.input id="auth-popup-login-email" name="email" type="text" value="" required label="Email or Username" placeholder="Email" class="mb-5" />
+            <x-float.input id="auth-popup-login-email" name="email" type="text" value="" required label="Phone, username or email" placeholder="Email" class="mb-5" />
             <x-float.input id="auth-popup-login-password" name="password" type="password" value="" required label="Password" placeholder="Password" class="mb-4" />
             <div class="flex items-center justify-between mb-2">
                 <label for="auth-popup-login-remember-me" class="flex gap-2 items-center">
@@ -61,6 +61,7 @@
             <x-float.input id="auth-popup-register-phone" name="phone" type="number" value="" required label="Phone" placeholder="Phone" class="mb-5" />
             <x-float.input id="auth-popup-register-password" name="password" type="password" value="" required label="Password" placeholder="Password" class="mb-3" />
 
+            @if(false)
             <div class="mb-3 flex flex-wrap items-center gap-3 select-none">
                 <div class="font-semibold">
                     I am a
@@ -78,6 +79,7 @@
                     </label>
                 </div>
             </div>
+            @endif
 
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
                 <div class="mt-4">

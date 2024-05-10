@@ -1,17 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\SocialLoginController;
+
 
 Route::get('/', function () {
     return view('pages.index');
-<<<<<<< HEAD
-})->name('pages.index');
+})->name('home');
+
 Route::get('/contactus', function () {
     return view('pages.contactUs');
 })->name('pages.contactUs');
-=======
-})->name('home');
 
 
 Route::middleware('guest')->group(function () {
@@ -22,7 +22,11 @@ Route::middleware('guest')->group(function () {
         SocialLoginController::class, 'googleCallback'
     ]);
 });
->>>>>>> 344c6ee509a06002bcdc9f922ef8c0dea2656983
+
+Route::middleware('auth')->group(function(){
+    Route::resource('users', UserController::class, ['name'=> 'users']);
+});
+
 
 Route::middleware([
     'auth:sanctum',

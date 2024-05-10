@@ -2,15 +2,16 @@
 
 namespace App\Actions\Fortify;
 
-use App\Enums\UserRoleEnum;
 use App\Models\Team;
 use App\Models\User;
+use App\Enums\UserRoleEnum;
+use Illuminate\Validation\Rule;
+use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Jetstream\Jetstream;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -25,21 +26,26 @@ class CreateNewUser implements CreatesNewUsers
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)],
+            'username' => ['required', 'string', 'max:255', Rule::unique(User::class)],
             'password' => $this->passwordRules(),
-            'phone' => ['required', 'numeric', 'digits:10'],
-            'role' => ['required', new Enum(UserRoleEnum::class) ],
+            'phone' => ['required', 'numeric', 'digits:10', Rule::unique(User::class)],
+            // 'role' => ['required', new Enum(UserRoleEnum::class) ],
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ], [
             'phone.digits' => 'Phone must be valid 10 digits Indian number',
+            'phone.unique' => 'Phone number already exists',
             'role.required' => 'Please pick if you are student or teacher'
         ])->validate();
 
-        if(!empty($input['role']) && in_array($input['role'], UserRoleEnum::toArray())){
-            if($input['role'] == UserRoleEnum::ADMIN){
-                $input['role'] = UserRoleEnum::TEACHER;
+        if (!empty($input['role']) && in_array($input['role'], UserRoleEnum::toArray())) {
+            if (in_array($input['role'], [
+                UserRoleEnum::SUPERADMIN, UserRoleEnum::ADMIN, UserRoleEnum::EDITOR
+            ])) {
+                $input['role'] = UserRoleEnum::STUDENT;
             }
+        } else {
+            $input['role'] = UserRoleEnum::STUDENT;
         }
 
         return DB::transaction(function () use ($input) {
@@ -63,7 +69,7 @@ class CreateNewUser implements CreatesNewUsers
     {
         $user->ownedTeams()->save(Team::forceCreate([
             'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
+            'name' => explode(' ', $user->name, 2)[0] . "'s Team",
             'personal_team' => true,
         ]));
     }
