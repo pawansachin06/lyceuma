@@ -62,6 +62,13 @@ class AdminLayout extends Component
                 'show' => ($isSuperAdmin || $isAdmin || $isEditor),
             ],
             [
+                'route' => 'exam-questions.index',
+                'routes' => ['exam-questions.index', 'exam-questions.create', 'exam-questions.edit'],
+                'icon' => 'icons.library-books',
+                'title' => 'Questions',
+                'show' => ($isSuperAdmin || $isAdmin || $isEditor),
+            ],
+            [
                 'route' => 'users.index',
                 'routes' => ['users.index', 'users.create', 'users.edit'],
                 'icon' => 'icons.account-circle',

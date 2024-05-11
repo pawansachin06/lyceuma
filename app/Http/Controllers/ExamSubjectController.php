@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ModelStatusEnum;
+use Exception;
 use App\Models\ExamSubject;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Enum;
 
 class ExamSubjectController extends Controller
 {
@@ -29,7 +32,21 @@ class ExamSubjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $item = ExamSubject::create([
+                'name' => 'New subject',
+            ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Loading...',
+                'redirect' => route('exam-subjects.edit', $item),
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -45,15 +62,32 @@ class ExamSubjectController extends Controller
      */
     public function edit(ExamSubject $examSubject)
     {
-        //
+        $statuses = ModelStatusEnum::toArray();
+        return view('exam-subjects.edit', [
+            'item'=> $examSubject,
+            'statuses'=> $statuses,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ExamSubject $examSubject)
+    public function update(Request $req, ExamSubject $examSubject)
     {
-        //
+        $validated = $req->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'status' => [new Enum(ModelStatusEnum::class)],
+        ]);
+
+        try {
+            $examSubject->update($validated);
+            return response()->json([
+                'success' => true,
+                'message' => 'Saved successfully',
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -61,6 +95,15 @@ class ExamSubjectController extends Controller
      */
     public function destroy(ExamSubject $examSubject)
     {
-        //
+        try {
+            $examSubject->delete();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+        return response()->json([
+            'success' => true,
+            'reload' => true,
+            'message' => 'Deleted successfully',
+        ]);
     }
 }

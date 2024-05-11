@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ModelStatusEnum;
 use App\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,10 @@ class ExamChapter extends Model
         'exam_difficulty_id',
     ];
 
+    protected $casts = [
+        'status' => ModelStatusEnum::class,
+    ];
+
     public function subject()
     {
         return $this->hasOne(ExamSubject::class, 'id', 'exam_subject_id');
@@ -27,5 +32,10 @@ class ExamChapter extends Model
     public function difficulty()
     {
         return $this->hasOne(ExamDifficulty::class, 'id', 'exam_difficulty_id');
+    }
+
+    public function isStatus($askedStatus = '')
+    {
+        return $this->status->value == $askedStatus;
     }
 }

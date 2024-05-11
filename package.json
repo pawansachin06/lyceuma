@@ -16,9 +16,7 @@
         "postcss": "^8.4.32",
         "sass": "^1.77.0",
         "tailwindcss": "^3.4.0",
+        "@ckeditor/ckeditor5": "github:isaul32/ckeditor5",
         "vite": "^5.0"
-    },
-    "dependencies": {
-        "swiper": "^11.1.1"
     }
 }

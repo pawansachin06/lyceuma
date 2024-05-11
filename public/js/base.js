@@ -10,7 +10,7 @@ try {
     dev && console.log(e);
 }
 
-if (dev) console.log('%c DEV MODE ENABLED %c => Byvex.com <=', "background:#1565c0;color:#ffffff;padding:4px 5px;border-radius:18px;", "");
+if (dev) console.log('%c DEV MODE ENABLED %c ---> Byvex.com <---', "background:#1565c0;color:#ffffff;;padding:4px 5px;border-radius:18px;", "");
 
 function getAxiosError(err) {
     let msg = 'An error occurred, try again.';
@@ -35,10 +35,9 @@ if (appForms) {
                     data.append('content', myContentEl.getContent());
                 }
             }
-            if (typeof appCkEditor == 'object') {
-                var appCkeditorTextarea = document.getElementById('app-ckeditor-textarea');
-                if (appCkeditorTextarea) {
-                    data.append('content', appCkEditor.getData());
+            if (typeof appCkEditors == 'object') {
+                for (var i = 0; i < appCkEditors.length; i++) {
+                    data.append(appCkEditors[i].name, appCkEditors[i].editor.getData());
                 }
             }
 
@@ -114,7 +113,7 @@ if (appCreateForms) {
             let data = new FormData(form);
             axios.post(url, data).then(function (res) {
                 Toastify({
-                    text: (res.data?.message) ? res.data.message : 'An error occurred',
+                    text: (res.data?.message) ? res.data.message : 'No response from server',
                     className: (res.data?.success) ? 'toast-success' : 'toast-error',
                     position: 'center',
                 }).showToast();

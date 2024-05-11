@@ -2,9 +2,9 @@
     <div class="lg:container px-3 py-3">
         <div class="mb-2 flex flex-wrap justify-between items-center">
             <div class="">
-                <h1 class="text-2xl font-semibold">Exam Types</h1>
+                <h1 class="text-2xl font-semibold">Exam Questions</h1>
             </div>
-            <form action="{{ route('exam-types.store') }}" method="post" data-js="app-create-form">
+            <form action="{{ route('exam-questions.store') }}" method="post" data-js="app-create-form">
                 <x-button data-js="app-form-btn" type="submit">Create</x-button>
             </form>
         </div>
@@ -15,6 +15,9 @@
                         <tr class="border-solid border-b border-gray-200">
                             <th class="px-2 py-2">Name</th>
                             <th class="px-2 py-2">Status</th>
+                            <th class="px-2 py-2">Subject</th>
+                            <th class="px-2 py-2">Pattern</th>
+                            <th class="px-2 py-2">Difficulty</th>
                             <th class="px-2 py-2">Action</th>
                         </tr>
                     </thead>
@@ -23,10 +26,13 @@
                             <tr class="border border-b border-gray-100">
                                 <td class="px-2 py-2">{{ $item->name }}</td>
                                 <td class="px-2 py-2">{{ $item->status }}</td>
+                                <td class="px-2 py-2">{{ $item?->subject?->name }}</td>
+                                <td class="px-2 py-2">{{ $item?->pattern?->name }} - {{ $item?->pattern?->type?->name }}</td>
+                                <td class="px-2 py-2">{{ $item?->difficulty?->name }}</td>
                                 <td class="px-2 py-2">
                                     <div class="inline-flex flex items-center flex-wrap gap-1 justify-end">
-                                        <x-button href="{{ route('exam-types.edit', $item->id) }}" size="sm">Edit</x-button>
-                                        <form action="{{ route('exam-types.destroy', $item->id) }}" method="post" data-js="app-delete-form">
+                                        <x-button href="{{ route('exam-questions.edit', $item->id) }}" size="sm">Edit</x-button>
+                                        <form action="{{ route('exam-questions.destroy', $item->id) }}" method="post" data-js="app-delete-form">
                                             @method('DELETE')
                                             <x-button type="submit" size="sm">Delete</x-button>
                                         </form>

@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExamTypeController;
 use App\Http\Controllers\ExamChapterController;
 use App\Http\Controllers\ExamPatternController;
+use App\Http\Controllers\ExamQuestionController;
 use App\Http\Controllers\ExamSubjectController;
 use App\Http\Controllers\SocialLoginController;
 
@@ -45,7 +46,9 @@ Route::middleware('auth')->group(function(){
     Route::resource('exam-chapters', ExamChapterController::class, [
         'name'=> 'exam-chapters'
     ]);
-
+    Route::resource('exam-questions', ExamQuestionController::class, [
+        'name'=> 'exam-questions'
+    ]);
 
 });
 

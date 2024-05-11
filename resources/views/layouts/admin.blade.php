@@ -1,9 +1,9 @@
 @props([
     'aos' => 0,
     'swiper' => 0,
-    'sweetalert' => 0,
     'tinymce' => 0,
     'ckeditor' => 0,
+    'sweetalert' => 0,
     'title' => config('app.name', 'Laravel'),
     'description' => '',
 ])<!DOCTYPE html>
@@ -30,6 +30,7 @@
     $stylesArr = [
         'lib' => '/css/lib.css?v='. $version,
         'toastify' => '/css/lib/toastify.min.css?v=1.12.0',
+        'ckeditor' => !empty($ckeditor) ? '/css/lib/ckeditor.css?v='. $version : '',
         'global' => '/css/admin/global.css?v=' . $version,
         'montserrat' => 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap',
     ];
@@ -102,6 +103,34 @@
     ];
     @endphp
     <script defer src="/js/lib/toastify.min.js?v=1.12.0"></script>
+    @if(!empty($ckeditor))
+        <script src="/external/ckeditor5/build/ckeditor.js?v={{ $version }}"></script>
+        <script type="text/javascript">
+            var appCkEditor = null;
+            var appCkEditors = [];
+            (function(){
+                var appCkeditorTextarea = document.getElementById('app-ckeditor-textarea');
+                var appCkeditorTextareas = document.querySelectorAll('.app-ckeditor-textarea');
+                if(appCkeditorTextareas){
+                    for (var i = 0; i < appCkeditorTextareas.length; i++) {
+                        ClassicEditor.create(appCkeditorTextareas[i])
+                        .then(function(editor){
+                            appCkEditors.push({
+                                name: editor.sourceElement.getAttribute('data-name'),
+                                editor: editor,
+                            })
+                            // console.log(editor.getData());
+                        }).catch(function(error){
+                            console.error( error );
+                        });
+                    }
+                } else {
+                    console.warn('CK Editor not in use, consider removing from this page');
+                }
+            })();
+        </script>
+    @endif
+
     @foreach($scriptsArr as $scriptPath)
     <script defer src="{{ $scriptPath }}"></script>
     @endforeach

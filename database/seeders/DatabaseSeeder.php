@@ -163,18 +163,21 @@ class DatabaseSeeder extends Seeder
         foreach ($examTypes as $__examType) {
             $examType = ExamType::factory()->create([
                 'name' => $__examType['name'],
+                'status' => ModelStatusEnum::PUBLISHED,
             ]);
             if(!empty($__examType['patterns'])){
                 foreach ($__examType['patterns'] as $__examPattern) {
                     $examPattern = ExamPattern::factory()->create([
                         'name' => $__examPattern['name'],
                         'exam_type_id' => $examType['id'],
+                        'status' => ModelStatusEnum::PUBLISHED,
                     ]);
                     if(!empty($__examPattern['categories'])){
                         foreach ($__examPattern['categories'] as $__examCategory) {
                             $examCategory = ExamCategory::factory()->create([
                                 'name' => $__examCategory['name'],
                                 'exam_pattern_id' => $examPattern['id'],
+                                'status' => ModelStatusEnum::PUBLISHED,
                             ]);
                         }
                     }
@@ -223,6 +226,7 @@ class DatabaseSeeder extends Seeder
         foreach ($examSubjects as $__examSubject) {
             $examSubject = ExamSubject::factory()->create([
                 'name' => $__examSubject['name'],
+                'status' => ModelStatusEnum::PUBLISHED,
             ]);
             if(!empty($__examSubject['chapters'])){
                 foreach ($__examSubject['chapters'] as $__examChapter) {
@@ -244,6 +248,7 @@ class DatabaseSeeder extends Seeder
         foreach ($examDifficulties as $examDifficulty) {
             ExamDifficulty::factory()->create([
                 'name' => $examDifficulty['name'],
+                'status' => ModelStatusEnum::PUBLISHED,
             ]);
         }
 
@@ -252,8 +257,16 @@ class DatabaseSeeder extends Seeder
             'lastname' => 'User',
             'username' => 'admin',
             'role' => UserRoleEnum::SUPERADMIN,
-            'email' => 'admin@example.com',
+            'email' => 'admin@test.com',
             'phone' => '8181040977',
+        ]);
+        User::factory()->create([
+            'name' => 'Editor',
+            'lastname' => 'User',
+            'username' => 'editor',
+            'role' => UserRoleEnum::EDITOR,
+            'email' => 'editor@test.com',
+            'phone' => '9123456789',
         ]);
     }
 }

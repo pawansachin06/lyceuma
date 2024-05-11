@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ModelStatusEnum;
 use App\Models\ExamType;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Enum;
 
 class ExamTypeController extends Controller
 {
@@ -29,7 +32,21 @@ class ExamTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $item = ExamType::create([
+                'name' => 'New exam type',
+            ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Loading...',
+                'redirect' => route('exam-types.edit', $item),
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -45,15 +62,32 @@ class ExamTypeController extends Controller
      */
     public function edit(ExamType $examType)
     {
-        //
+        $statuses = ModelStatusEnum::toArray();
+        return view('exam-types.edit', [
+            'item'=> $examType,
+            'statuses'=> $statuses,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ExamType $examType)
+    public function update(Request $req, ExamType $examType)
     {
-        //
+        $validated = $req->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'status' => [new Enum(ModelStatusEnum::class)],
+        ]);
+
+        try {
+            $examType->update($validated);
+            return response()->json([
+                'success' => true,
+                'message' => 'Saved successfully',
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -61,6 +95,15 @@ class ExamTypeController extends Controller
      */
     public function destroy(ExamType $examType)
     {
-        //
+        try {
+            $examType->delete();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+        return response()->json([
+            'success' => true,
+            'reload' => true,
+            'message' => 'Deleted successfully',
+        ]);
     }
 }
