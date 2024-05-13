@@ -16,8 +16,12 @@ class ExamChapterController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $req)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $items = ExamChapter::with('subject')->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
         return view('exam-chapters.index', ['items' => $items]);
     }
@@ -33,8 +37,12 @@ class ExamChapterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         try {
             $item = ExamChapter::create([
                 'name' => 'New chapter',
@@ -63,8 +71,12 @@ class ExamChapterController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ExamChapter $examChapter)
+    public function edit(Request $req, ExamChapter $examChapter)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $statuses = ModelStatusEnum::toArray();
         $examSubjects = ExamSubject::get(['id', 'name']);
         $examDifficulties = ExamDifficulty::get(['id', 'name']);
@@ -83,6 +95,10 @@ class ExamChapterController extends Controller
      */
     public function update(Request $req, ExamChapter $examChapter)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $validated = $req->validate([
             'name' => ['required', 'string', 'max:255'],
             'status' => [new Enum(ModelStatusEnum::class)],
@@ -105,8 +121,12 @@ class ExamChapterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ExamChapter $examChapter)
+    public function destroy(Request $req, ExamChapter $examChapter)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         try {
             $examChapter->delete();
         } catch (Exception $e) {

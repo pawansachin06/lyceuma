@@ -68,10 +68,12 @@
                     </div>
                     <div class="grow overflow-y-auto app-scrollbar border-b">
                         @foreach($navLinks as $navLink)
-                            <a href="{{ route($navLink['route']) }}" class="{{ request()->routeIs($navLink['routes']) ? 'text-primary-800 bg-primary-50' : 'text-gray-600 hover:bg-gray-100' }} flex px-2 py-2 items-center gap-2 no-underline focus:outline-primary-500 font-medium">
-                                <x-dynamic-component :component="$navLink['icon']" class="w-5 h-5" />
-                                <span>{{ $navLink['title'] }}</span>
-                            </a>
+                            @if($navLink['show'])
+                                <a href="{{ route($navLink['route']) }}" class="{{ request()->routeIs($navLink['routes']) ? 'text-primary-800 bg-primary-50' : 'text-gray-600 hover:bg-gray-100' }} flex px-2 py-2 items-center gap-2 no-underline focus:outline-primary-500 font-medium">
+                                    <x-dynamic-component :component="$navLink['icon']" class="w-5 h-5" />
+                                    <span>{{ $navLink['title'] }}</span>
+                                </a>
+                            @endif
                         @endforeach
 
                         <form method="POST" action="{{ route('logout') }}" class="block w-full">

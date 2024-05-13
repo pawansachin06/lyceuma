@@ -13,8 +13,12 @@ class ExamSubjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $req)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $items = ExamSubject::latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
         return view('exam-subjects.index', ['items'=> $items]);
     }
@@ -30,8 +34,12 @@ class ExamSubjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         try {
             $item = ExamSubject::create([
                 'name' => 'New subject',
@@ -60,8 +68,12 @@ class ExamSubjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ExamSubject $examSubject)
+    public function edit(Request $req, ExamSubject $examSubject)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $statuses = ModelStatusEnum::toArray();
         return view('exam-subjects.edit', [
             'item'=> $examSubject,
@@ -74,6 +86,10 @@ class ExamSubjectController extends Controller
      */
     public function update(Request $req, ExamSubject $examSubject)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $validated = $req->validate([
             'name' => ['required', 'string', 'max:255'],
             'status' => [new Enum(ModelStatusEnum::class)],
@@ -93,8 +109,12 @@ class ExamSubjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ExamSubject $examSubject)
+    public function destroy(Request $req, ExamSubject $examSubject)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         try {
             $examSubject->delete();
         } catch (Exception $e) {

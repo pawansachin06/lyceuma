@@ -15,8 +15,12 @@ class ExamPatternController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $req)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $items = ExamPattern::with('type')->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
         return view('exam-patterns.index', ['items' => $items]);
     }
@@ -32,8 +36,12 @@ class ExamPatternController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         try {
             $item = ExamPattern::create([
                 'name' => 'New pattern',
@@ -62,8 +70,12 @@ class ExamPatternController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ExamPattern $examPattern)
+    public function edit(Request $req, ExamPattern $examPattern)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $statuses = ModelStatusEnum::toArray();
         $examTypes = ExamType::get(['id', 'name']);
         return view('exam-patterns.edit', [
@@ -78,6 +90,10 @@ class ExamPatternController extends Controller
      */
     public function update(Request $req, ExamPattern $examPattern)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $validated = $req->validate([
             'name' => ['required', 'string', 'max:255'],
             'status' => [new Enum(ModelStatusEnum::class)],
@@ -98,8 +114,12 @@ class ExamPatternController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ExamPattern $examPattern)
+    public function destroy(Request $req, ExamPattern $examPattern)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         try {
             $examPattern->delete();
         } catch (Exception $e) {

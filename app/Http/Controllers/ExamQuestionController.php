@@ -18,8 +18,12 @@ class ExamQuestionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $req)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $items = ExamQuestion::with('difficulty:id,name')
                 ->with('subject:id,name')
                 ->with('pattern.type:id,name')
@@ -38,8 +42,12 @@ class ExamQuestionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         try {
             $item = ExamQuestion::create([
                 'name' => 'New question',
@@ -69,8 +77,12 @@ class ExamQuestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ExamQuestion $examQuestion)
+    public function edit(Request $req, ExamQuestion $examQuestion)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $statuses = ModelStatusEnum::toArray();
         $examPatterns = ExamPattern::with('type:id,name')
                         ->orderBy('name', 'desc')
@@ -93,6 +105,10 @@ class ExamQuestionController extends Controller
      */
     public function update(Request $req, ExamQuestion $examQuestion)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $validated = $req->validate([
             'name' => ['required', 'string', 'max:255'],
             'status' => [new Enum(ModelStatusEnum::class)],
@@ -125,6 +141,9 @@ class ExamQuestionController extends Controller
     public function destroy(Request $req, ExamQuestion $examQuestion)
     {
         $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         try {
             $examQuestion->delete();
         } catch(Exception $e) {

@@ -13,8 +13,12 @@ class ExamTypeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $req)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
         $items = ExamType::latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
         return view('exam-types.index', ['items' => $items]);
     }
@@ -30,8 +34,13 @@ class ExamTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
+
         try {
             $item = ExamType::create([
                 'name' => 'New exam type',
@@ -60,8 +69,13 @@ class ExamTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ExamType $examType)
+    public function edit(Request $req, ExamType $examType)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
+
         $statuses = ModelStatusEnum::toArray();
         return view('exam-types.edit', [
             'item'=> $examType,
@@ -74,6 +88,11 @@ class ExamTypeController extends Controller
      */
     public function update(Request $req, ExamType $examType)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
+
         $validated = $req->validate([
             'name' => ['required', 'string', 'max:255'],
             'status' => [new Enum(ModelStatusEnum::class)],
@@ -93,8 +112,13 @@ class ExamTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ExamType $examType)
+    public function destroy(Request $req, ExamType $examType)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent()){
+            abort(404);
+        }
+
         try {
             $examType->delete();
         } catch (Exception $e) {
