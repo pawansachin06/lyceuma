@@ -28,6 +28,16 @@ class ExamPattern extends Model
         return $this->status->value == $askedStatus;
     }
 
+    public function isStatusDraft()
+    {
+        return $this->status === ModelStatusEnum::DRAFT;
+    }
+
+    public function isStatusPublished()
+    {
+        return $this->status === ModelStatusEnum::PUBLISHED;
+    }
+
     public function type()
     {
         return $this->hasOne(ExamType::class, 'id', 'exam_type_id');

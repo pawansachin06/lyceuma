@@ -3,26 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ModelStatusEnum;
+use App\Models\ExamChapter;
+use App\Models\ExamTopic;
 use Exception;
-use App\Models\ExamPattern;
-use App\Models\ExamType;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
-class ExamPatternController extends Controller
+class ExamTopicController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $req)
+    public function index()
     {
-        $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
-        }
-        $items = ExamPattern::with('type')->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
-        return view('exam-patterns.index', ['items' => $items]);
+        $items = ExamTopic::with('chapter')->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        return view('exam-topics.index', ['items'=> $items]);
     }
 
     /**
@@ -38,18 +34,14 @@ class ExamPatternController extends Controller
      */
     public function store(Request $req)
     {
-        $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
-        }
         try {
-            $item = ExamPattern::create([
+            $item = ExamTopic::create([
                 'name' => '',
             ]);
             return response()->json([
                 'success' => true,
                 'message' => 'Loading...',
-                'redirect' => route('exam-patterns.edit', $item),
+                'redirect' => route('exam-topics.edit', $item),
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -62,7 +54,7 @@ class ExamPatternController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ExamPattern $examPattern)
+    public function show(ExamTopic $examTopic)
     {
         //
     }
@@ -70,38 +62,31 @@ class ExamPatternController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $req, ExamPattern $examPattern)
+    public function edit(ExamTopic $examTopic)
     {
-        $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
-        }
         $statuses = ModelStatusEnum::toArray();
-        $examTypes = ExamType::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
-        return view('exam-patterns.edit', [
-            'item'=> $examPattern,
+        $examChapters = ExamChapter::orderBy('name', 'desc')
+            ->where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
+        return view('exam-topics.edit', [
+            'item'=> $examTopic,
+            'examChapters'=> $examChapters,
             'statuses'=> $statuses,
-            'examTypes'=> $examTypes,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $req, ExamPattern $examPattern)
+    public function update(Request $req, ExamTopic $examTopic)
     {
-        $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
-        }
         $validated = $req->validate([
             'name' => ['required', 'string', 'max:255'],
             'status' => [new Enum(ModelStatusEnum::class)],
-            'exam_type_id' => [Rule::exists(ExamType::class, 'id')],
+            'exam_chapter_id' => [Rule::exists(ExamChapter::class, 'id')],
         ]);
 
         try {
-            $examPattern->update($validated);
+            $examTopic->update($validated);
             return response()->json([
                 'success' => true,
                 'message' => 'Saved successfully',
@@ -114,14 +99,10 @@ class ExamPatternController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $req, ExamPattern $examPattern)
+    public function destroy(ExamTopic $examTopic)
     {
-        $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
-        }
         try {
-            $examPattern->delete();
+            $examTopic->delete();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

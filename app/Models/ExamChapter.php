@@ -38,4 +38,14 @@ class ExamChapter extends Model
     {
         return $this->status->value == $askedStatus;
     }
+
+    public function isStatusDraft()
+    {
+        return $this->status === ModelStatusEnum::DRAFT;
+    }
+
+    public function isStatusPublished()
+    {
+        return $this->status === ModelStatusEnum::PUBLISHED;
+    }
 }

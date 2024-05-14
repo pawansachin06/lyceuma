@@ -7,7 +7,7 @@ use App\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ExamDifficulty extends Model
+class ExamClass extends Model
 {
     use HasFactory;
     use UuidTrait;
@@ -23,6 +23,11 @@ class ExamDifficulty extends Model
         'status' => ModelStatusEnum::class,
     ];
 
+    public function isStatus($askedStatus = '')
+    {
+        return $this->status->value == $askedStatus;
+    }
+
     public function isStatusDraft()
     {
         return $this->status === ModelStatusEnum::DRAFT;
@@ -32,5 +37,4 @@ class ExamDifficulty extends Model
     {
         return $this->status === ModelStatusEnum::PUBLISHED;
     }
-
 }

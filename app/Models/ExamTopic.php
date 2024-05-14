@@ -7,7 +7,7 @@ use App\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ExamDifficulty extends Model
+class ExamTopic extends Model
 {
     use HasFactory;
     use UuidTrait;
@@ -16,12 +16,22 @@ class ExamDifficulty extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'name', 'status',
+        'name', 'status', 'exam_chapter_id',
     ];
 
     protected $casts = [
         'status' => ModelStatusEnum::class,
     ];
+
+    public function chapter()
+    {
+        return $this->hasOne(ExamChapter::class, 'id', 'exam_chapter_id');
+    }
+
+    public function isStatus($askedStatus = '')
+    {
+        return $this->status->value == $askedStatus;
+    }
 
     public function isStatusDraft()
     {
@@ -32,5 +42,4 @@ class ExamDifficulty extends Model
     {
         return $this->status === ModelStatusEnum::PUBLISHED;
     }
-
 }

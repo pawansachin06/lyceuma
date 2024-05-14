@@ -48,6 +48,20 @@ class AdminLayout extends Component
                 'show' => ($isSuperAdmin || $isAdmin || $isEditor),
             ],
             [
+                'route' => 'exam-categories.index',
+                'routes' => ['exam-categories.index', 'exam-categories.create', 'exam-categories.edit'],
+                'icon' => 'icons.library-books',
+                'title' => 'Exam Categories',
+                'show' => ($isSuperAdmin || $isAdmin || $isEditor),
+            ],
+            [
+                'route' => 'exam-classes.index',
+                'routes' => ['exam-classes.index', 'exam-classes.create', 'exam-classes.edit'],
+                'icon' => 'icons.library-books',
+                'title' => 'Classes',
+                'show' => ($isSuperAdmin || $isAdmin || $isEditor),
+            ],
+            [
                 'route' => 'exam-subjects.index',
                 'routes' => ['exam-subjects.index', 'exam-subjects.create', 'exam-subjects.edit'],
                 'icon' => 'icons.library-books',
@@ -62,10 +76,26 @@ class AdminLayout extends Component
                 'show' => ($isSuperAdmin || $isAdmin || $isEditor),
             ],
             [
+                'route' => 'exam-topics.index',
+                'routes' => ['exam-topics.index', 'exam-topics.create', 'exam-topics.edit'],
+                'icon' => 'icons.library-books',
+                'title' => 'Topics',
+                'show' => ($isSuperAdmin || $isAdmin || $isEditor),
+            ],
+            [
                 'route' => 'exam-questions.index',
-                'routes' => ['exam-questions.index', 'exam-questions.create', 'exam-questions.edit'],
+                'routes' => ['exam-questions.index'],
+                'icon' => 'icons.library-books',
+                'title' => 'Review Questions',
+                'show' => ($isSuperAdmin || $isAdmin || $isEditor),
+            ],
+            [
+                'route' => 'exam-questions.create',
+                'routes' => ['exam-questions.edit'],
                 'icon' => 'icons.library-books',
                 'title' => 'Questions',
+                'type' => 'form',
+                'route' => route('exam-questions.store'),
                 'show' => ($isSuperAdmin || $isAdmin || $isEditor),
             ],
             [

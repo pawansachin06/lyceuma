@@ -50,7 +50,7 @@ class ExamQuestionController extends Controller
         }
         try {
             $item = ExamQuestion::create([
-                'name' => 'New question',
+                'name' => '',
                 'correct_answer' => 1,
             ]);
             return response()->json([
@@ -86,9 +86,10 @@ class ExamQuestionController extends Controller
         $statuses = ModelStatusEnum::toArray();
         $examPatterns = ExamPattern::with('type:id,name')
                         ->orderBy('name', 'desc')
+                        ->where('status', ModelStatusEnum::PUBLISHED)
                         ->get(['id', 'name', 'exam_type_id']);
-        $examDifficulties = ExamDifficulty::get(['id', 'name']);
-        $examSubjects = ExamSubject::get(['id', 'name']);
+        $examDifficulties = ExamDifficulty::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
+        $examSubjects = ExamSubject::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
         $examAnswerTypes = ExamAnswerTypeEnum::toArray();
         return view('exam-questions.edit', [
             'item' => $examQuestion,

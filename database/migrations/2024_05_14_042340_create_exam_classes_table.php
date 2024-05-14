@@ -12,10 +12,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('exam_patterns', function (Blueprint $table) {
+        Schema::create('exam_classes', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary;
             $table->string('name');
-            $table->foreignUuid('exam_type_id')->nullable();
             $table->string('status')->default(ModelStatusEnum::DRAFT);
             $table->timestamps();
         });
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('exam_patterns');
+        Schema::dropIfExists('exam_classes');
     }
 };

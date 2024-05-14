@@ -2,7 +2,7 @@
     <div class="lg:container px-3 py-3">
         <div class="mb-2 flex flex-wrap justify-between items-center">
             <div class="">
-                <h1 class="text-2xl font-semibold">Edit Question</h1>
+                <h1 class="text-2xl font-sans font-semibold">Edit Question</h1>
             </div>
             <div class="">
                 <x-button href="{{ route('exam-questions.index') }}">Back</x-button>
@@ -87,19 +87,19 @@
                 </div>
                 <div class="w-full px-1 mb-3">
                     <div>Answer 1</div>
-                    <textarea class="app-ckeditor-textarea" data-name="answer1" style="display:none;"><?= $item->answer1 ?></textarea>
+                    <textarea class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="answer1"><?= $item->answer1 ?></textarea>
                 </div>
                 <div class="w-full px-1 mb-3">
                     <div>Answer 2</div>
-                    <textarea class="app-ckeditor-textarea" data-name="answer2" style="display:none;"><?= $item->answer2 ?></textarea>
+                    <textarea class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="answer2"><?= $item->answer2 ?></textarea>
                 </div>
                 <div class="w-full px-1 mb-3">
                     <div>Answer 3</div>
-                    <textarea class="app-ckeditor-textarea" data-name="answer3" style="display:none;"><?= $item->answer3 ?></textarea>
+                    <textarea class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="answer3"><?= $item->answer3 ?></textarea>
                 </div>
                 <div class="w-full px-1 mb-3">
                     <div>Answer 4</div>
-                    <textarea class="app-ckeditor-textarea" data-name="answer4" style="display:none;"><?= $item->answer4 ?></textarea>
+                    <textarea class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="answer4"><?= $item->answer4 ?></textarea>
                 </div>
                 <div class="w-full px-1 mb-3">
                     <div>Correct Answer</div>

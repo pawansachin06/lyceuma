@@ -45,7 +45,7 @@ class ExamChapterController extends Controller
         }
         try {
             $item = ExamChapter::create([
-                'name' => 'New chapter',
+                'name' => '',
             ]);
             return response()->json([
                 'success' => true,
@@ -78,13 +78,11 @@ class ExamChapterController extends Controller
             abort(404);
         }
         $statuses = ModelStatusEnum::toArray();
-        $examSubjects = ExamSubject::get(['id', 'name']);
-        $examDifficulties = ExamDifficulty::get(['id', 'name']);
-        $examChapters = ExamChapter::get(['id', 'name']);
+        $examSubjects = ExamSubject::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
+        $examDifficulties = ExamDifficulty::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
         return view('exam-chapters.edit', [
             'item' => $examChapter,
             'statuses' => $statuses,
-            'examChapters' => $examChapters,
             'examDifficulties' => $examDifficulties,
             'examSubjects' => $examSubjects,
         ]);
@@ -103,7 +101,6 @@ class ExamChapterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'status' => [new Enum(ModelStatusEnum::class)],
             'exam_subject_id' => [Rule::exists(ExamSubject::class, 'id')],
-            'exam_chapter_id' => ['nullable', Rule::exists(ExamChapter::class, 'id')],
             'exam_difficulty_id' => [Rule::exists(ExamDifficulty::class, 'id')],
         ]);
 

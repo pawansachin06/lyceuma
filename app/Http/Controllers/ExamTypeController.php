@@ -43,7 +43,7 @@ class ExamTypeController extends Controller
 
         try {
             $item = ExamType::create([
-                'name' => 'New exam type',
+                'name' => '',
             ]);
             return response()->json([
                 'success' => true,

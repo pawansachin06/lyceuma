@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('exam_categories', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary;
             $table->string('name');
-            $table->foreignUuid('exam_pattern_id')->constrained()->cascadeOnDelete();
             $table->string('status')->default(ModelStatusEnum::DRAFT);
             $table->timestamps();
         });

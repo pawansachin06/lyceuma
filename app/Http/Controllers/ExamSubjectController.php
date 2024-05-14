@@ -42,7 +42,7 @@ class ExamSubjectController extends Controller
         }
         try {
             $item = ExamSubject::create([
-                'name' => 'New subject',
+                'name' => '',
             ]);
             return response()->json([
                 'success' => true,

@@ -2,7 +2,7 @@
     <div class="lg:container px-3 py-3">
         <div class="mb-2 flex flex-wrap justify-between items-center">
             <div class="">
-                <h1 class="text-2xl font-semibold">Edit Subject</h1>
+                <h1 class="text-2xl font-sans font-semibold">Edit Subject</h1>
             </div>
             <div class="">
                 <x-button href="{{ route('exam-subjects.index') }}">Back</x-button>

@@ -3,26 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ModelStatusEnum;
+use App\Models\ExamClass;
 use Exception;
-use App\Models\ExamPattern;
-use App\Models\ExamType;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
-class ExamPatternController extends Controller
+class ExamClassController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $req)
+    public function index()
     {
-        $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
-        }
-        $items = ExamPattern::with('type')->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
-        return view('exam-patterns.index', ['items' => $items]);
+        $items = ExamClass::latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        return view('exam-classes.index', ['items'=> $items]);
     }
 
     /**
@@ -38,18 +33,14 @@ class ExamPatternController extends Controller
      */
     public function store(Request $req)
     {
-        $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
-        }
         try {
-            $item = ExamPattern::create([
+            $item = ExamClass::create([
                 'name' => '',
             ]);
             return response()->json([
                 'success' => true,
                 'message' => 'Loading...',
-                'redirect' => route('exam-patterns.edit', $item),
+                'redirect' => route('exam-classes.edit', $item),
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -62,7 +53,7 @@ class ExamPatternController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ExamPattern $examPattern)
+    public function show(ExamClass $examClass)
     {
         //
     }
@@ -70,38 +61,27 @@ class ExamPatternController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $req, ExamPattern $examPattern)
+    public function edit(ExamClass $examClass)
     {
-        $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
-        }
         $statuses = ModelStatusEnum::toArray();
-        $examTypes = ExamType::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
-        return view('exam-patterns.edit', [
-            'item'=> $examPattern,
+        return view('exam-classes.edit', [
+            'item'=> $examClass,
             'statuses'=> $statuses,
-            'examTypes'=> $examTypes,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $req, ExamPattern $examPattern)
+    public function update(Request $req, ExamClass $examClass)
     {
-        $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
-        }
         $validated = $req->validate([
             'name' => ['required', 'string', 'max:255'],
             'status' => [new Enum(ModelStatusEnum::class)],
-            'exam_type_id' => [Rule::exists(ExamType::class, 'id')],
         ]);
 
         try {
-            $examPattern->update($validated);
+            $examClass->update($validated);
             return response()->json([
                 'success' => true,
                 'message' => 'Saved successfully',
@@ -114,14 +94,10 @@ class ExamPatternController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $req, ExamPattern $examPattern)
+    public function destroy(ExamClass $examClass)
     {
-        $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
-        }
         try {
-            $examPattern->delete();
+            $examClass->delete();
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
