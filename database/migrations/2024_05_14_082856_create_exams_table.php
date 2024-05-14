@@ -12,10 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('exam_patterns', function (Blueprint $table) {
+        Schema::create('exams', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary;
             $table->string('name');
+            $table->string('table')->nullable();
+            $table->uuid('exam_category_id')->nullable();
             $table->uuid('exam_type_id')->nullable();
+            $table->integer('duration')->unsigned()->default(1);
+            $table->date('date')->nullable();
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
+            $table->text('classes')->nullable();
+            $table->text('subjects')->nullable();
             $table->integer('order')->unsigned()->default(0);
             $table->string('status')->default(ModelStatusEnum::DRAFT);
             $table->timestamps();
@@ -27,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('exam_patterns');
+        Schema::dropIfExists('exams');
     }
 };

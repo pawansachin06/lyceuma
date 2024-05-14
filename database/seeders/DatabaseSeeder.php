@@ -6,6 +6,7 @@ use App\Enums\ModelStatusEnum;
 use App\Enums\UserRoleEnum;
 use App\Models\ExamCategory;
 use App\Models\ExamChapter;
+use App\Models\ExamClass;
 use App\Models\User;
 use App\Models\ExamType;
 use App\Models\ExamSubject;
@@ -81,10 +82,22 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+        $examClasses = [
+            ['name' => 'Class X'],
+            ['name' => 'Class XI'],
+            ['name' => 'Class XII'],
+        ];
+        foreach ($examClasses as $examClass) {
+            ExamClass::factory()->create([
+                'name' => $examClass['name'],
+                'status' => ModelStatusEnum::PUBLISHED,
+            ]);
+        }
+
 
         $examCategories = [
-            ['name'=> 'Exam'],
-            ['name'=> 'DPP'],
+            ['name' => 'Exam'],
+            ['name' => 'DPP'],
         ];
         foreach ($examCategories as $examCategory) {
             ExamCategory::factory()->create([
@@ -150,13 +163,14 @@ class DatabaseSeeder extends Seeder
 
 
         $examDifficulties = [
-            ['name' => 'Easy'],
-            ['name' => 'Moderate'],
-            ['name' => 'Tough'],
+            ['name' => 'Easy', 'order' => 1],
+            ['name' => 'Moderate', 'order' => 2],
+            ['name' => 'Tough', 'order' => 3],
         ];
         foreach ($examDifficulties as $examDifficulty) {
             ExamDifficulty::factory()->create([
                 'name' => $examDifficulty['name'],
+                'order' => $examDifficulty['order'],
                 'status' => ModelStatusEnum::PUBLISHED,
             ]);
         }

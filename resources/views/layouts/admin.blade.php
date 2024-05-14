@@ -1,5 +1,6 @@
 @props([
     'aos' => 0,
+    'exam' => 0,
     'swiper' => 0,
     'tinymce' => 0,
     'ckeditor' => 0,
@@ -37,8 +38,10 @@
     ];
     @endphp
     @foreach($stylesArr as $stylePath)
-    <link rel="preload" as="style" href="{{ $stylePath }}" />
-    <link rel="stylesheet" href="{{ $stylePath }}" />
+        @if( !empty($stylePath) )
+            <link rel="preload" as="style" href="{{ $stylePath }}" />
+            <link rel="stylesheet" href="{{ $stylePath }}" />
+        @endif
     @endforeach
 
     <script defer src="/js/lib/axios.min.js?v=1.6.8"></script>
@@ -122,6 +125,7 @@
     @php
     $scriptsArr = [
         'sweetalert' => !empty($sweetalert) ? '/js/lib/sweetalert2.min.js?v=11.9.0' : '',
+        'exam' => !empty($exam) ? '/js/exam.js?v='. $version : '',
         'global' => '/js/global.js?v='. $version,
     ];
     @endphp
@@ -155,7 +159,9 @@
     @endif
 
     @foreach($scriptsArr as $scriptPath)
-    <script defer src="{{ $scriptPath }}"></script>
+        @if( !empty($scriptPath) )
+            <script defer src="{{ $scriptPath }}"></script>
+        @endif
     @endforeach
 
     @livewireScripts

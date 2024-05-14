@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('exam_difficulties', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary;
             $table->string('name');
+            $table->integer('order')->unsigned()->default(0);
             $table->string('status')->default(ModelStatusEnum::DRAFT);
             $table->timestamps();
         });

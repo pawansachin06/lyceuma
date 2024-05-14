@@ -15,7 +15,8 @@ return new class extends Migration
         Schema::create('exam_topics', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary;
             $table->string('name');
-            $table->foreignUuid('exam_chapter_id')->nullable();
+            $table->uuid('exam_chapter_id')->nullable();
+            $table->integer('order')->unsigned()->default(0);
             $table->string('status')->default(ModelStatusEnum::DRAFT);
             $table->timestamps();
         });

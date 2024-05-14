@@ -6,10 +6,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExamTypeController;
 use App\Http\Controllers\ExamChapterController;
 use App\Http\Controllers\ExamClassController;
+use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamPatternController;
 use App\Http\Controllers\ExamQuestionController;
 use App\Http\Controllers\ExamSubjectController;
 use App\Http\Controllers\ExamTopicController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\SocialLoginController;
 
 
@@ -37,6 +39,9 @@ Route::middleware('auth')->group(function(){
     Route::resource('users', UserController::class, [
         'name'=> 'users'
     ]);
+    Route::resource('exams', ExamController::class, [
+        'name'=> 'exams'
+    ]);
     Route::resource('exam-types', ExamTypeController::class, [
         'name'=> 'exam-types'
     ]);
@@ -58,9 +63,22 @@ Route::middleware('auth')->group(function(){
     Route::resource('exam-topics', ExamTopicController::class, [
         'name'=> 'exam-topics'
     ]);
-    Route::resource('exam-questions', ExamQuestionController::class, [
+    /*Route::resource('exam-questions', ExamQuestionController::class, [
         'name'=> 'exam-questions'
-    ]);
+    ]);*/
+
+    Route::post('exams/questions/{exam}',[
+        ExamController::class, 'addQuestion'
+    ])->name('exams.add-question');
+    Route::get('exams/questions/{exam}/{id}', [
+        ExamController::class, 'editQuestion',
+    ])->name('exams.edit-question');
+    Route::put('exams/questions/{exam}/{id}', [
+        ExamController::class, 'updateQuestion',
+    ])->name('exams.update-question');
+    Route::delete('exams/questions/{exam}/{id}', [
+        ExamController::class, 'destroyQuestion',
+    ])->name('exams.destroy-question');
 
 });
 
@@ -74,3 +92,6 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+
+Route::get('/mathjax', [PageController::class, 'mathjax'])->name('mathjax');

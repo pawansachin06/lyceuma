@@ -17,9 +17,9 @@ return new class extends Migration
             $table->uuid('id')->unique()->primary;
             $table->string('name');
             $table->string('status')->default(ModelStatusEnum::DRAFT);
-            $table->foreignUuid('exam_pattern_id')->nullable();
-            $table->foreignUuid('exam_subject_id')->nullable();
-            $table->foreignUuid('exam_difficulty_id')->nullable();
+            $table->uuid('exam_pattern_id')->nullable();
+            $table->uuid('exam_subject_id')->nullable();
+            $table->uuid('exam_difficulty_id')->nullable();
             $table->text('question')->nullable();
             $table->text('solution')->nullable();
             $table->string('answer_type')->default(ExamAnswerTypeEnum::RADIO);
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->text('answer2')->nullable();
             $table->text('answer3')->nullable();
             $table->text('answer4')->nullable();
+            $table->integer('order')->unsigned()->default(0);
             $table->timestamps();
         });
     }

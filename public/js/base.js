@@ -222,6 +222,3 @@ if (previewImgInputs) {
         });
     }
 }
-
-
-
