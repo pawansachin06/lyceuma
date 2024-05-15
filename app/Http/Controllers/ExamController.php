@@ -26,10 +26,27 @@ class ExamController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $req)
     {
-        $items = Exam::with('type:id,name')->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
-        return view('exams.index', ['items' => $items]);
+        $examCategories = ExamCategory::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
+        $examTypes = ExamType::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
+        $examClasses = ExamClass::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
+        $query = Exam::query()->with('type:id,name')->with('category:id,name');
+        if(!empty($req->category_id)){
+            $query = $query->where('exam_category_id', $req->category_id);
+        }
+        if(!empty($req->type_id)){
+            $query = $query->where('exam_type_id', $req->type_id);
+        }
+        $items = $query->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        return view('exams.index', [
+            'items' => $items,
+            'type_id' => $req->type_id,
+            'category_id' => $req->category_id,
+            'examTypes' => $examTypes,
+            // 'examClasses' => $examClasses,
+            'examCategories' => $examCategories,
+        ]);
     }
 
     /**

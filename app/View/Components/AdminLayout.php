@@ -35,9 +35,16 @@ class AdminLayout extends Component
             ],
             [
                 'route' => 'exams.index',
-                'routes' => ['exams.index', 'exams.create', 'exams.edit'],
+                'routes' => ['exams.index', 'exams.edit'],
                 'icon' => 'icons.stacks',
-                'title' => 'Exams',
+                'title' => 'Manage Exam',
+                'show' => true,
+            ],
+            [
+                'route' => 'exams.create',
+                'routes' => ['exams.create'],
+                'icon' => 'icons.contract-edit',
+                'title' => 'Create Exam',
                 'show' => true,
             ],
             [

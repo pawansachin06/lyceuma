@@ -33,6 +33,11 @@ class Exam extends Model
         return $this->hasOne(ExamType::class, 'id', 'exam_type_id');
     }
 
+    public function category()
+    {
+        return $this->hasOne(ExamCategory::class, 'id', 'exam_category_id');
+    }
+
     public function isStatus($askedStatus = '')
     {
         return $this->status->value == $askedStatus;
