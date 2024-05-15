@@ -36,7 +36,7 @@
                     <select name="class_id" class="rounded py-1 focus:border-primary-500 focus:ring-primary-400">
                         <option value="">All classes</option>
                         @foreach($examClasses as $examClass)
-                            <option value="{{ $examClass->id }}">{{ $examClass->name }}</option>
+                            <option value="{{ $examClass->id }}" <?= $examClass->id == $class_id ? 'selected' : '' ?>>{{ $examClass->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -52,6 +52,7 @@
                             <th class="px-2 py-2">Name</th>
                             <th class="px-2 py-2">Type</th>
                             <th class="px-2 py-2">Category</th>
+                            <th class="px-2 py-2">Classes</th>
                             <th class="px-2 py-2 text-center">Status</th>
                             <th class="px-2 py-2">Action</th>
                         </tr>
@@ -62,6 +63,13 @@
                                 <td class="px-2 py-2">{{ $item->name }}</td>
                                 <td class="px-2 py-2">{{ $item->type?->name }}</td>
                                 <td class="px-2 py-2">{{ $item->category?->name }}</td>
+                                <td class="px-2 py-2">
+                                    @if( !empty($item->classes) && is_iterable($item->classes) )
+                                        @foreach($item->classes as $item_class)
+                                            {{ !empty($item_class->name) ? $item_class->name . ($loop->last ? '' : ', ') : '' }}
+                                        @endforeach
+                                    @endif
+                                </td>
                                 <td class="px-2 py-2 text-center">
                                     @if( $item->isStatusPublished() )
                                         <x-icons.task-alt class="w-8 h-8 px-1 py-1 text-green-800 bg-green-200 rounded" />

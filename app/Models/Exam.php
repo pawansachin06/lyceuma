@@ -17,15 +17,13 @@ class Exam extends Model
 
     protected $fillable = [
         'name', 'table', 'exam_category_id', 'exam_type_id', 'duration', 'date',
-        'start_time', 'end_time', 'classes', 'subjects', 'order', 'status',
+        'start_time', 'end_time', 'order', 'status',
     ];
 
     protected $casts = [
         'status' => ModelStatusEnum::class,
-        'classes' => 'array',
         'duration' => 'integer',
         'date' => 'date',
-        'subjects' => 'array',
     ];
 
     public function type()
@@ -36,6 +34,16 @@ class Exam extends Model
     public function category()
     {
         return $this->hasOne(ExamCategory::class, 'id', 'exam_category_id');
+    }
+
+    public function classes()
+    {
+        return $this->belongsToMany(ExamClass::class, 'exam_pivot_exam_class', 'exam_id', 'exam_class_id');
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(ExamSubject::class, 'exam_pivot_exam_subject', 'exam_id', 'exam_subject_id');
     }
 
     public function isStatus($askedStatus = '')

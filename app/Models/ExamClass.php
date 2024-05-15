@@ -23,6 +23,11 @@ class ExamClass extends Model
         'status' => ModelStatusEnum::class,
     ];
 
+    public function exams()
+    {
+        return $this->belongsToMany(Exam::class, 'exam_pivot_exam_class', 'exam_class_id', 'exam_id');
+    }
+
     public function isStatus($askedStatus = '')
     {
         return $this->status->value == $askedStatus;

@@ -22,8 +22,7 @@ return new class extends Migration
             $table->date('date')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
-            $table->text('classes')->nullable();
-            $table->text('subjects')->nullable();
+            $table->text('difficulties')->nullable();
             $table->integer('order')->unsigned()->default(0);
             $table->string('status')->default(ModelStatusEnum::DRAFT);
             $table->timestamps();

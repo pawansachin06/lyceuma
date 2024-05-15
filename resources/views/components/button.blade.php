@@ -5,7 +5,7 @@
     'type' => '',
 ])
 @php
-    $classes = ' inline-flex gap-2 items-center justify-center border border-transparent rounded-md font-semibold tracking-wide transition-colors focus:outline focus:outline-offset-2';
+    $classes = ' select-none inline-flex gap-2 items-center justify-center border border-transparent rounded-md font-semibold tracking-wide transition-colors focus:outline focus:outline-offset-2';
 
     if( !empty($href) ){
         $type = '';

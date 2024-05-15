@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ExamAnswerTypeEnum;
-use App\Enums\ModelStatusEnum;
-use App\Models\Exam;
-use App\Models\ExamCategory;
-use App\Models\ExamChapter;
-use App\Models\ExamClass;
-use App\Models\ExamDifficulty;
-use App\Models\ExamSubject;
-use App\Models\ExamTopic;
-use App\Models\ExamType;
 use Exception;
+use App\Enums\ModelStatusEnum;
+use App\Enums\ExamAnswerTypeEnum;
+use App\Models\Exam;
+use App\Models\ExamType;
+use App\Models\ExamClass;
+use App\Models\ExamTopic;
+use App\Models\ExamChapter;
+use App\Models\ExamSubject;
+use App\Models\ExamCategory;
+use App\Models\ExamDifficulty;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
 class ExamController extends Controller
 {
@@ -31,20 +31,27 @@ class ExamController extends Controller
         $examCategories = ExamCategory::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
         $examTypes = ExamType::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
         $examClasses = ExamClass::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
-        $query = Exam::query()->with('type:id,name')->with('category:id,name');
+        $query = Exam::query()->with('type:id,name')->with('category:id,name')->with('classes:id,name');
         if(!empty($req->category_id)){
             $query = $query->where('exam_category_id', $req->category_id);
         }
         if(!empty($req->type_id)){
             $query = $query->where('exam_type_id', $req->type_id);
         }
+        if(!empty($req->class_id)){
+            $class_id = $req->class_id;
+            $query = $query->whereHas('classes', function($q) use ($class_id){
+                $q->whereIn('exam_class_id', [$class_id]);
+            });
+        }
         $items = $query->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
         return view('exams.index', [
             'items' => $items,
+            'class_id' => $req->class_id,
             'type_id' => $req->type_id,
             'category_id' => $req->category_id,
             'examTypes' => $examTypes,
-            // 'examClasses' => $examClasses,
+            'examClasses' => $examClasses,
             'examCategories' => $examCategories,
         ]);
     }
@@ -137,9 +144,10 @@ class ExamController extends Controller
                 'date' => $validated['date'],
                 'start_time' => $validated['start_time'],
                 'end_time' => $validated['end_time'],
-                'classes' => $validated['exam_class_id'],
                 'subjects' => $subjects,
             ]);
+            $exam->classes()->sync($validated['exam_class_id']);
+            $exam->subjects()->sync($validated['exam_subject_id']);
             return response()->json([
                 'success' => true,
                 'message' => 'Loading exam...',
