@@ -22,8 +22,24 @@ class ExamChapterController extends Controller
         if($currentUser->isStudent()){
             abort(404);
         }
-        $items = ExamChapter::with('subject')->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        $items = ExamChapter::with('subject')->latest()->whereNull('parent_id')->orderBy('name', 'asc')->paginate(10)->withQueryString();
         return view('exam-chapters.index', ['items' => $items]);
+    }
+
+    public function apiIndex(Request $req)
+    {
+        $subjectId = $req->subjectId;
+        $items = [];
+        if( !empty($subjectId) ){
+            $items = ExamChapter::with('topics')
+                ->where('status', ModelStatusEnum::PUBLISHED)
+                ->where('exam_subject_id', $subjectId)
+                ->get(['id', 'name', 'parent_id']);
+        }
+        return response()->json([
+            'success'=> true,
+            'items'=> $items,
+        ]);
     }
 
     /**

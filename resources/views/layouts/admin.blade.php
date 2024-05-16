@@ -3,6 +3,8 @@
     'exam' => 0,
     'swiper' => 0,
     'tinymce' => 0,
+    'mathjax' => 0,
+    'question' => 0,
     'ckeditor' => 0,
     'sweetalert' => 0,
     'title' => config('app.name', 'Laravel'),
@@ -80,8 +82,8 @@
                             @if($navLink['show'])
                                 @if( !empty($navLink['type']) )
                                     @if( $navLink['type'] == 'form' )
-                                        <form action="{{ $navLink['route'] }}" method="POST" class="block w-full" data-js="app-create-form">
-                                            <button data-js="app-form-btn" type="submit" class="{{ request()->routeIs($navLink['routes']) ? 'text-white bg-primary-500' : 'text-gray-200 bg-transparent hover:bg-primary-700' }} w-full flex px-2 py-2 items-center gap-2 no-underline focus:outline-primary-500 font-medium border-0">
+                                        <form action="{{ route($navLink['route']) }}" method="POST" class="block w-full" data-js="app-create-form">
+                                            <button data-js="app-form-btn" type="submit" class="hidden {{ request()->routeIs($navLink['routes']) ? 'text-white bg-primary-500' : 'text-gray-200 bg-transparent hover:bg-primary-700' }} w-full flex px-2 py-2 items-center gap-2 no-underline focus:outline-primary-500 font-medium border-0">
                                                 <x-dynamic-component :component="$navLink['icon']" class="w-5 h-5" />
                                                 <span>{{ $navLink['title'] }}</span>
                                                 <svg data-js="btn-loader" xmlns="http://www.w3.org/2000/svg" fill="none" class="animate-spin hidden shrink-0 w-4 h-4" viewBox="0 0 24 24" width="24" height="24">
@@ -122,11 +124,17 @@
         </div>
     </div>
     @stack('modals')
+    @if( !empty($scripts) )
+        {{ $scripts }}
+    @endif
     @php
     $scriptsArr = [
         'sweetalert' => !empty($sweetalert) ? '/js/lib/sweetalert2.min.js?v=11.9.0' : '',
         'exam' => !empty($exam) ? '/js/exam.js?v='. $version : '',
+        'mathjax-local' => !empty($mathjax) ? '/js/mathjax.js?v='. $version : '',
+        'mathjax' => !empty($mathjax) ? 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js' : '',
         'global' => '/js/global.js?v='. $version,
+        'question' => !empty($question) ? '/js/question.js?v'. $version : '',
     ];
     @endphp
     <script defer src="/js/lib/toastify.min.js?v=1.12.0"></script>

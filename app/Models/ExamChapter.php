@@ -16,8 +16,7 @@ class ExamChapter extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'name', 'status', 'exam_subject_id', 'exam_chapter_id',
-        'exam_difficulty_id',
+        'name', 'status', 'exam_subject_id', 'parent_id',
     ];
 
     protected $casts = [
@@ -29,9 +28,14 @@ class ExamChapter extends Model
         return $this->hasOne(ExamSubject::class, 'id', 'exam_subject_id');
     }
 
-    public function difficulty()
+    public function topics()
     {
-        return $this->hasOne(ExamDifficulty::class, 'id', 'exam_difficulty_id');
+        return $this->hasMany(ExamChapter::class, 'parent_id', 'id');
+    }
+
+    public function chapter()
+    {
+        return $this->belongsTo(ExamChapter::class, 'parent_id', 'id');
     }
 
     public function isStatus($askedStatus = '')

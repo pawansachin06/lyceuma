@@ -12,6 +12,10 @@ use App\Models\ExamType;
 use App\Models\ExamSubject;
 use App\Models\ExamDifficulty;
 use App\Models\ExamPattern;
+use App\Models\QuestionTable;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -83,66 +87,204 @@ class DatabaseSeeder extends Seeder
         }
 
         $examClasses = [
-            ['name' => 'Class X'],
-            ['name' => 'Class XI'],
-            ['name' => 'Class XII'],
+            ['name' => 'Class IX', 'order' => 1],
+            ['name' => 'Class X', 'order' => 2],
+            ['name' => 'Class XI',  'order' => 3],
+            ['name' => 'Class XII', 'order' => 4],
         ];
         foreach ($examClasses as $examClass) {
             ExamClass::factory()->create([
                 'name' => $examClass['name'],
+                'order'=> $examClass['order'],
                 'status' => ModelStatusEnum::PUBLISHED,
             ]);
         }
 
 
-        $examCategories = [
-            ['name' => 'Exam'],
-            ['name' => 'DPP'],
-        ];
-        foreach ($examCategories as $examCategory) {
-            ExamCategory::factory()->create([
-                'name' => $examCategory['name'],
-                'status' => ModelStatusEnum::PUBLISHED,
-            ]);
-        }
+        // $examCategories = [
+        //     ['name' => 'Exam'],
+        //     ['name' => 'DPP'],
+        // ];
+        // foreach ($examCategories as $examCategory) {
+        //     ExamCategory::factory()->create([
+        //         'name' => $examCategory['name'],
+        //         'status' => ModelStatusEnum::PUBLISHED,
+        //     ]);
+        // }
 
 
         $examSubjects = [
             [
                 'name' => 'Physics',
                 'chapters' => [
-                    ['name' => '01. Mathematics for Physics',],
-                    ['name' => '02. Units, Dimensions & Error Analysis',],
-                    ['name' => '03. Kinematics',],
-                    ['name' => '04. Newton\'s laws of motion',],
-                    ['name' => '05. Friction',],
-                    ['name' => '06. Circular Motion',],
-                    ['name' => '07. Work, Power & Energy',],
-                    ['name' => '08. Center of Mass and Conservation of Linear Momentum',],
-                    ['name' => '09. Rotational Dynamics',],
-                    ['name' => '10. Gravitation',],
-                    ['name' => '11. Fluids',],
-                    ['name' => '12. Simple Harmonic Motion',],
-                    ['name' => '13. Mechanical Properties of Matter',],
-                    ['name' => '14. Wave Motion',],
-                    ['name' => '15. Thermal Expansion and Calorimetry',],
-                    ['name' => '16. Heat Transfer',],
-                    ['name' => '17. Kinetic Theory of Gases',],
-                    ['name' => '18. Thermodynamics',],
-                    ['name' => '19. Electrostatistics',],
+                    [
+                        'name' => 'Mathematics for Physics',
+                        'topics' => [
+                            ['name' => 'Fundamentals of vectors'],
+                            ['name' => 'Introductory Trigonometry, Coordinate & Algebra'],
+                            ['name' => 'Introductory Differential calculus'],
+                            ['name' => 'Application of Differentiation'],
+                            ['name' => 'Integration and it\'s Applications '],
+                        ],
+                    ],
+                    [
+                        'name' => 'Units, Dimensions & Error Analysis',
+                        'topics' => [
+                            ['name' => 'Units and Dimensions'],
+                            ['name' => 'Dimensional Analysis'],
+                            ['name' => 'Error Analysis'],
+                            ['name' => 'Signifact Numbers in Measurements'],
+                            ['name' => 'Vernier calipers'],
+                            ['name' => 'Screw Gauge'],
+                        ],
+                    ],
+                    [
+                        'name' => 'Kinematics',
+                        'topics' => [
+                            ['name' => 'Physical Quantities in Kinematics'],
+                            ['name' => 'Relations between time varying Physical Quantities'],
+                            ['name' => 'Motion along a Straight line'],
+                            ['name' => 'Graphical interpretation of 1-D motion'],
+                            ['name' => 'Introductory Projectile Motion'],
+                            ['name' => '1-D Relative Motion'],
+                            ['name' => '2-D Relative motion: River-Boat, Rain-Main etc'],
+                        ],
+                    ],
+                    [
+                        'name' => 'Newton\'s laws of motion',
+                        'topics' => [
+                            ['name' => 'Free Body Diagrams and Constraint Relations'],
+                            ['name' => 'Newton\'s Laws - Basics'],
+                            ['name' => 'Application of NLM'],
+                            ['name' => 'Non-Inertial Frame of Referance'],
+                        ],
+                    ],
+                    [
+                        'name' => 'Friction',
+                        'topics' => [
+                            ['name' => 'Introductory Frictional Force'],
+                            ['name' => 'Single Block problems involving Friction'],
+                            ['name' => 'Two Block problems involving Frictional Force'],
+                            ['name' => 'Problems with Critical understanding of Frictional Force'],
+                        ],
+                    ],
+                    [
+                        'name' => 'Circular Motion',
+                        'topics' => [
+                            ['name' => 'Introduction to Angular Variables'],
+                            ['name' => 'Relation between Angular variables and Linear variables'],
+                            ['name' => 'Dynamics of Circular Motion Basics'],
+                            ['name' => 'Problems involving Application of Circular Motion'],
+                            ['name' => 'Banking of Roads'],
+                            ['name' => 'Radius of Curvature'],
+                        ],
+                    ],
+                    ['name' => 'Work, Power & Energy',],
+                    ['name' => 'Center of Mass and Conservation of Linear Momentum',],
+                    ['name' => 'Rotational Dynamics',],
+                    ['name' => 'Gravitation',],
+                    ['name' => 'Fluids',],
+                    ['name' => 'Simple Harmonic Motion',],
+                    ['name' => 'Mechanical Properties of Matter',],
+                    ['name' => 'Wave Motion',],
+                    ['name' => 'Thermal Expansion and Calorimetry',],
+                    ['name' => 'Heat Transfer',],
+                    ['name' => 'Kinetic Theory of Gases',],
+                    ['name' => 'Thermodynamics',],
+                    ['name' => 'Electrostatistics',],
                 ],
             ],
             [
-                'name' => 'Chemistry'
+                'name' => 'Chemistry',
+                'chapters'=> [
+                    [
+                        'name' => 'Some Basic Concepts of Chemistry (Mole Concept)',
+                        'topics' => [
+                            ['name'=> 'Measurement of Physical Properties and Composition of Matter'],
+                            ['name'=> 'Atoms, Molecules and Laws of combination'],
+                            ['name'=> 'Introduction to Mole Concept'],
+                            ['name'=> 'Percentage Composition & Empirical Formula'],
+                            ['name'=> 'Chemical Equations and Stoichiometry'],
+                            ['name'=> 'Solutions and Reactions in Aqueous Medium'],
+                        ],
+                    ],
+                    [
+                        'name'=> 'Structure of Atoms',
+                        'topics'=> [
+                            ['name'=> 'Subatomic Particles & Primitive Models of Atoms'],
+                            ['name'=> 'Electromagnetic Waves and Spectra'],
+                            ['name'=> 'Bohr\'s Model of Atom'],
+                            ['name'=> 'Analysis of Spectra of H-like species'],
+                        ],
+                    ],
+                ],
             ],
             [
-                'name' => 'Mathematics'
+                'name' => 'Mathematics',
+                'chapters'=> [
+                    [
+                        'name'=> 'Basic Maths',
+                        'topics'=> [
+                            ['name'=> 'Basic Arithmetic & Algebra'],
+                            ['name'=> 'Basic Geometry'],
+                            ['name'=> 'Intervals and Inequations'],
+                            ['name'=> 'Modulus Function'],
+                        ],
+                    ],
+                    [
+                        'name'=> 'Logarithms',
+                        'topics'=> [
+                            ['name'=> 'Fundamentals of Logarithms'],
+                            ['name'=> 'Logarithmic Equations'],
+                            ['name'=> 'Logarithmic Inequations'],
+                            ['name'=> 'Characteristics and Mantissa'],
+                        ],
+                    ],
+                ],
             ],
             [
-                'name' => 'Zoology'
+                'name' => 'Zoology',
+                'chapters'=> [
+                    [
+                        'name'=> 'Animal Kingdom',
+                        'topics'=> [
+                            ['name'=> 'Basis of classification and classification'],
+                            ['name'=> 'Classification of Non-choradates/Invertebrates'],
+                            ['name'=> 'Classification of Phylum Chordata'],
+                            ['name'=> 'Subphylum Vertebrata and its Classification'],
+                        ],
+                    ],
+                    [
+                        'name'=> 'Structural Organization in Animals',
+                        'topics'=> [
+                            ['name'=> 'Epithelial Tissue and Cell Junctions'],
+                            ['name'=> 'Connective Tissues'],
+                            ['name'=> 'Muscular and Neural Tissues, Organs and Organ Systems'],
+                            ['name'=> 'Morphology and Anatomy of Frog'],
+                        ],
+                    ],
+                ],
             ],
             [
-                'name' => 'Botany'
+                'name' => 'Botany',
+                'chapters'=> [
+                    [
+                        'name'=> 'The Living World',
+                        'topics'=> [
+                            ['name'=> 'Characteristics of Life and Diversity in Living World'],
+                            ['name'=> 'Taxonomic Categories'],
+                            ['name'=> 'Taxonomic Aids'],
+                        ],
+                    ],
+                    [
+                        'name'=> 'Biological Classification',
+                        'topics'=> [
+                            ['name'=> 'History of biological classification'],
+                            ['name'=> 'Five Kingdom Classification'],
+                            ['name'=> 'Viruses, viroids, prions, lichens and mycoplasma'],
+                        ],
+                    ],
+                ],
             ],
         ];
         foreach ($examSubjects as $__examSubject) {
@@ -157,10 +299,19 @@ class DatabaseSeeder extends Seeder
                         'exam_subject_id' => $examSubject['id'],
                         'status' => ModelStatusEnum::PUBLISHED,
                     ]);
+                    if (!empty($__examChapter['topics'])) {
+                        foreach ($__examChapter['topics'] as $__examTopic) {
+                            $examSubChapter = ExamChapter::factory()->create([
+                                'name' => $__examTopic['name'],
+                                'exam_subject_id' => $examSubject['id'],
+                                'parent_id' => $examChapter['id'],
+                                'status' => ModelStatusEnum::PUBLISHED,
+                            ]);
+                        }
+                    }
                 }
             }
         }
-
 
         $examDifficulties = [
             ['name' => 'Easy', 'order' => 1],
@@ -173,6 +324,45 @@ class DatabaseSeeder extends Seeder
                 'order' => $examDifficulty['order'],
                 'status' => ModelStatusEnum::PUBLISHED,
             ]);
+        }
+
+        $newExamClasses = ExamClass::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
+        $newExamSubjects = ExamSubject::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
+
+        foreach ($newExamClasses as $newExamClass) {
+            foreach ($newExamSubjects as $newExamSubject) {
+                $table_name = 'ques_' . $newExamClass->name . '_' . $newExamSubject->name;
+                $table_name = Str::slug($table_name, '_', 'en', ['-' => '_']);
+                QuestionTable::factory()->create([
+                    'name' => $table_name,
+                    'table' => $table_name,
+                    'exam_class_id' => $newExamClass->id,
+                    'exam_subject_id' => $newExamSubject->id,
+                ]);
+
+                Schema::create($table_name, function (Blueprint $table) {
+                    $table->id();
+                    $table->string('name')->nullable();
+                    $table->text('question');
+                    $table->text('option1')->nullable();
+                    $table->text('option2')->nullable();
+                    $table->text('option3')->nullable();
+                    $table->text('option4')->nullable();
+                    $table->text('option5')->nullable();
+                    $table->text('option6')->nullable();
+                    $table->text('answer')->nullable();
+                    $table->text('solution')->nullable();
+                    $table->boolean('reviewed')->default(false);
+                    $table->decimal('positive_marks', 5, 2)->nullable();
+                    $table->decimal('negative_marks', 5, 2)->nullable();
+                    $table->string('answer_type')->nullable();
+                    $table->uuid('exam_chapter_id')->nullable();
+                    $table->uuid('exam_difficulty_id')->nullable();
+                    $table->integer('order')->unsigned()->default(1);
+                    $table->string('status')->default(ModelStatusEnum::DRAFT);
+                    $table->timestamps();
+                });
+            }
         }
 
         User::factory()->withPersonalTeam()->create([

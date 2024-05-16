@@ -1,29 +1,74 @@
+var ckeditorToMathjaxBtns = document.querySelectorAll('[data-js="ckeditor-to-mathjax-btn"]');
+
 window.MathJax = {
     startup: {
         pageReady: function () {
-            var input = document.getElementById('MathInput');
-            var output = document.getElementById('MathPreview');
-            var button = document.getElementById('renderHTML');
-            output.innerHTML = input.value.trim();
-            window.typesetInput = function () {
-                button.disabled = true;
-                output.innerHTML = input.value.trim();
-                MathJax.texReset();
-                MathJax.typesetClear();
-                MathJax.typesetPromise([output]).catch(function (err) {
-                    output.innerHTML = '';
-                    output.appendChild(document.createTextNode(err.message));
-                    console.error(err);
-                }).then(function () {
-                    button.disabled = false;
-                });
+            var input = document.getElementById('mathjax-input');
+            var output = document.getElementById('mathjax-preview');
+            // var button = document.getElementById('renderHTML');
+
+            if(ckeditorToMathjaxBtns){
+                for (var j = 0; j < ckeditorToMathjaxBtns.length; j++) {
+                    ckeditorToMathjaxBtns[j].click();
+                }
             }
-            input.oninput = typesetInput;
+
+            if(input && output){
+                output.innerHTML = input.value.trim();
+                window.typesetInput = function () {
+                    // button.disabled = true;
+                    output.innerHTML = input.value.trim();
+                    MathJax.texReset();
+                    MathJax.typesetClear();
+                    MathJax.typesetPromise([output]).catch(function (err) {
+                        output.innerHTML = '';
+                        output.appendChild(document.createTextNode(err.message));
+                        console.error(err);
+                    }).then(function () {
+                        // button.disabled = false;
+                    });
+                }
+                input.oninput = typesetInput;
+            }
             return MathJax.startup.defaultPageReady();
         },
     },
     tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']],
         processEscapes: true
+    }
+}
+
+if(ckeditorToMathjaxBtns){
+    for (var i = 0; i < ckeditorToMathjaxBtns.length; i++) {
+        ckeditorToMathjaxBtns[i].addEventListener('click', function(e){
+            e.preventDefault();
+            var el = e.target;
+            var name = el.getAttribute('data-name');
+            var previewId = el.getAttribute('data-preview');
+            var previewEl = (previewId?.length) ? document.getElementById(previewId) : null;
+            if(previewEl && appCkEditors && appCkEditors.length){
+                for (var i = 0; i < appCkEditors.length; i++) {
+                    if(appCkEditors[i].name == name){
+                        var content = appCkEditors[i].editor.getData();
+                        previewEl.innerHTML = content;
+                        el.disabled = true;
+                        el.textContent = 'Please wait..';
+                        MathJax.texReset();
+                        MathJax.typesetClear();
+                        MathJax.typesetPromise([previewEl]).catch(function (err) {
+                            previewEl.innerHTML = '';
+                            previewEl.appendChild(document.createTextNode(err.message));
+                            console.error(err);
+                        }).then(function () {
+                            el.disabled = false;
+                            el.textContent = 'Render';
+                        });
+                    }
+                }
+            } else {
+                console.log(previewEl, appCkEditors );
+            }
+        });
     }
 }

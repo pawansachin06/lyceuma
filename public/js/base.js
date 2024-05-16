@@ -101,6 +101,10 @@ if (appForms) {
 
 var appCreateForms = document.querySelectorAll('[data-js="app-create-form"]');
 if (appCreateForms) {
+    var appCreateFormBtns = document.querySelectorAll('[data-js="app-create-form"] [data-js="app-form-btn"]');
+    for (var i = 0; i < appCreateFormBtns.length; i++) {
+        appCreateFormBtns[i].classList.remove('hidden');
+    }
     for (var i = 0; i < appCreateForms.length; i++) {
         appCreateForms[i].addEventListener('submit', function (e) {
             e.preventDefault();

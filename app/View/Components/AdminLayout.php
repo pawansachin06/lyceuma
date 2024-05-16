@@ -34,6 +34,27 @@ class AdminLayout extends Component
                 'show' => true,
             ],
             [
+                'route' => 'users.index',
+                'routes' => ['users.index', 'users.create', 'users.edit'],
+                'icon' => 'icons.account-circle',
+                'title' => 'Users',
+                'show' => ($isSuperAdmin || $isAdmin),
+            ],
+            [
+                'route'=> 'questions.create',
+                'routes'=> ['questions.create'],
+                'icon'=> 'icons.question',
+                'title'=> 'Add Question',
+                'show'=> true,
+            ],
+            [
+                'route'=> 'questions.index',
+                'routes'=> ['questions.index'],
+                'icon'=> 'icons.stacks',
+                'title'=> 'Review Questions',
+                'show'=> true,
+            ],
+            [
                 'route' => 'exams.index',
                 'routes' => ['exams.index', 'exams.edit'],
                 'icon' => 'icons.stacks',
@@ -112,20 +133,13 @@ class AdminLayout extends Component
             //     'route' => route('exam-questions.store'),
             //     'show' => ($isSuperAdmin || $isAdmin || $isEditor),
             // ],
-            [
-                'route' => 'mathjax',
-                'routes' => ['mathjax'],
-                'icon' => 'icons.function',
-                'title'=> 'Try MathJax',
-                'show' => ($isSuperAdmin || $isAdmin || $isEditor)
-            ],
-            [
-                'route' => 'users.index',
-                'routes' => ['users.index', 'users.create', 'users.edit'],
-                'icon' => 'icons.account-circle',
-                'title' => 'Users',
-                'show' => ($isSuperAdmin || $isAdmin),
-            ],
+            // [
+            //     'route' => 'mathjax',
+            //     'routes' => ['mathjax'],
+            //     'icon' => 'icons.function',
+            //     'title'=> 'Try MathJax',
+            //     'show' => ($isSuperAdmin || $isAdmin || $isEditor)
+            // ],
             [
                 'route' => 'profile.show',
                 'routes' => ['profile.show'],

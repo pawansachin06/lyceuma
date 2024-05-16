@@ -7,8 +7,8 @@ enum UserRoleEnum: string
     case SUPERADMIN = 'SUPERADMIN';
     case ADMIN      = 'ADMIN';
     case EDITOR     = 'EDITOR';
+    case TEACHER    = 'TEACHER';
     case STUDENT    = 'STUDENT';
-    // case TEACHER    = 'TEACHER';
 
     public static function toArray() : array {
         $arr = [];

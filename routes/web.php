@@ -8,10 +8,11 @@ use App\Http\Controllers\ExamChapterController;
 use App\Http\Controllers\ExamClassController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamPatternController;
-use App\Http\Controllers\ExamQuestionController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ExamSubjectController;
 use App\Http\Controllers\ExamTopicController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\QuestionTableController;
 use App\Http\Controllers\SocialLoginController;
 
 
@@ -35,39 +36,64 @@ Route::middleware('guest')->group(function () {
 });
 
 
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class, [
-        'name'=> 'users'
+        'name' => 'users'
     ]);
     Route::resource('exams', ExamController::class, [
-        'name'=> 'exams'
+        'name' => 'exams'
     ]);
     Route::resource('exam-types', ExamTypeController::class, [
-        'name'=> 'exam-types'
+        'name' => 'exam-types'
     ]);
     Route::resource('exam-patterns', ExamPatternController::class, [
-        'name'=> 'exam-patterns'
+        'name' => 'exam-patterns'
     ]);
     Route::resource('exam-categories', ExamCategoryController::class, [
-        'name'=> 'exam-categories'
+        'name' => 'exam-categories'
     ]);
     Route::resource('exam-classes', ExamClassController::class, [
-        'name'=> 'exam-classes'
+        'name' => 'exam-classes'
     ]);
     Route::resource('exam-subjects', ExamSubjectController::class, [
-        'name'=> 'exam-subjects'
+        'name' => 'exam-subjects'
     ]);
     Route::resource('exam-chapters', ExamChapterController::class, [
-        'name'=> 'exam-chapters'
+        'name' => 'exam-chapters'
     ]);
     Route::resource('exam-topics', ExamTopicController::class, [
-        'name'=> 'exam-topics'
+        'name' => 'exam-topics'
     ]);
-    /*Route::resource('exam-questions', ExamQuestionController::class, [
-        'name'=> 'exam-questions'
-    ]);*/
 
-    Route::post('exams/questions/{exam}',[
+
+    Route::get('/questions', [
+        QuestionController::class, 'index'
+    ])->name('questions.index');
+    Route::get('questions/create', [
+        QuestionController::class, 'create'
+    ])->name('questions.create');
+    Route::post('/questions', [
+        QuestionController::class, 'store'
+    ])->name('questions.store');
+    Route::get('/questions/edit/{tableId}/{quesId}', [
+        QuestionController::class, 'edit'
+    ])->name('questions.edit');
+    Route::put('/questions/save/{tableId}/{quesId}', [
+        QuestionController::class, 'update'
+    ])->name('questions.update');
+    Route::delete('/questions/delete/{tableId}/{quesId}', [
+        QuestionController::class, 'destroy'
+    ])->name('questions.destroy');
+
+    // Route::resource('questions', QuestionController::class, [
+    //     'name'=> 'questions'
+    // ]);
+
+    // Route::resource('question-tables', QuestionTableController::class, [
+    //     'name'=> 'question-tables',
+    // ]);
+
+    Route::post('exams/questions/{exam}', [
         ExamController::class, 'addQuestion'
     ])->name('exams.add-question');
     Route::get('exams/questions/{exam}/{id}', [
@@ -79,7 +105,6 @@ Route::middleware('auth')->group(function(){
     Route::delete('exams/questions/{exam}/{id}', [
         ExamController::class, 'destroyQuestion',
     ])->name('exams.destroy-question');
-
 });
 
 

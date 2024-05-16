@@ -15,7 +15,6 @@
                         <tr class="border-solid border-b border-gray-200">
                             <th class="px-2 py-2">Name</th>
                             <th class="px-2 py-2">Subject</th>
-                            <th class="px-2 py-2">Difficulty</th>
                             <th class="px-2 py-2 text-center">Status</th>
                             <th class="px-2 py-2">Action</th>
                         </tr>
@@ -25,7 +24,6 @@
                             <tr class="border border-b border-gray-100">
                                 <td class="px-2 py-2">{{ $item->name }}</td>
                                 <td class="px-2 py-2">{{ $item?->subject?->name }}</td>
-                                <td class="px-2 py-2">{{ $item?->difficulty?->name }}</td>
                                 <td class="px-2 py-2 text-center">
                                     @if( $item->isStatusPublished() )
                                         <x-icons.task-alt class="w-8 h-8 px-1 py-1 text-green-800 bg-green-200 rounded" />

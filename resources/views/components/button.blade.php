@@ -30,7 +30,7 @@
 
 
 @endphp
-<{{ !empty($href) ? 'a' : 'button' }} {{ $attributes->merge(['class' => $classes, 'href'=> $href ]) }}>
+<{{ !empty($href) ? 'a' : 'button' }} {{ !empty($href) ? 'href='. $href . '' : '' }} {{ $attributes->merge(['class' => $classes ]) }} {{ !empty($href) ? '' : ( !empty($type) ? 'type="'. $type .'"' : 'type="submit"' ) }}>
     <span data-js="btn-text">{{ $slot }}</span>
     <svg  data-js="btn-loader" xmlns="http://www.w3.org/2000/svg" fill="none" class="animate-spin hidden shrink-0 w-4 h-4" viewBox="0 0 24 24" width="24" height="24">
         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle>
