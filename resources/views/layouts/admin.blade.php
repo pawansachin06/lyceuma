@@ -77,7 +77,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="grow overflow-y-auto app-scrollbar border-b">
+                    <div class="grow overflow-y-auto app-scrollbar border-b select-none">
                         @foreach($navLinks as $navLink)
                             @if($navLink['show'])
                                 @if( !empty($navLink['type']) )
@@ -86,10 +86,7 @@
                                             <button data-js="app-form-btn" type="submit" class="hidden {{ request()->routeIs($navLink['routes']) ? 'text-white bg-primary-500' : 'text-gray-200 bg-transparent hover:bg-primary-700' }} w-full flex px-2 py-2 items-center gap-2 no-underline focus:outline-primary-500 font-medium border-0">
                                                 <x-dynamic-component :component="$navLink['icon']" class="w-5 h-5" />
                                                 <span>{{ $navLink['title'] }}</span>
-                                                <svg data-js="btn-loader" xmlns="http://www.w3.org/2000/svg" fill="none" class="animate-spin hidden shrink-0 w-4 h-4" viewBox="0 0 24 24" width="24" height="24">
-                                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle>
-                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                </svg>
+                                                <x-loader class="hidden w-4 h-4" />
                                             </button>
                                         </form>
                                     @endif
@@ -112,7 +109,7 @@
                             </button>
                         </form>
                     </div>
-                    <div class="text-center">
+                    <div class="text-center select-none">
                         <a href="{{ config('app.url') }}" target="_blank" rel="noopener noreferrer nofollow" class="text-sm leading-none no-underline text-white">Built with {{ config('app.name') }} Team</a>
                     </div>
                 </div>

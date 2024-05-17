@@ -22,6 +22,15 @@ function getAxiosError(err) {
     return msg;
 }
 
+function niceBytes(x) {
+    var units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    var l = 0, n = parseInt(x, 10) || 0;
+    while (n >= 1024 && ++l) {
+        n = n / 1024;
+    }
+    return (n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
+}
+
 var appForms = document.querySelectorAll('[data-js="app-form"]');
 if (appForms) {
     for (var i = 0; i < appForms.length; i++) {
@@ -226,3 +235,53 @@ if (previewImgInputs) {
         });
     }
 }
+
+var previewImgDeleteBtns = document.querySelectorAll('[data-js="preview-image-delete-btn"]');
+if(previewImgDeleteBtns){
+    for (var i = 0; i < previewImgDeleteBtns.length; i++) {
+        previewImgDeleteBtns[i].addEventListener('click', function(e){
+            e.preventDefault();
+            if(!window.confirm('Permanently delete image ?')){
+                return;
+            }
+            var el = e.target;
+            el.disabled = true;
+            var url = el.getAttribute('data-route');
+            var name = el.getAttribute('data-name');
+            var quesId = el.getAttribute('data-ques');
+            var tableId = el.getAttribute('data-table');
+            var btnText = el.querySelector('[data-js="btn-text"]');
+            var btnLoader = el.querySelector('[data-js="btn-loader"]');
+            var targetImgId = el.getAttribute('data-target-img');
+            var targetImg = targetImgId ? document.getElementById(targetImgId) : null;
+            btnText.classList.add('hidden');
+            btnLoader.classList.remove('hidden');
+            axios.post(url, {
+                name: name, quesId: quesId, tableId: tableId
+            }).then(function(res){
+                Toastify({
+                    text: res.data.message ? res.data.message : 'No response from server',
+                    className: (res.data?.success) ? 'toast-success' : 'toast-error',
+                    position: 'center',
+                }).showToast();
+                if(res.data.success){
+                    el.classList.add('hidden');
+                    targetImg.src = '/img/dummy/blank.png';
+                }
+            }).catch(function(err){
+                let errMsg = getAxiosError(err);
+                Toastify({
+                    text: errMsg,
+                    className: 'toast-error',
+                    position: 'center',
+                }).showToast();
+                dev && console.log(err);
+            }).finally(function(){
+                btnText.classList.remove('hidden');
+                btnLoader.classList.add('hidden');
+                el.disabled = false;
+            });
+        })
+    }
+}
+

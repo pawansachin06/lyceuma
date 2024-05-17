@@ -83,6 +83,16 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    public function classrooms()
+    {
+        return $this->belongsToMany(Classroom::class, 'user_pivot_classroom', 'user_id', 'classroom_id');
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'user_pivot_subject', 'user_id', 'subject_id');
+    }
+
     public function profilePhotoUrl(): Attribute
     {
         return Attribute::get(function () {
@@ -125,13 +135,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
-    // public function isTeacher()
-    // {
-    //     if($this->role == UserRoleEnum::TEACHER){
-    //         return true;
-    //     }
-    //     return false;
-    // }
+    public function isTeacher()
+    {
+        if($this->role == UserRoleEnum::TEACHER){
+            return true;
+        }
+        return false;
+    }
 
     public function isStudent()
     {

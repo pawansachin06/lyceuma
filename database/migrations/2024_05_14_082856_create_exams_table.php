@@ -12,21 +12,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('exams', function (Blueprint $table) {
-            $table->uuid('id')->unique()->primary;
-            $table->string('name');
-            $table->string('table')->nullable();
-            $table->uuid('exam_category_id')->nullable();
-            $table->uuid('exam_type_id')->nullable();
-            $table->integer('duration')->unsigned()->default(1);
-            $table->date('date')->nullable();
-            $table->time('start_time')->nullable();
-            $table->time('end_time')->nullable();
-            $table->text('difficulties')->nullable();
-            $table->integer('order')->unsigned()->default(0);
-            $table->string('status')->default(ModelStatusEnum::DRAFT);
-            $table->timestamps();
-        });
+        // Schema::create('exams', function (Blueprint $table) {
+        //     $table->uuid('id')->unique()->primary;
+        //     $table->string('name');
+        //     $table->string('table')->nullable();
+        //     $table->uuid('exam_category_id')->nullable();
+        //     $table->uuid('exam_type_id')->nullable();
+        //     $table->integer('duration')->unsigned()->default(1);
+        //     $table->date('date')->nullable();
+        //     $table->time('start_time')->nullable();
+        //     $table->time('end_time')->nullable();
+        //     $table->text('difficulties')->nullable();
+        //     $table->integer('order')->unsigned()->default(0);
+        //     $table->string('status')->default(ModelStatusEnum::DRAFT);
+        //     $table->timestamps();
+        // });
     }
 
     /**

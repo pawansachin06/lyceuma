@@ -1,39 +1,148 @@
 (function(){
-    var examSubjectsSelect = document.querySelector('[data-js="exam-subjects-select"]');
-    var examChaptersSelect = document.querySelector('[data-js="exam-chapters-select"]');
-    if(examSubjectsSelect && examChaptersSelect){
-        examSubjectsSelect.addEventListener('change', function(e){
-            var subjectId = examSubjectsSelect.value;
-            examChaptersSelect.disabled = true;
-            while (examChaptersSelect.firstChild) {
-                examChaptersSelect.removeChild(examChaptersSelect.firstChild);
-            }
-            var option = document.createElement('option');
-            option.value = '';
-            option.textContent = 'Pick topic';
-            examChaptersSelect.appendChild(option);
-            axios.get(EXAM_CHAPTERS_API + '?subjectId=' + subjectId).then(function(res){
-                if(res.data.items){
-                    for (var i = 0; i < res.data.items.length; i++) {
-                        if(res.data.items[i].topics?.length){
-                            var optionGroup = document.createElement('optgroup');
-                            optionGroup.label = res.data.items[i]['name'];
-                            for (var j = 0; j < res.data.items[i].topics.length; j++) {
-                                var option = document.createElement('option');
-                                option.value = res.data.items[i].topics[j]['id'];
-                                option.textContent = res.data.items[i].topics[j]['name'];
-                                optionGroup.appendChild(option);
+    var examSubjectsRadios = document.querySelectorAll('[data-js="question-subjects-radio"]');
+    var examChaptersSelect = document.querySelector('[data-js="chapters-select"]');
+    if(examSubjectsRadios && examChaptersSelect){
+        for (var i = 0; i < examSubjectsRadios.length; i++) {
+            examSubjectsRadios[i].addEventListener('change', function(e){
+                var subjectId = e.target.value;
+                examChaptersSelect.disabled = true;
+                while (examChaptersSelect.firstChild) {
+                    examChaptersSelect.removeChild(examChaptersSelect.firstChild);
+                }
+                var option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'Pick topic';
+                examChaptersSelect.appendChild(option);
+                axios.get(CHAPTERS_API + '?subjectId=' + subjectId).then(function(res){
+                    if(res.data.items){
+                        for (var i = 0; i < res.data.items.length; i++) {
+                            if(res.data.items[i].topics?.length){
+                                var optionGroup = document.createElement('optgroup');
+                                optionGroup.label = res.data.items[i]['name'];
+                                for (var j = 0; j < res.data.items[i].topics.length; j++) {
+                                    var option = document.createElement('option');
+                                    option.value = res.data.items[i].topics[j]['id'];
+                                    option.textContent = res.data.items[i].topics[j]['name'];
+                                    optionGroup.appendChild(option);
+                                }
+                                examChaptersSelect.appendChild(optionGroup);
                             }
-                            examChaptersSelect.appendChild(optionGroup);
                         }
                     }
+                }).catch(function(err){
+                    console.log(err);
+                    alert((err?.message) ? err.message : 'An error occured in fetching topics');
+                }).finally(function(){
+                    examChaptersSelect.disabled = false;
+                });
+            });
+        }
+    }
+
+    var questionsImportForm = document.getElementById('questions-import-form');
+    if(questionsImportForm){
+        questionsImportForm.classList.remove('hidden');
+        var questionsImportFormUrl = questionsImportForm.getAttribute('action');
+        questionsImportForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            var data = new FormData(questionsImportForm);
+            var submitBtn = questionsImportForm.querySelector('[data-js="app-form-btn"]');
+            submitBtn.disabled = true;
+            var submitBtnText = submitBtn.querySelector('[data-js="btn-text"]');
+            submitBtnText.textContent = 'Uploading';
+            var submitBtnLoader = submitBtn.querySelector('[data-js="btn-loader"]');
+            submitBtnLoader.classList.remove('hidden');
+            var submitStatus = questionsImportForm.querySelector('[data-js="app-form-status"]');
+            submitStatus.classList.remove('hidden');
+            submitStatus.textContent = 'Connecting, please wait...';
+            axios.post(questionsImportFormUrl, data, {
+                onUploadProgress: function (e) {
+                    var percent = (e.loaded / e.total) * 100;
+                    if(percent > 99){
+                        submitStatus.textContent = 'Processing file, please wait...';
+                    } else {
+                        submitStatus.textContent = 'Uploaded ' + niceBytes(e.loaded) + ' of ' + niceBytes(e.total);
+                    }
                 }
+            }).then(function(res){
+                let msg = (res.data?.message) ? res.data.message : 'No response from server';
+                if (res.data?.reset) {
+                    questionsImportForm.reset();
+                }
+                Toastify({
+                    text: msg,
+                    className: (res.data?.success) ? 'toast-success' : 'toast-error',
+                    position: 'center',
+                }).showToast();
+                submitStatus.textContent = msg;
             }).catch(function(err){
-                console.log(err);
-                alert((err?.message) ? err.message : 'An error occured in fetching topics');
+                let msg = getAxiosError(err);
+                Toastify({
+                    text: msg,
+                    className: 'toast-error',
+                    position: 'center',
+                }).showToast();
+                dev && console.log(err);
             }).finally(function(){
-                examChaptersSelect.disabled = false;
+                submitBtn.disabled = false;
+                submitBtnText.textContent = 'Upload another file';
+                submitBtnLoader.classList.add('hidden');
             });
         });
     }
+
+
+    var questionsExportForm = document.getElementById('questions-export-form');
+    if(questionsExportForm){
+        questionsExportForm.classList.remove('hidden');
+        var questionsExportFormUrl = questionsExportForm.getAttribute('action');
+        questionsExportForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            var data = new FormData(questionsExportForm);
+            var submitBtn = questionsExportForm.querySelector('[data-js="app-form-btn"]');
+            submitBtn.disabled = true;
+            var submitBtnText = submitBtn.querySelector('[data-js="btn-text"]');
+            submitBtnText.textContent = 'Uploading';
+            var submitBtnLoader = submitBtn.querySelector('[data-js="btn-loader"]');
+            submitBtnLoader.classList.remove('hidden');
+            var submitStatus = questionsExportForm.querySelector('[data-js="app-form-status"]');
+            submitStatus.classList.remove('hidden');
+            submitStatus.textContent = 'Connecting, please wait...';
+            axios.post(questionsExportFormUrl, data).then(function(res){
+                let msg = (res.data?.message) ? res.data.message : 'No response from server';
+                if (res.data?.reset) {
+                    questionsExportForm.reset();
+                }
+                if(res.data.success && res.data.download){
+                    var a = document.createElement('a');
+                    a.href = res.data.download;
+                    a.setAttribute('target', '_blank');
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    submitStatus.textContent = '';
+                } else {
+                    Toastify({
+                        text: msg,
+                        className: (res.data?.success) ? 'toast-success' : 'toast-error',
+                        position: 'center',
+                    }).showToast();
+                    submitStatus.textContent = msg;
+                }
+            }).catch(function(err){
+                let msg = getAxiosError(err);
+                Toastify({
+                    text: msg,
+                    className: 'toast-error',
+                    position: 'center',
+                }).showToast();
+                dev && console.log(err);
+            }).finally(function(){
+                submitBtn.disabled = false;
+                submitBtnText.textContent = 'Download another file';
+                submitBtnLoader.classList.add('hidden');
+            });
+        });
+    }
+
 })();

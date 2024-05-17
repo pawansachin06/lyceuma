@@ -4,14 +4,14 @@ namespace Database\Seeders;
 
 use App\Enums\ModelStatusEnum;
 use App\Enums\UserRoleEnum;
-use App\Models\ExamCategory;
-use App\Models\ExamChapter;
-use App\Models\ExamClass;
+// use App\Models\ExamCategory;
+use App\Models\Chapter;
+use App\Models\Classroom;
 use App\Models\User;
-use App\Models\ExamType;
-use App\Models\ExamSubject;
-use App\Models\ExamDifficulty;
-use App\Models\ExamPattern;
+use App\Models\Course;
+use App\Models\Subject;
+use App\Models\Difficulty;
+// use App\Models\ExamPattern;
 use App\Models\QuestionTable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->withPersonalTeam()->create();
 
-        $examTypes = [
+        $courses = [
             [
                 'name' => 'JEE Advanced',
                 'patterns' => [
@@ -61,7 +61,7 @@ class DatabaseSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'State Level Entrances',
+                'name' => 'Foundation',
                 'patterns' => [
                     ['name' => 'KCET',],
                     ['name' => 'MHT CET',],
@@ -70,32 +70,34 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        foreach ($examTypes as $__examType) {
-            $examType = ExamType::factory()->create([
-                'name' => $__examType['name'],
+        foreach ($courses as $__course) {
+            $examType = Course::factory()->create([
+                'name' => $__course['name'],
+                'slug' => Str::slug($__course['name']),
                 'status' => ModelStatusEnum::PUBLISHED,
             ]);
-            if (!empty($__examType['patterns'])) {
-                foreach ($__examType['patterns'] as $__examPattern) {
-                    $examPattern = ExamPattern::factory()->create([
-                        'name' => $__examPattern['name'],
-                        'exam_type_id' => $examType['id'],
-                        'status' => ModelStatusEnum::PUBLISHED,
-                    ]);
-                }
-            }
+            // if (!empty($__examType['patterns'])) {
+            //     foreach ($__examType['patterns'] as $__examPattern) {
+            //         $examPattern = ExamPattern::factory()->create([
+            //             'name' => $__examPattern['name'],
+            //             'exam_type_id' => $examType['id'],
+            //             'status' => ModelStatusEnum::PUBLISHED,
+            //         ]);
+            //     }
+            // }
         }
 
-        $examClasses = [
+        $classrooms = [
             ['name' => 'Class IX', 'order' => 1],
             ['name' => 'Class X', 'order' => 2],
             ['name' => 'Class XI',  'order' => 3],
             ['name' => 'Class XII', 'order' => 4],
         ];
-        foreach ($examClasses as $examClass) {
-            ExamClass::factory()->create([
-                'name' => $examClass['name'],
-                'order'=> $examClass['order'],
+        foreach ($classrooms as $classroom) {
+            Classroom::factory()->create([
+                'name' => $classroom['name'],
+                'slug' => Str::slug($classroom['name']),
+                'order'=> $classroom['order'],
                 'status' => ModelStatusEnum::PUBLISHED,
             ]);
         }
@@ -113,7 +115,7 @@ class DatabaseSeeder extends Seeder
         // }
 
 
-        $examSubjects = [
+        $subjects = [
             [
                 'name' => 'Physics',
                 'chapters' => [
@@ -287,23 +289,26 @@ class DatabaseSeeder extends Seeder
                 ],
             ],
         ];
-        foreach ($examSubjects as $__examSubject) {
-            $examSubject = ExamSubject::factory()->create([
+        foreach ($subjects as $__examSubject) {
+            $examSubject = Subject::factory()->create([
                 'name' => $__examSubject['name'],
+                'slug' => Str::slug($__examSubject['name']),
                 'status' => ModelStatusEnum::PUBLISHED,
             ]);
             if (!empty($__examSubject['chapters'])) {
                 foreach ($__examSubject['chapters'] as $__examChapter) {
-                    $examChapter = ExamChapter::factory()->create([
+                    $examChapter = Chapter::factory()->create([
                         'name' => $__examChapter['name'],
-                        'exam_subject_id' => $examSubject['id'],
+                        'slug' => Str::slug($__examChapter['name']),
+                        'subject_id' => $examSubject['id'],
                         'status' => ModelStatusEnum::PUBLISHED,
                     ]);
                     if (!empty($__examChapter['topics'])) {
                         foreach ($__examChapter['topics'] as $__examTopic) {
-                            $examSubChapter = ExamChapter::factory()->create([
+                            $examSubChapter = Chapter::factory()->create([
                                 'name' => $__examTopic['name'],
-                                'exam_subject_id' => $examSubject['id'],
+                                'slug' => Str::slug($__examTopic['name']),
+                                'subject_id' => $examSubject['id'],
                                 'parent_id' => $examChapter['id'],
                                 'status' => ModelStatusEnum::PUBLISHED,
                             ]);
@@ -314,20 +319,21 @@ class DatabaseSeeder extends Seeder
         }
 
         $examDifficulties = [
-            ['name' => 'Easy', 'order' => 1],
-            ['name' => 'Moderate', 'order' => 2],
-            ['name' => 'Tough', 'order' => 3],
+            ['name' => 'Level 1', 'order' => 1],
+            ['name' => 'Level 2', 'order' => 2],
+            ['name' => 'Level 3', 'order' => 3],
         ];
         foreach ($examDifficulties as $examDifficulty) {
-            ExamDifficulty::factory()->create([
+            Difficulty::factory()->create([
                 'name' => $examDifficulty['name'],
+                'slug' => Str::slug($examDifficulty['name']),
                 'order' => $examDifficulty['order'],
                 'status' => ModelStatusEnum::PUBLISHED,
             ]);
         }
 
-        $newExamClasses = ExamClass::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
-        $newExamSubjects = ExamSubject::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
+        $newExamClasses = Classroom::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
+        $newExamSubjects = Subject::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
 
         foreach ($newExamClasses as $newExamClass) {
             foreach ($newExamSubjects as $newExamSubject) {
@@ -336,8 +342,8 @@ class DatabaseSeeder extends Seeder
                 QuestionTable::factory()->create([
                     'name' => $table_name,
                     'table' => $table_name,
-                    'exam_class_id' => $newExamClass->id,
-                    'exam_subject_id' => $newExamSubject->id,
+                    'classroom_id' => $newExamClass->id,
+                    'subject_id' => $newExamSubject->id,
                 ]);
 
                 Schema::create($table_name, function (Blueprint $table) {
@@ -356,8 +362,9 @@ class DatabaseSeeder extends Seeder
                     $table->decimal('positive_marks', 5, 2)->nullable();
                     $table->decimal('negative_marks', 5, 2)->nullable();
                     $table->string('answer_type')->nullable();
-                    $table->uuid('exam_chapter_id')->nullable();
-                    $table->uuid('exam_difficulty_id')->nullable();
+                    $table->uuid('chapter_id')->nullable();
+                    $table->uuid('course_id')->nullable();
+                    $table->uuid('difficulty_id')->nullable();
                     $table->integer('order')->unsigned()->default(1);
                     $table->string('status')->default(ModelStatusEnum::DRAFT);
                     $table->timestamps();
@@ -366,20 +373,32 @@ class DatabaseSeeder extends Seeder
         }
 
         User::factory()->withPersonalTeam()->create([
-            'name' => 'Admin',
-            'lastname' => 'User',
+            'name' => 'Super Admin',
             'username' => 'admin',
             'role' => UserRoleEnum::SUPERADMIN,
             'email' => 'admin@test.com',
             'phone' => '8181040977',
         ]);
+        // User::factory()->withPersonalTeam()->create([
+        //     'name' => 'Admin',
+        //     'username' => 'admin',
+        //     'role' => UserRoleEnum::ADMIN,
+        //     'email' => 'admin@test.com',
+        //     'phone' => '9100091001',
+        // ]);
+        User::factory()->create([
+            'name' => 'Teacher',
+            'username' => 'teacher',
+            'role' => UserRoleEnum::TEACHER,
+            'email' => 'teacher@test.com',
+            'phone' => '9100091002',
+        ]);
         User::factory()->create([
             'name' => 'Editor',
-            'lastname' => 'User',
             'username' => 'editor',
             'role' => UserRoleEnum::EDITOR,
             'email' => 'editor@test.com',
-            'phone' => '9123456789',
+            'phone' => '9100091005',
         ]);
     }
 }

@@ -3,13 +3,13 @@
 use App\Http\Controllers\ExamCategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ExamTypeController;
-use App\Http\Controllers\ExamChapterController;
-use App\Http\Controllers\ExamClassController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamPatternController;
 use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\ExamSubjectController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\ExamTopicController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\QuestionTableController;
@@ -43,27 +43,27 @@ Route::middleware('auth')->group(function () {
     Route::resource('exams', ExamController::class, [
         'name' => 'exams'
     ]);
-    Route::resource('exam-types', ExamTypeController::class, [
-        'name' => 'exam-types'
+    Route::resource('courses', CourseController::class, [
+        'name' => 'courses'
     ]);
-    Route::resource('exam-patterns', ExamPatternController::class, [
-        'name' => 'exam-patterns'
+    // Route::resource('exam-patterns', ExamPatternController::class, [
+    //     'name' => 'exam-patterns'
+    // ]);
+    // Route::resource('exam-categories', ExamCategoryController::class, [
+    //     'name' => 'exam-categories'
+    // ]);
+    Route::resource('classrooms', ClassroomController::class, [
+        'name' => 'classrooms'
     ]);
-    Route::resource('exam-categories', ExamCategoryController::class, [
-        'name' => 'exam-categories'
+    Route::resource('subjects', SubjectController::class, [
+        'name' => 'subjects'
     ]);
-    Route::resource('exam-classes', ExamClassController::class, [
-        'name' => 'exam-classes'
+    Route::resource('chapters', ChapterController::class, [
+        'name' => 'chapters'
     ]);
-    Route::resource('exam-subjects', ExamSubjectController::class, [
-        'name' => 'exam-subjects'
-    ]);
-    Route::resource('exam-chapters', ExamChapterController::class, [
-        'name' => 'exam-chapters'
-    ]);
-    Route::resource('exam-topics', ExamTopicController::class, [
-        'name' => 'exam-topics'
-    ]);
+    // Route::resource('exam-topics', ExamTopicController::class, [
+    //     'name' => 'exam-topics'
+    // ]);
 
 
     Route::get('/questions', [
@@ -84,6 +84,21 @@ Route::middleware('auth')->group(function () {
     Route::delete('/questions/delete/{tableId}/{quesId}', [
         QuestionController::class, 'destroy'
     ])->name('questions.destroy');
+    Route::post('/questions/image/delete', [
+        QuestionController::class, 'destroyImage'
+    ])->name('questions.image.destroy');
+    Route::get('/questions/export', [
+        QuestionController::class, 'export'
+    ])->name('questions.export');
+    Route::match(['get', 'post'], '/questions/export/download', [
+        QuestionController::class, 'exportDownload'
+    ])->name('questions.export.download');
+    Route::get('/questions/import', [
+        QuestionController::class, 'import'
+    ])->name('questions.import');
+    Route::post('/questions/import/save', [
+        QuestionController::class, 'importUpload'
+    ])->name('questions.import.upload');
 
     // Route::resource('questions', QuestionController::class, [
     //     'name'=> 'questions'

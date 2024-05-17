@@ -12,14 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('exam_patterns', function (Blueprint $table) {
-            $table->uuid('id')->unique()->primary;
-            $table->string('name');
-            $table->uuid('exam_type_id')->nullable();
-            $table->integer('order')->unsigned()->default(0);
-            $table->string('status')->default(ModelStatusEnum::DRAFT);
-            $table->timestamps();
-        });
+        // Schema::create('exam_patterns', function (Blueprint $table) {
+        //     $table->uuid('id')->unique()->primary;
+        //     $table->string('name');
+        //     $table->uuid('exam_type_id')->nullable();
+        //     $table->integer('order')->unsigned()->default(0);
+        //     $table->string('status')->default(ModelStatusEnum::DRAFT);
+        //     $table->timestamps();
+        // });
     }
 
     /**

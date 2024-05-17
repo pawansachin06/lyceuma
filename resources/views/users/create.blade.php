@@ -31,7 +31,7 @@
                 <div class="w-full sm:w-6/12 px-1 mb-2">
                     <div class="flex flex-col">
                         <span>Phone</span>
-                        <input type="number" name="phone" value="" required class="rounded focus:border-primary-500 focus:ring-primary-400" />
+                        <input type="number" name="phone" value="" maxlength="10" minlength="10" required class="rounded focus:border-primary-500 focus:ring-primary-400" />
                     </div>
                 </div>
                 <div class="w-full sm:w-6/12 px-1 mb-2">

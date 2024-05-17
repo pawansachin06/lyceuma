@@ -18,9 +18,9 @@ enum ExamAnswerTypeEnum: string
 
     public static function toFormattedArray() : array {
         $arr = [];
-        $arr[] = ['key'=> self::RADIO, 'value'=> 'Single Choice'];
-        $arr[] = ['key'=> self::CHECKBOX, 'value'=> 'Multiple Choice'];
-        $arr[] = ['key'=> self::NUMBER, 'value'=> 'Integer Type'];
+        $arr[] = ['key'=> 'RADIO', 'value'=> 'Single Choice'];
+        $arr[] = ['key'=> 'CHECKBOX', 'value'=> 'Multiple Choice'];
+        $arr[] = ['key'=> 'NUMBER', 'value'=> 'Integer Type'];
         return $arr;
     }
 }

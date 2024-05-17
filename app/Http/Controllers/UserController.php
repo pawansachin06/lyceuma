@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\User;
 use App\Enums\UserRoleEnum;
+use App\Models\Classroom;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
@@ -20,20 +22,24 @@ class UserController extends Controller
 
     public function index(Request $req)
     {
+        $keyword = $req->s;
         $currentUser = $req->user();
         $query = User::query();
-        if( $currentUser->isSuperAdmin() ){
-        } else if( $currentUser->isAdmin() ){
-            $query = $query->whereIn('role', [
-                UserRoleEnum::EDITOR, UserRoleEnum::STUDENT
-            ]);
-        } else if( $currentUser->isEditor() ) {
-            $query = $query->where('role', UserRoleEnum::STUDENT);
-        } else if( $currentUser->isStudent() ) {
-            $query = $query->where('id', $currentUser->id);
+
+        if($currentUser->isSuperAdmin() || $currentUser->isAdmin()){
+        } else {
+            abort(404);
+        }
+
+        if(!empty($keyword)){
+            $query = $query->where('name', 'like', '%' . $keyword . '%')
+                        ->orWhere('lastname', 'like', '%' . $keyword . '%')
+                        ->orWhere('email', 'like', '%' . $keyword . '%')
+                        ->orWhere('uid', 'like', '%' . $keyword . '%')
+                        ->orWhere('phone', 'like', '%' . $keyword . '%');
         }
         $items = $query->latest()->paginate(10)->withQueryString();
-        return view('users.index', ['items' => $items]);
+        return view('users.index', ['items' => $items, 'keyword'=> $keyword]);
     }
 
 
@@ -46,7 +52,6 @@ class UserController extends Controller
                 'user_roles' => UserRoleEnum::toArray(),
             ]);
         }
-
         abort(403);
     }
 
@@ -117,13 +122,22 @@ class UserController extends Controller
     public function edit(Request $req, User $user)
     {
         $currentUser = $req->user();
-        if( !in_array($currentUser->role, [
-            UserRoleEnum::SUPERADMIN, UserRoleEnum::ADMIN
-        ]) ){
-            abort(403, 'Access denied');
+        if($currentUser->isSuperAdmin() || $currentUser->isAdmin()){
+        } else {
+            abort(404);
         }
+
+        $classrooms = Classroom::orderBy('order', 'asc')->get(['id', 'name']);
+        $subjects = Subject::orderBy('name', 'asc')->get(['id', 'name']);
+        $userClassrooms = $user->classrooms->pluck('id')->toArray();
+        $userSubjects = $user->subjects->pluck('id')->toArray();
         return view('users.edit', [
             'item' => $user,
+            'classrooms'=> $classrooms,
+            'subjects'=> $subjects,
+            'userClassrooms' => $userClassrooms,
+            'currentUser'=> $currentUser,
+            'userSubjects' => $userSubjects,
             'user_roles' => UserRoleEnum::toArray(),
         ]);
     }
@@ -150,15 +164,31 @@ class UserController extends Controller
             'phone' => ['required', 'numeric', 'digits:10', Rule::unique(User::class)->ignore($user->id)],
         ];
 
-        if($currentUser->isSuperAdmin()){
+        if( ($currentUser->isSuperAdmin() || $currentUser->Admin()) && $item->isTeacher() ){
             $rules['role'] = ['required', new Enum(UserRoleEnum::class)];
+            $rules['classroom_id'] = ['nullable'];
+            $rules['classroom_id.*'] = ['nullable', Rule::exists(Classroom::class, 'id')];
+            $rules['subject_id'] = ['nullable'];
+            $rules['subject_id.*'] = ['nullable', Rule::exists(Subject::class, 'id')];
         } else {
-            $validated['role'] = UserRoleEnum::STUDENT;
+            // $validated['role'] = UserRoleEnum::STUDENT;
         }
 
         $validated = $req->validate($rules);
 
         try {
+            if( ($currentUser->isSuperAdmin() || $currentUser->Admin()) && $item->isTeacher() ){
+                if(empty($validated['classroom_id'])){
+                    $item->classrooms()->sync([]);
+                } else {
+                    $item->classrooms()->sync($validated['classroom_id']);
+                }
+                if(empty($validated['subject_id'])){
+                    $item->subjects()->sync([]);
+                } else {
+                    $item->subjects()->sync($validated['subject_id']);
+                }
+            }
             $item->update($validated);
             return response()->json([
                 'success' => true, 'message' => 'Saved successfully',
@@ -174,6 +204,11 @@ class UserController extends Controller
     public function destroy(Request $req, User $user)
     {
         $currentUser = $req->user();
+        if($currentUser->isSuperAdmin() || $currentUser->isAdmin()){
+        } else {
+            return response()->json(['message'=> 'Admins only'], 404);
+        }
+
         if($currentUser->isSuperAdmin()){
             if($currentUser->id == $user->id){
                 return response()->json(['success'=> false, 'message'=> 'Can not deleted own super admin account']);

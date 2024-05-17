@@ -41,7 +41,7 @@
                         <input type="text" name="username" value="{{ $item->username }}" required class="rounded focus:border-primary-500 focus:ring-primary-400" />
                     </div>
                 </div>
-                @if( !empty($user_roles) )
+                @if( ($currentUser->isSuperAdmin() || $currentUser->isAdmin()) && !empty($user_roles) )
                     <div class="w-full sm:w-6/12 px-1 mb-2">
                         <div class="flex flex-col">
                             <span>Role</span>
@@ -52,6 +52,32 @@
                             </select>
                         </div>
                     </div>
+                @endif
+                @if( $item->isTeacher() && !empty($classrooms) )
+                <div class="w-full px-1 mb-3 select-none">
+                    <div>Accessible Classrooms</div>
+                    <div class="flex flex-wrap gap-x-5 gap-y-1">
+                        @foreach($classrooms as $classroom)
+                            <label class="inline-flex gap-2 items-center cursor-pointer">
+                                <input type="checkbox" name="classroom_id[]" value="{{ $classroom->id }}" <?= in_array($classroom->id, $userClassrooms) ? 'checked' : '' ?> class="w-5 h-5 rounded my-1 border-gray-500 text-primary-500 shadow-sm focus:ring-primary-500 border-solid" />
+                                <span>{{ $classroom->name }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+                @if( $item->isTeacher() && !empty($subjects) )
+                <div class="w-full px-1 mb-3 select-none">
+                    <div>Accessible Subjects</div>
+                    <div class="flex flex-wrap gap-x-5 gap-y-1">
+                        @foreach($subjects as $subject)
+                            <label class="inline-flex gap-2 items-center cursor-pointer">
+                                <input type="checkbox" name="subject_id[]" value="{{ $subject->id }}" <?= in_array($subject->id, $userSubjects) ? 'checked' : '' ?> class="w-5 h-5 rounded my-1 border-gray-500 text-primary-500 shadow-sm focus:ring-primary-500 border-solid" />
+                                <span>{{ $subject->name }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
                 @endif
                 <div class="w-full px-1">
                     <div data-js="app-form-status" class="hidden font-semibold hidden w-full mb-2"></div>

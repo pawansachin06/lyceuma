@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ExamChapterController;
+use App\Http\Controllers\ChapterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -9,7 +9,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/chapters/', [
-    ExamChapterController::class, 'apiIndex'
-])->name('api.exam-chapters.index');
+    ChapterController::class, 'apiIndex'
+])->name('api.chapters.index');
 
 
