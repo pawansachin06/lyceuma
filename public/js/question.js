@@ -1,42 +1,84 @@
 (function(){
     var examSubjectsRadios = document.querySelectorAll('[data-js="question-subjects-radio"]');
     var examChaptersSelect = document.querySelector('[data-js="chapters-select"]');
+    var examTopicsSelect   = document.querySelector('[data-js="topics-select"]');
     if(examSubjectsRadios && examChaptersSelect){
         for (var i = 0; i < examSubjectsRadios.length; i++) {
             examSubjectsRadios[i].addEventListener('change', function(e){
                 var subjectId = e.target.value;
+
                 examChaptersSelect.disabled = true;
                 while (examChaptersSelect.firstChild) {
                     examChaptersSelect.removeChild(examChaptersSelect.firstChild);
                 }
                 var option = document.createElement('option');
                 option.value = '';
-                option.textContent = 'Pick topic';
+                option.textContent = 'Pick chapter';
                 examChaptersSelect.appendChild(option);
-                axios.get(CHAPTERS_API + '?subjectId=' + subjectId).then(function(res){
+
+                if(examTopicsSelect){
+                    while (examTopicsSelect.firstChild) {
+                        examTopicsSelect.removeChild(examTopicsSelect.firstChild);
+                    }
+                    var option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'Pick topic';
+                    examTopicsSelect.appendChild(option);
+                }
+
+                axios.post(CHAPTERS_API, {
+                    subjectId: subjectId
+                }).then(function(res){
                     if(res.data.items){
                         for (var i = 0; i < res.data.items.length; i++) {
-                            if(res.data.items[i].topics?.length){
-                                var optionGroup = document.createElement('optgroup');
-                                optionGroup.label = res.data.items[i]['name'];
-                                for (var j = 0; j < res.data.items[i].topics.length; j++) {
-                                    var option = document.createElement('option');
-                                    option.value = res.data.items[i].topics[j]['id'];
-                                    option.textContent = res.data.items[i].topics[j]['name'];
-                                    optionGroup.appendChild(option);
-                                }
-                                examChaptersSelect.appendChild(optionGroup);
-                            }
+                            var option = document.createElement('option');
+                            option.value = res.data.items[i]['id'];
+                            option.textContent = res.data.items[i]['name'];
+                            examChaptersSelect.appendChild(option);
                         }
                     }
                 }).catch(function(err){
                     console.log(err);
-                    alert((err?.message) ? err.message : 'An error occured in fetching topics');
+                    alert((err?.message) ? err.message : 'An error occured in fetching chapters');
                 }).finally(function(){
                     examChaptersSelect.disabled = false;
                 });
             });
         }
+    }
+
+    if(examChaptersSelect && examTopicsSelect){
+        examChaptersSelect.addEventListener('change', function(e){
+            var chapterId = e.target.value;
+
+            examTopicsSelect.disabled = true;
+
+            while (examTopicsSelect.firstChild) {
+                examTopicsSelect.removeChild(examTopicsSelect.firstChild);
+            }
+            var option = document.createElement('option');
+            option.value = '';
+            option.textContent = 'Pick topic';
+            examTopicsSelect.appendChild(option);
+
+            axios.post(CHAPTERS_API, {
+                chapterId: chapterId
+            }).then(function(res){
+                if(res.data.items){
+                    for (var i = 0; i < res.data.items.length; i++) {
+                        var option = document.createElement('option');
+                        option.value = res.data.items[i]['id'];
+                        option.textContent = res.data.items[i]['name'];
+                        examTopicsSelect.appendChild(option);
+                    }
+                }
+            }).catch(function(err){
+                console.log(err);
+                alert((err?.message) ? err.message : 'An error occured in fetching topics');
+            }).finally(function(){
+                examTopicsSelect.disabled = false;
+            });
+        });
     }
 
     var questionsImportForm = document.getElementById('questions-import-form');

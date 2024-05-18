@@ -3,17 +3,40 @@
     'swiper' => 0,
     'mathjax' => 0,
     'title' => config('app.name', 'Laravel'),
-    'description' => '',
+    'description' => 'Lyceuma',
 ])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>{{ $title }} | {{ config('app.name', 'Laravel') }}</title>
+    <meta name="description" content="{{ $description }}">
+
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="distribution" content="global" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#212121" />
+    <meta name="apple-mobile-web-app-status-bar" content="#212121" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/pwa/icon-192.png" />
+
+    <meta property="og:title" content="{{ $title }}" />
+    <meta property="og:image:alt" content="{{ $title }}" />
+    <meta property="og:description" content={`Best Website Development Company, Domain Registration, Hosting, Website Designing. 100% Quality Work Guaranteed. On call support. Development Starts @2,999.`} />
+    <meta property="og:site_name" content="{{ $title }}" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:title" content="{{ $title }}" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

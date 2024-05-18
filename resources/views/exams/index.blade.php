@@ -71,13 +71,7 @@
                                     @endif
                                 </td>
                                 <td class="px-2 py-2 text-center">
-                                    @if( $item->isStatusPublished() )
-                                        <x-icons.task-alt class="w-8 h-8 px-1 py-1 text-green-800 bg-green-200 rounded" />
-                                    @elseif( $item->isStatusDraft() )
-                                        <x-icons.draft-orders class="w-8 h-8 px-1 py-1 text-yellow-800 bg-yellow-200 rounded" />
-                                    @else
-                                        {{ $item->status }}
-                                    @endif
+                                    <x-status.icon :status="$item->status" />
                                 </td>
                                 <td class="px-2 py-2">
                                     <div class="inline-flex flex items-center flex-wrap gap-1 justify-end">

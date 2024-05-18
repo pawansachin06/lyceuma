@@ -20,7 +20,7 @@ enum ExamAnswerTypeEnum: string
         $arr = [];
         $arr[] = ['key'=> 'RADIO', 'value'=> 'Single Choice'];
         $arr[] = ['key'=> 'CHECKBOX', 'value'=> 'Multiple Choice'];
-        $arr[] = ['key'=> 'NUMBER', 'value'=> 'Integer Type'];
+        $arr[] = ['key'=> 'NUMBER', 'value'=> 'Number Type'];
         return $arr;
     }
 }

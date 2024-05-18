@@ -1,4 +1,4 @@
-<x-admin-layout ckeditor="1" mathjax="1">
+<x-admin-layout ckeditor="1" question="1" mathjax="1">
     <div class="lg:container px-3 py-3">
         <div class="mb-2 flex flex-wrap justify-between items-center">
             <div class="">
@@ -159,18 +159,29 @@
                 @if( !empty($chapters) )
                 <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div class="flex flex-col">
-                        <span>Pick Topic</span>
-                        <select name="chapter_id" required class="rounded focus:border-primary-500 focus:ring-primary-400">
+                        <span>Pick Chapter</span>
+                        <select name="chapter_id" required data-js="chapters-select" class="rounded focus:border-primary-500 focus:ring-primary-400">
                             <option value="">Pick chapter</option>
                             @foreach($chapters as $chapter)
-                                <optgroup label="{{ $chapter->name }}">
+                                <option value="{{ $chapter->id }}" <?= $chapter->id == $item->chapter_id ? 'selected' : '' ?>>{{ $chapter->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full sm:w-6/12 px-1 mb-3">
+                    <div class="flex flex-col">
+                        <span>Pick Topic</span>
+                        <select name="topic_id" required data-js="topics-select" class="rounded focus:border-primary-500 focus:ring-primary-400">
+                            <option value="">Pick topic</option>
+                            @if( !empty($item->chapter_id) )
+                                @foreach($chapters as $chapter)
                                     @if( !empty($chapter->topics) && count($chapter->topics) )
                                         @foreach($chapter->topics as $topic)
-                                            <option value="{{ $topic->id }}" <?= $topic->id == $item->chapter_id ? 'selected' : '' ?>>{{ $topic->name }}</option>
+                                            <option value="{{ $topic->id }}" <?= $topic->id == $item->topic_id ? 'selected' : '' ?>>{{ $topic->name }}</option>
                                         @endforeach
                                     @endif
-                                </optgroup>
-                            @endforeach
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                 </div>
@@ -181,13 +192,13 @@
                         <select name="answer_type" class="rounded focus:border-primary-500 focus:ring-primary-400 w-full">
                             @foreach($examAnswerTypes as $examAnswerType)
                                 <option value="{{ $examAnswerType['key'] }}" <?= $examAnswerType['key'] == $item->answer_type ? 'selected' : '' ?>>
-                                    {{ $examAnswerType['value'] }}
+                                    {{ $examAnswerType['value'] }} ({{$examAnswerType['key']}})
                                 </option>
                             @endforeach
                         </select>
                     </div>
                 @endif
-                <div class="w-full px-1 mb-3">
+                <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div>Answer</div>
                     <input type="text" name="answer" value="{{ $item->answer }}" required class="rounded w-full focus:border-primary-500 focus:ring-primary-400" />
                     <small>Please enter numerical eg:1(single choice) 2,3(multiple choice)</small>
@@ -218,4 +229,9 @@
             </div>
         </form>
     </div>
+    <x-slot name="scripts">
+        <script type="text/javascript">
+            var CHAPTERS_API = "{{ route('api.chapters.index') }}";
+        </script>
+    </x-slot>
 </x-admin-layout>

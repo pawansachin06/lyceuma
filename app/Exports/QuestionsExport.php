@@ -41,6 +41,7 @@ class QuestionsExport implements FromQuery, WithMapping, WithHeadings
             'positive_marks',
             'negative_marks',
             'answer_type',
+            'chapter_slug',
             'topic_slug',
             'course_slug',
             'difficulty_slug',
@@ -68,6 +69,7 @@ class QuestionsExport implements FromQuery, WithMapping, WithHeadings
             $item->negative_marks,
             strtolower($item->answer_type),
             (!empty($this->chapters[$item->chapter_id]) ? $this->chapters[$item->chapter_id] : '') ,
+            (!empty($this->chapters[$item->topic_id]) ? $this->chapters[$item->topic_id] : '') ,
             (!empty($this->courses[$item->course_id]) ? $this->courses[$item->course_id] : ''),
             (!empty($this->difficulties[$item->difficulty_id]) ? $this->difficulties[$item->difficulty_id] : ''),
         ];

@@ -86,4 +86,44 @@
             submitLoader.classList.add('hidden');
         });
     });
+
+    if(typeof tippy !== 'undefined'){
+        tippy('[data-tippy-content]');
+    }
+
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(function (reg) {
+                console.log('Service worker registered.');
+            })
+            .catch(function (err) {
+                console.log('Service worker registration failed:', err);
+            });
+    }
+
+    var deferredPrompt;
+    var liteAppBtns = document.querySelectorAll('.lite-app-btn')
+    if (liteAppBtns) {
+        window.addEventListener('beforeinstallprompt', function (e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            for (var i = 0; i < liteAppBtns.length; i++) {
+                liteAppBtns[i].classList.remove('hidden');
+                liteAppBtns[i].addEventListener('click', function (e) {
+                    var liteAppBtn = e.target;
+                    liteAppBtn.classList.add('hidden');
+                    deferredPrompt.prompt()
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the A2HS prompt');
+                        } else {
+                            console.log('User dismissed the A2HS prompt');
+                        }
+                        deferredPrompt = null;
+                    });
+                });
+            }
+        });
+    }
 })();

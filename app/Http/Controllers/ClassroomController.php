@@ -18,10 +18,9 @@ class ClassroomController extends Controller
     public function index(Request $req)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent() || $currentUser->isTeacher()){
-            abort(404);
+        if ($currentUser->cannot('viewAny', Classroom::class)) {
+            abort(403);
         }
-
         $items = Classroom::latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
         return view('classrooms.index', ['items'=> $items]);
     }
@@ -29,9 +28,12 @@ class ClassroomController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $req)
     {
-        //
+        $currentUser = $req->user();
+        if ($currentUser->cannot('create', Classroom::class)) {
+            abort(403);
+        }
     }
 
     /**

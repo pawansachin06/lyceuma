@@ -31,6 +31,7 @@ class QuestionController extends Controller
     {
         $this->validationRules = [
             'chapter_id' => ['required', Rule::exists(Chapter::class, 'id')],
+            'topic_id' => ['required', Rule::exists(Chapter::class, 'id')],
             'difficulty_id' => ['required', Rule::exists(Difficulty::class, 'id')],
             'question' => ['required', 'string'],
             'option1' => ['nullable', 'string'],
@@ -54,7 +55,8 @@ class QuestionController extends Controller
         ];
     }
 
-    private function saveFilesTrigger(Request $req, $tableId, $quesId){
+    private function saveFilesTrigger(Request $req, $tableId, $quesId)
+    {
         $this->saveFile($req, [
             'name' => 'question_image', 'itemId' => $quesId,
             'baseFolder' => 'questions', 'tableId' => $tableId,
@@ -161,10 +163,10 @@ class QuestionController extends Controller
         $tableId = '';
         $questionsTable = QuestionTable::where('classroom_id', $classroomId)
             ->where('subject_id', $subjectId)->first();
-        if($currentUser->isTeacher()) {
+        if ($currentUser->isTeacher()) {
             $allowedSubjects = $currentUser->subjects->pluck('id')->toArray();
             $allowedClassrooms = $currentUser->classrooms->pluck('id')->toArray();
-            if(in_array($classroomId, $allowedClassrooms) && in_array($subjectId, $allowedSubjects)){
+            if (in_array($classroomId, $allowedClassrooms) && in_array($subjectId, $allowedSubjects)) {
                 // all good
             } else {
                 $questionsTable = null;
@@ -174,11 +176,11 @@ class QuestionController extends Controller
             $tableId = $questionsTable->id;
             $table = $questionsTable->table;
             $query = DB::table($table);
-            if(!empty($courseId)){
+            if (!empty($courseId)) {
                 $query = $query->where('course_id', $courseId);
             }
 
-            if(!empty($statusId)){
+            if (!empty($statusId)) {
                 $query = $query->where('status', $statusId);
             }
 
@@ -192,7 +194,7 @@ class QuestionController extends Controller
             'statusId' => $statusId,
             'classroomId' => $classroomId,
             'courseId' => $courseId,
-            'statuses'=> $statuses,
+            'statuses' => $statuses,
             'courses' => $courses,
             'classrooms' => $classrooms,
             'subjects' => $subjects,
@@ -206,7 +208,7 @@ class QuestionController extends Controller
     public function create(Request $req)
     {
         $currentUser = $req->user();
-        if($currentUser->isSuperAdmin() || $currentUser->isAdmin() || $currentUser->isEditor()){
+        if ($currentUser->isSuperAdmin() || $currentUser->isAdmin() || $currentUser->isEditor()) {
         } else {
             abort(404);
         }
@@ -305,10 +307,10 @@ class QuestionController extends Controller
         $classroomId = $questionsTable->classroom_id;
         $subjectId = $questionsTable->subject_id;
 
-        if($currentUser->isTeacher()){
+        if ($currentUser->isTeacher()) {
             $allowedSubjects = $currentUser->subjects->pluck('id')->toArray();
             $allowedClassrooms = $currentUser->classrooms->pluck('id')->toArray();
-            if(in_array($classroomId, $allowedClassrooms) && in_array($subjectId, $allowedSubjects)){
+            if (in_array($classroomId, $allowedClassrooms) && in_array($subjectId, $allowedSubjects)) {
                 // all good
             } else {
                 abort(404);
@@ -318,6 +320,8 @@ class QuestionController extends Controller
         $examDifficulties = Difficulty::where('status', ModelStatusEnum::PUBLISHED)->orderBy('order', 'asc')->get(['id', 'name']);
         $examChapters = Chapter::with('topics:id,name,parent_id')->where('status', ModelStatusEnum::PUBLISHED)
             ->where('subject_id', $questionsTable->subject_id)
+            ->whereNull('parent_id')
+            ->orWhere('parent_id', '')
             ->orderBy('order')->get(['id', 'name', 'parent_id']);
         $examAnswerTypes = ExamAnswerTypeEnum::toFormattedArray();
         $statuses = ModelStatusEnum::toArray();
@@ -325,13 +329,13 @@ class QuestionController extends Controller
 
         $photoable_id = $questionsTable->id . '--' . $quesId;
         $imagesObj = Photo::where('photoable_type', Question::class)
-                        ->where('photoable_id', $photoable_id)->get(['name', 'folder', 'tag']);
+            ->where('photoable_id', $photoable_id)->get(['name', 'folder', 'tag']);
         $images = [];
-        if(!empty($imagesObj) && count($imagesObj)){
+        if (!empty($imagesObj) && count($imagesObj)) {
             foreach ($imagesObj as $imgObj) {
-                if(!empty($imgObj->tag)){
+                if (!empty($imgObj->tag)) {
                     $images[$imgObj->tag] = [
-                        'url'=> '/storage/'. $imgObj->folder . '/'. $imgObj->name,
+                        'url' => '/storage/' . $imgObj->folder . '/' . $imgObj->name,
                     ];
                 }
             }
@@ -398,22 +402,22 @@ class QuestionController extends Controller
         $tableId = $req->tableId;
         $photoable_id = $tableId . '--' . $quesId;
 
-        if(empty($name) || empty($quesId) || empty($tableId)){
+        if (empty($name) || empty($quesId) || empty($tableId)) {
             return response()->json([
-                'message'=> 'Parameters missing in request'
+                'message' => 'Parameters missing in request'
             ], 500);
         }
 
         try {
             $photo = Photo::where('tag', $name)->where('photoable_id', $photoable_id)
-                        ->where('photoable_type', Question::class)->first();
-            if( !empty($photo) && !empty($photo->folder) && !empty($photo->name) ){
+                ->where('photoable_type', Question::class)->first();
+            if (!empty($photo) && !empty($photo->folder) && !empty($photo->name)) {
                 Storage::delete('/public/' . $photo->folder . '/' . $photo->name);
                 $photo->delete();
             } else {
-                return response()->json(['message'=> 'Image not in database'], 500);
+                return response()->json(['message' => 'Image not in database'], 500);
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
         return response()->json([
@@ -427,6 +431,38 @@ class QuestionController extends Controller
         if ($currentUser->isStudent()) {
             abort(404);
         }
+
+        try {
+            $questionTable = QuestionTable::where('id', $tableId)->first(['id', 'table']);
+            if (empty($questionTable)) {
+                return response()->json([
+                    'message' => 'Table not found for this subject and class',
+                ], 500);
+            }
+            $table = $questionTable->table;
+
+            // delete photos of question
+            $photoable_id = $tableId . '--' . $quesId;
+            $photos = Photo::where('photoable_id', $photoable_id)
+                ->where('photoable_type', Question::class)
+                ->get(['name', 'folder']);
+            if (!empty($photos) && count($photos)) {
+                foreach ($photos as $photo) {
+                    Storage::delete('/public/' . $photo->folder . '/' . $photo->name);
+                    $photo->delete();
+                }
+            }
+
+            // delete question
+            DB::table($table)->where('id', $quesId)->delete();
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+        return response()->json([
+            'success' => true,
+            'reload' => true,
+            'message' => 'Deleted successfully',
+        ]);
     }
 
     public function import()
@@ -445,7 +481,7 @@ class QuestionController extends Controller
         $req->validate([
             'subjectId' => ['required', Rule::exists(Subject::class, 'id')],
             'classroomId' => ['required', Rule::exists(Classroom::class, 'id')],
-            'importFile'=> ['file', 'mimes:xls,xlsx'],
+            'importFile' => ['file', 'mimes:xls,xlsx'],
         ]);
 
         try {
@@ -466,12 +502,12 @@ class QuestionController extends Controller
             Excel::import($import, $req->file('importFile'));
 
             return response()->json([
-                'success'=> true,
-                'reset'=> true,
-                'data'=> $data,
-                'message'=> 'Questions imported with DRAFT status',
+                'success' => true,
+                'reset' => true,
+                'data' => $data,
+                'message' => 'Questions imported with DRAFT status',
             ]);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
@@ -495,7 +531,7 @@ class QuestionController extends Controller
         ]);
 
         $questionTable = QuestionTable::where('classroom_id', $req->classroomId)
-                ->where('subject_id', $req->subjectId)->first(['id', 'table']);
+            ->where('subject_id', $req->subjectId)->first(['id', 'table']);
         if (empty($questionTable) || empty($questionTable->table)) {
             return response()->json([
                 'message' => 'Table not found for this subject and class',
@@ -503,20 +539,20 @@ class QuestionController extends Controller
         }
         $table = $questionTable->table;
 
-        if($req->download){
+        if ($req->download) {
             $query = DB::table($table)->orderBy('id');
-            $filename = 'questions-'. date('Y-m-d-H-i-s') . '.xlsx';
+            $filename = 'questions-' . date('Y-m-d-H-i-s') . '.xlsx';
             $chapters = Chapter::pluck('slug', 'id');
             $courses = Course::pluck('slug', 'id');
             $difficulties = Difficulty::pluck('slug', 'id');
             return (new QuestionsExport($query, $chapters, $courses, $difficulties))->download($filename);
         } else {
             return response()->json([
-                'success'=> true,
-                'download'=> route('questions.export.download', [
-                    'subjectId'=> $req->subjectId,
-                    'classroomId'=> $req->classroomId,
-                    'download'=> 1,
+                'success' => true,
+                'download' => route('questions.export.download', [
+                    'subjectId' => $req->subjectId,
+                    'classroomId' => $req->classroomId,
+                    'download' => 1,
                 ]),
             ]);
         }

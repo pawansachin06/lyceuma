@@ -146,27 +146,33 @@
                     </div>
                 </div>
                 @endif
-                @if( !empty($chapters) )
+                <div class="w-full sm:w-6/12 px-1 mb-3">
+                    <div class="flex flex-col">
+                        <span>Chapter</span>
+                        <select name="chapter_id" required data-js="chapters-select" class="rounded focus:border-primary-500 focus:ring-primary-400">
+                            <option value="">Pick chapter</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div class="flex flex-col">
                         <span>Topic</span>
-                        <select name="chapter_id" required data-js="chapters-select" class="rounded focus:border-primary-500 focus:ring-primary-400">
+                        <select name="topic_id" required data-js="topics-select" class="rounded focus:border-primary-500 focus:ring-primary-400">
                             <option value="">Pick topic</option>
                         </select>
                     </div>
                 </div>
-                @endif
                 @if(!empty($examAnswerTypes))
                     <div class="w-full sm:w-6/12 px-1 mb-3">
                         <div>Answer Type</div>
                         <select name="answer_type" class="rounded focus:border-primary-500 focus:ring-primary-400 w-full">
                             @foreach($examAnswerTypes as $examAnswerType)
-                                <option value="{{ $examAnswerType['key'] }}">{{ $examAnswerType['value'] }}</option>
+                                <option value="{{ $examAnswerType['key'] }}">{{ $examAnswerType['value'] }} ({{ $examAnswerType['key'] }})</option>
                             @endforeach
                         </select>
                     </div>
                 @endif
-                <div class="w-full px-1 mb-3">
+                <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div>Answer</div>
                     <input type="text" name="answer" value="" required class="rounded w-full focus:border-primary-500 focus:ring-primary-400" />
                     <small>Please enter numerical eg:1(single choice) 2,3(multiple choice)</small>

@@ -2,6 +2,10 @@
 
 namespace App\View\Components;
 
+use App\Models\Chapter;
+use App\Models\Classroom;
+use App\Models\Course;
+use App\Models\Subject;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 
@@ -81,7 +85,7 @@ class AdminLayout extends Component
                 'routes' => ['courses.index', 'courses.create', 'courses.edit'],
                 'icon' => 'icons.category',
                 'title' => 'Courses',
-                'show' => ($isSuperAdmin || $isAdmin || $isEditor),
+                'show' => $user->can('viewAny', Course::class),
             ],
             // [
             //     'route' => 'exam-patterns.index',
@@ -102,21 +106,21 @@ class AdminLayout extends Component
                 'routes' => ['classrooms.index', 'classrooms.create', 'classrooms.edit'],
                 'icon' => 'icons.library-books',
                 'title' => 'Classrooms',
-                'show' => ($isSuperAdmin || $isAdmin || $isEditor),
+                'show' => $user->can('viewAny', Classroom::class),
             ],
             [
                 'route' => 'subjects.index',
                 'routes' => ['subjects.index', 'subjects.create', 'subjects.edit'],
                 'icon' => 'icons.library-books',
                 'title' => 'Subjects',
-                'show' => ($isSuperAdmin || $isAdmin || $isEditor),
+                'show' => $user->can('viewAny', Subject::class),
             ],
             [
                 'route' => 'chapters.index',
                 'routes' => ['chapters.index', 'chapters.create', 'chapters.edit'],
                 'icon' => 'icons.library-books',
                 'title' => 'Chapters',
-                'show' => ($isSuperAdmin || $isAdmin || $isEditor),
+                'show' => $user->can('viewAny', Chapter::class),
             ],
             // [
             //     'route' => 'exam-topics.index',

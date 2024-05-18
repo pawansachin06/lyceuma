@@ -363,6 +363,7 @@ class DatabaseSeeder extends Seeder
                     $table->decimal('negative_marks', 5, 2)->nullable();
                     $table->string('answer_type')->nullable();
                     $table->uuid('chapter_id')->nullable();
+                    $table->uuid('topic_id')->nullable();
                     $table->uuid('course_id')->nullable();
                     $table->uuid('difficulty_id')->nullable();
                     $table->integer('order')->unsigned()->default(1);

@@ -32,8 +32,9 @@ class QuestionsImport implements ToCollection
         foreach ($collection as $key => $row) {
             if($key == 0) continue;
             $chapter_id = (!empty($row[12]) && !empty($chapters[$row[12]])) ? $chapters[$row[12]] : '';
-            $course_id = (!empty($row[13]) && !empty($courses[$row[13]])) ? $courses[$row[13]] : '';
-            $difficulty_id = (!empty($row[14]) && !empty($difficulties[$row[14]])) ? $difficulties[$row[14]] : '';
+            $topic_id = (!empty($row[13]) && !empty($chapters[$row[13]])) ? $chapters[$row[13]] : '';
+            $course_id = (!empty($row[14]) && !empty($courses[$row[14]])) ? $courses[$row[14]] : '';
+            $difficulty_id = (!empty($row[15]) && !empty($difficulties[$row[15]])) ? $difficulties[$row[15]] : '';
             $input = [
                 'question' => $row[1],
                 'option1' => $row[2],
@@ -47,11 +48,14 @@ class QuestionsImport implements ToCollection
                 'negative_marks' => $row[10],
                 'answer_type' => strtoupper($row[11]),
                 'chapter_id' => $chapter_id,
+                'topic_id' => $topic_id,
                 'course_id' => $course_id,
                 'difficulty_id' => $difficulty_id,
             ];
             // Log::info($input);
-            DB::table($table)->insert($input);
+            if(!empty($row[1]) && $row[2]){
+                DB::table($table)->insert($input);
+            }
         }
     }
 }

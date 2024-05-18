@@ -8,7 +8,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/chapters/', [
+Route::match(['get', 'post'], '/chapters/', [
     ChapterController::class, 'apiIndex'
 ])->name('api.chapters.index');
 

@@ -18,8 +18,8 @@ class SubjectController extends Controller
     public function index(Request $req)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent() || $currentUser->isTeacher()){
-            abort(404);
+        if ($currentUser->cannot('viewAny', Subject::class)) {
+            abort(403);
         }
         $items = Subject::latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
         return view('subjects.index', ['items'=> $items]);
@@ -28,9 +28,12 @@ class SubjectController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $req)
     {
-        //
+        $currentUser = $req->user();
+        if ($currentUser->cannot('create', Subject::class)) {
+            abort(403);
+        }
     }
 
     /**
@@ -39,8 +42,8 @@ class SubjectController extends Controller
     public function store(Request $req)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
+        if ($currentUser->cannot('create', Subject::class)) {
+            return response()->json(['message' => 'Forbidden'], 403);
         }
         try {
             $item = Subject::create([
@@ -62,9 +65,12 @@ class SubjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Subject $subject)
+    public function show(Request $req, Subject $subject)
     {
-        //
+        $currentUser = $req->user();
+        if ($currentUser->cannot('create', $subject)) {
+            abort(403);
+        }
     }
 
     /**
@@ -73,8 +79,8 @@ class SubjectController extends Controller
     public function edit(Request $req, Subject $subject)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent() || $currentUser->isTeacher()){
-            abort(404);
+        if ($currentUser->cannot('update', $subject)) {
+            abort(403);
         }
         $statuses = ModelStatusEnum::toArray();
         return view('subjects.edit', [
@@ -89,8 +95,8 @@ class SubjectController extends Controller
     public function update(Request $req, Subject $subject)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
+        if ($currentUser->cannot('update', $subject)) {
+            return response()->json(['message' => 'Forbidden'], 403);
         }
 
         $req->merge(['slug' => Str::slug($req['slug']) ]);
@@ -117,9 +123,10 @@ class SubjectController extends Controller
     public function destroy(Request $req, Subject $subject)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
-            abort(404);
+        if ($currentUser->cannot('delete', $subject)) {
+            return response()->json(['message' => 'Forbidden'], 403);
         }
+
         try {
             $subject->delete();
         } catch (Exception $e) {

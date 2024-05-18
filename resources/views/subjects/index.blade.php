@@ -1,11 +1,11 @@
-<x-admin-layout sweetalert="1">
+<x-admin-layout sweetalert="1" tippy="1">
     <div class="lg:container px-3 py-3">
         <div class="mb-2 flex flex-wrap justify-between items-center">
             <div class="">
                 <h1 class="text-2xl font-sans font-semibold">Exam Subjects</h1>
             </div>
             <form action="{{ route('subjects.store') }}" method="post" data-js="app-create-form">
-                <x-button data-js="app-form-btn" type="submit">Create</x-button>
+                <x-button data-js="app-form-btn" type="submit" class="hidden">Create</x-button>
             </form>
         </div>
         @if( !empty($items) && count($items) )
@@ -25,13 +25,7 @@
                                 <td class="px-2 py-2">{{ $item->name }}</td>
                                 <td class="px-2 py-2">{{ $item->slug }}</td>
                                 <td class="px-2 py-2 text-center">
-                                    @if( $item->isStatusPublished() )
-                                        <x-icons.task-alt class="w-8 h-8 px-1 py-1 text-green-800 bg-green-200 rounded" />
-                                    @elseif( $item->isStatusDraft() )
-                                        <x-icons.draft-orders class="w-8 h-8 px-1 py-1 text-yellow-800 bg-yellow-200 rounded" />
-                                    @else
-                                        {{ $item->status }}
-                                    @endif
+                                    <x-status.icon :status="$item->status" />
                                 </td>
                                 <td class="px-2 py-2">
                                     <div class="inline-flex flex items-center flex-wrap gap-1 justify-end">

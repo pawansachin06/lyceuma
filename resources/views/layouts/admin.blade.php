@@ -2,21 +2,45 @@
     'aos' => 0,
     'exam' => 0,
     'swiper' => 0,
+    'tippy' => 0,
     'tinymce' => 0,
     'mathjax' => 0,
     'question' => 0,
     'ckeditor' => 0,
     'sweetalert' => 0,
     'title' => config('app.name', 'Laravel'),
-    'description' => '',
+    'description' => 'Lyceuma',
 ])<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <title>{{ $title }} | {{ config('app.name', 'Laravel') }}</title>
+    <meta name="description" content="{{ $description }}">
+
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="distribution" content="global" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#212121" />
+    <meta name="apple-mobile-web-app-status-bar" content="#212121" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/pwa/icon-192.png" />
+
+    <meta property="og:title" content="{{ $title }}" />
+    <meta property="og:image:alt" content="{{ $title }}" />
+    <meta property="og:description" content={`Best Website Development Company, Domain Registration, Hosting, Website Designing. 100% Quality Work Guaranteed. On call support. Development Starts @2,999.`} />
+    <meta property="og:site_name" content="{{ $title }}" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:title" content="{{ $title }}" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -127,6 +151,8 @@
     @php
     $scriptsArr = [
         'sweetalert' => !empty($sweetalert) ? '/js/lib/sweetalert2.min.js?v=11.9.0' : '',
+        'popper' => !empty($tippy) ? '/js/lib/popper.min.js?v=2.11.8' : '',
+        'tippy' => !empty($tippy) ? '/js/lib/tippy-bundle.umd.min.js?v=6.3.7' : '',
         'exam' => !empty($exam) ? '/js/exam.js?v='. $version : '',
         'mathjax-local' => !empty($mathjax) ? '/js/mathjax.js?v='. $version : '',
         'mathjax' => !empty($mathjax) ? 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js' : '',
