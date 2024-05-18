@@ -50,7 +50,13 @@
                                 <tr>
                                     <td colspan="3" class="px-2 py-2 border border-solid border-0 border-b border-gray-500">
                                         @foreach($item->topics as $topic)
-                                            <a href="{{ route('chapters.edit', $topic->id) }}" class="text-xs block py-1 text-gray-600">{{ !empty($topic->name) ? $topic->name : 'Draft Topic' }}</a>
+                                            <div class="flex items-center gap-2">
+                                                <a href="{{ route('chapters.edit', $topic->id) }}" class="text-xs block py-1 text-gray-600">{{ !empty($topic->name) ? $topic->name : 'Draft Topic' }}</a>
+                                                <form action="{{ route('chapters.destroy', $topic->id) }}" method="post" data-js="app-delete-form" class="inline-block py-1">
+                                                    @method('DELETE')
+                                                    <button type="submit" class="border-0 inline-block text-xs py-1 rounded leading-none bg-red-500 text-white">Delete</button>
+                                                </form>
+                                            </div>
                                         @endforeach
                                     </td>
                                     <td class="px-2 py-2 border border-solid border-0 border-b border-gray-500 text-end">

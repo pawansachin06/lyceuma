@@ -17,6 +17,12 @@
                         <input type="text" name="name" value="{{ $item->name }}" required class="rounded focus:border-primary-500 focus:ring-primary-400" />
                     </div>
                 </div>
+                <div class="w-full sm:w-6/12 px-1 mb-3">
+                    <div class="flex flex-col">
+                        <span>Slug</span>
+                        <input type="text" name="slug" value="{{ $item->slug }}" required class="rounded focus:border-primary-500 focus:ring-primary-400" />
+                    </div>
+                </div>
                 @if( !empty($statuses) )
                 <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div class="flex flex-col">

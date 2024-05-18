@@ -5,16 +5,22 @@
                 <h1 class="text-2xl font-sans font-semibold">Edit Subject</h1>
             </div>
             <div class="">
-                <x-button href="{{ route('exam-subjects.index') }}">Back</x-button>
+                <x-button href="{{ route('subjects.index') }}">Back</x-button>
             </div>
         </div>
-        <form action="{{ route('exam-subjects.update', $item) }}" method="post" data-js="app-form">
+        <form action="{{ route('subjects.update', $item) }}" method="post" data-js="app-form">
             @method('PUT')
             <div class="flex flex-wrap -mx-1">
-                <div class="w-full px-1 mb-3">
+                <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div class="flex flex-col">
                         <span>Name</span>
                         <input type="text" name="name" value="{{ $item->name }}" required class="rounded focus:border-primary-500 focus:ring-primary-400" />
+                    </div>
+                </div>
+                <div class="w-full sm:w-6/12 px-1 mb-3">
+                    <div class="flex flex-col">
+                        <span>Slug</span>
+                        <input type="text" name="slug" value="{{ $item->slug }}" required class="rounded focus:border-primary-500 focus:ring-primary-400" />
                     </div>
                 </div>
                 @if( !empty($statuses) )

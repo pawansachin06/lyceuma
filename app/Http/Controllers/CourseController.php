@@ -6,6 +6,8 @@ use App\Enums\ModelStatusEnum;
 use App\Models\Course;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Enum;
 
 class CourseController extends Controller
@@ -16,7 +18,7 @@ class CourseController extends Controller
     public function index(Request $req)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
         $items = Course::latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
@@ -37,7 +39,7 @@ class CourseController extends Controller
     public function store(Request $req)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
 
@@ -72,13 +74,13 @@ class CourseController extends Controller
     public function edit(Request $req, Course $course)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
 
         $statuses = ModelStatusEnum::toArray();
         return view('courses.edit', [
-            'item'=> $examType,
+            'item'=> $course,
             'statuses'=> $statuses,
         ]);
     }
@@ -89,12 +91,14 @@ class CourseController extends Controller
     public function update(Request $req, Course $course)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
 
+        $req->merge(['slug' => Str::slug($req['slug']) ]);
         $validated = $req->validate([
             'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', Rule::unique(Course::class)->ignore($course->id)],
             'status' => [new Enum(ModelStatusEnum::class)],
         ]);
 
@@ -115,7 +119,7 @@ class CourseController extends Controller
     public function destroy(Request $req, Course $course)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
 

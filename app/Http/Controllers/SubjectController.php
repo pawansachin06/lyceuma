@@ -6,6 +6,8 @@ use App\Enums\ModelStatusEnum;
 use Exception;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Enum;
 
 class SubjectController extends Controller
@@ -16,7 +18,7 @@ class SubjectController extends Controller
     public function index(Request $req)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
         $items = Subject::latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
@@ -71,7 +73,7 @@ class SubjectController extends Controller
     public function edit(Request $req, Subject $subject)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
         $statuses = ModelStatusEnum::toArray();
@@ -90,8 +92,11 @@ class SubjectController extends Controller
         if($currentUser->isStudent()){
             abort(404);
         }
+
+        $req->merge(['slug' => Str::slug($req['slug']) ]);
         $validated = $req->validate([
             'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', Rule::unique(Subject::class)->ignore($subject->id)],
             'status' => [new Enum(ModelStatusEnum::class)],
         ]);
 

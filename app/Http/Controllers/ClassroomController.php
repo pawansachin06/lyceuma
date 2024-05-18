@@ -7,6 +7,7 @@ use App\Models\Classroom;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Enum;
 
 class ClassroomController extends Controller
@@ -14,8 +15,13 @@ class ClassroomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $req)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
+            abort(404);
+        }
+
         $items = Classroom::latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
         return view('classrooms.index', ['items'=> $items]);
     }
@@ -61,10 +67,15 @@ class ClassroomController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Classroom $classroom)
+    public function edit(Request $req, Classroom $classroom)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
+            abort(404);
+        }
+
         $statuses = ModelStatusEnum::toArray();
-        return view('exam-classes.edit', [
+        return view('classrooms.edit', [
             'item'=> $classroom,
             'statuses'=> $statuses,
         ]);
@@ -75,8 +86,15 @@ class ClassroomController extends Controller
      */
     public function update(Request $req, Classroom $classroom)
     {
+        $currentUser = $req->user();
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
+            abort(404);
+        }
+
+        $req->merge(['slug' => Str::slug($req['slug']) ]);
         $validated = $req->validate([
             'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', Rule::unique(Classroom::class)->ignore($classroom->id)],
             'status' => [new Enum(ModelStatusEnum::class)],
         ]);
 

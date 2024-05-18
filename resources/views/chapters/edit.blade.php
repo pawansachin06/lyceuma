@@ -11,10 +11,16 @@
         <form action="{{ route('chapters.update', $item) }}" method="post" data-js="app-form">
             @method('PUT')
             <div class="flex flex-wrap -mx-1">
-                <div class="w-full px-1 mb-3">
+                <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div class="flex flex-col">
                         <span>Name</span>
                         <input type="text" name="name" value="{{ $item->name }}" required class="rounded focus:border-primary-500 focus:ring-primary-400" />
+                    </div>
+                </div>
+                <div class="w-full sm:w-6/12 px-1 mb-3">
+                    <div class="flex flex-col">
+                        <span>Slug</span>
+                        <input type="text" name="slug" value="{{ $item->slug }}" required class="rounded focus:border-primary-500 focus:ring-primary-400" />
                     </div>
                 </div>
                 @if( !empty($subjects) )
@@ -34,8 +40,8 @@
                 <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div class="flex flex-col">
                         <span>Parent Chapter</span>
-                        <select name="chapter_id" required class="rounded focus:border-primary-500 focus:ring-primary-400">
-                            <option value="">Pick chapter</option>
+                        <select name="parent_id" class="rounded focus:border-primary-500 focus:ring-primary-400">
+                            <option value="">This is parent chapter</option>
                             @foreach($chapters as $chapter)
                                 <option value="{{ $chapter->id }}" <?= $chapter->id == $item->parent_id ? 'selected' : '' ?>>{{ $chapter->name }}</option>
                             @endforeach

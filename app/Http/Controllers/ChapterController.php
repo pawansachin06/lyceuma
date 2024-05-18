@@ -8,6 +8,7 @@ use App\Models\Chapter;
 use App\Models\Difficulty;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
@@ -19,10 +20,10 @@ class ChapterController extends Controller
     public function index(Request $req)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
-        $items = Chapter::with('subject')->with('topics')->latest()->whereNull('parent_id')->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        $items = Chapter::latest()->whereNull('parent_id')->orWhere('parent_id', '')->with('subject')->with('topics')->orderBy('name', 'asc')->paginate(10)->withQueryString();
         return view('chapters.index', ['items' => $items]);
     }
 
@@ -56,7 +57,7 @@ class ChapterController extends Controller
     public function store(Request $req)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
         try {
@@ -91,13 +92,13 @@ class ChapterController extends Controller
     public function edit(Request $req, Chapter $chapter)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
         $statuses = ModelStatusEnum::toArray();
         $examSubjects = Subject::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
         $examDifficulties = Difficulty::where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
-        $chapters = Chapter::whereNull('parent_id')->where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
+        $chapters = Chapter::whereNull('parent_id')->orWhere('parent_id', '')->where('status', ModelStatusEnum::PUBLISHED)->get(['id', 'name']);
         return view('chapters.edit', [
             'item' => $chapter,
             'chapters'=> $chapters,
@@ -113,13 +114,17 @@ class ChapterController extends Controller
     public function update(Request $req, Chapter $chapter)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
+
+        $req->merge(['slug' => Str::slug($req['slug']) ]);
         $validated = $req->validate([
             'name' => ['required', 'string', 'max:255'],
             'status' => [new Enum(ModelStatusEnum::class)],
+            'slug' => ['required', 'string', 'max:255', Rule::unique(Chapter::class)->ignore($chapter->id)],
             'subject_id' => [Rule::exists(Subject::class, 'id')],
+            'parent_id' => [ 'nullable', Rule::exists(Chapter::class, 'id')],
             'difficulty_id' => [Rule::exists(Difficulty::class, 'id')],
         ]);
 
@@ -140,7 +145,7 @@ class ChapterController extends Controller
     public function destroy(Request $req, Chapter $chapter)
     {
         $currentUser = $req->user();
-        if($currentUser->isStudent()){
+        if($currentUser->isStudent() || $currentUser->isTeacher()){
             abort(404);
         }
         try {
