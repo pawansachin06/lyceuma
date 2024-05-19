@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\DifficultyController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamPatternController;
 use App\Http\Controllers\QuestionController;
@@ -60,6 +61,9 @@ Route::middleware('auth')->group(function () {
     ]);
     Route::resource('chapters', ChapterController::class, [
         'name' => 'chapters'
+    ]);
+    Route::resource('difficulties', DifficultyController::class, [
+        'name' => 'difficulties'
     ]);
     // Route::resource('exam-topics', ExamTopicController::class, [
     //     'name' => 'exam-topics'

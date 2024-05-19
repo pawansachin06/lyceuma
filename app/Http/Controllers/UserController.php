@@ -28,7 +28,7 @@ class UserController extends Controller
 
         if($currentUser->isSuperAdmin() || $currentUser->isAdmin()){
         } else {
-            abort(404);
+            abort(403);
         }
 
         if(!empty($keyword)){
@@ -91,7 +91,7 @@ class UserController extends Controller
             ]) ){
                 $validated['role'] = UserRoleEnum::STUDENT;
             }
-            $validated['referral_code'] = $currentUser->unique_code;
+            // $validated['referral_code'] = $currentUser->unique_code;
         }
 
         if( $currentUser->isStudent() ) {

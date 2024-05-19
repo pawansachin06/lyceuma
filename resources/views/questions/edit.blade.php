@@ -219,6 +219,10 @@
                     <x-button type="button" data-name="solution" data-preview="mathjax-solution-preview" data-js="ckeditor-to-mathjax-btn" size="sm" class="mb-2">Render</x-button>
                     <div id="mathjax-solution-preview" class="px-3 py-3 rounded-md bg-white shadow-sm"></div>
                 </div>
+                <div class="w-full px-1 mb-3">
+                    <div>Source</div>
+                    <textarea class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="source"><?= $item->source ?></textarea>
+                </div>
                 <div class="w-full px-1 my-4">
                     <div data-js="app-form-status" class="hidden font-semibold hidden w-full mb-2"></div>
                     <div class="flex flex-wrap gap-2">

@@ -45,6 +45,7 @@ class QuestionController extends Controller
             'positive_marks' => ['required'],
             'negative_marks' => ['required'],
             'solution' => ['nullable', 'string'],
+            'source' => ['nullable', 'string'],
             'question_image' => ['nullable', 'file', 'max:2000'],
             'option1_image' => ['nullable', 'file', 'max:2000'],
             'option2_image' => ['nullable', 'file', 'max:2000'],

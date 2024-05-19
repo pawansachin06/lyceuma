@@ -13,7 +13,7 @@ class CoursePolicy
      */
     public function viewAny(User $user): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**
@@ -21,7 +21,7 @@ class CoursePolicy
      */
     public function view(User $user, Course $course): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**
@@ -29,7 +29,7 @@ class CoursePolicy
      */
     public function create(User $user): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**
@@ -37,7 +37,7 @@ class CoursePolicy
      */
     public function update(User $user, Course $course): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**
@@ -45,7 +45,7 @@ class CoursePolicy
      */
     public function delete(User $user, Course $course): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**
@@ -53,7 +53,7 @@ class CoursePolicy
      */
     public function restore(User $user, Course $course): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**

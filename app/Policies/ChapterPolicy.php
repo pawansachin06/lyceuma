@@ -13,7 +13,7 @@ class ChapterPolicy
      */
     public function viewAny(User $user): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**
@@ -21,7 +21,7 @@ class ChapterPolicy
      */
     public function view(User $user, Chapter $chapter): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**
@@ -29,7 +29,7 @@ class ChapterPolicy
      */
     public function create(User $user): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**
@@ -37,7 +37,7 @@ class ChapterPolicy
      */
     public function update(User $user, Chapter $chapter): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**
@@ -45,7 +45,7 @@ class ChapterPolicy
      */
     public function delete(User $user, Chapter $chapter): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**
@@ -53,7 +53,7 @@ class ChapterPolicy
      */
     public function restore(User $user, Chapter $chapter): bool
     {
-        return ($user->isSuperAdmin() || $user->isAdmin()) ? true : false;
+        return ($user->isSuperAdmin()) ? true : false;
     }
 
     /**

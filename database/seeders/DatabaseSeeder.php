@@ -322,6 +322,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Level 1', 'order' => 1],
             ['name' => 'Level 2', 'order' => 2],
             ['name' => 'Level 3', 'order' => 3],
+            ['name' => 'PYQ', 'order' => 4],
         ];
         foreach ($examDifficulties as $examDifficulty) {
             Difficulty::factory()->create([
@@ -366,6 +367,7 @@ class DatabaseSeeder extends Seeder
                     $table->uuid('topic_id')->nullable();
                     $table->uuid('course_id')->nullable();
                     $table->uuid('difficulty_id')->nullable();
+                    $table->text('source')->nullable();
                     $table->integer('order')->unsigned()->default(1);
                     $table->string('status')->default(ModelStatusEnum::DRAFT);
                     $table->timestamps();
