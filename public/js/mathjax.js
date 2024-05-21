@@ -44,26 +44,44 @@ if(ckeditorToMathjaxBtns){
         ckeditorToMathjaxBtns[i].addEventListener('click', function(e){
             e.preventDefault();
             var el = e.target;
-            var name = el.getAttribute('data-name');
             var previewId = el.getAttribute('data-preview');
             var previewEl = (previewId?.length) ? document.getElementById(previewId) : null;
+            var sourceId = el.getAttribute('data-source-id');
             if(previewEl && appCkEditors && appCkEditors.length){
-                for (var i = 0; i < appCkEditors.length; i++) {
-                    if(appCkEditors[i].name == name){
-                        var content = appCkEditors[i].editor.getData();
-                        previewEl.innerHTML = content;
-                        el.disabled = true;
-                        el.textContent = 'Please wait..';
-                        MathJax.texReset();
-                        MathJax.typesetClear();
-                        MathJax.typesetPromise([previewEl]).catch(function (err) {
-                            previewEl.innerHTML = '';
-                            previewEl.appendChild(document.createTextNode(err.message));
-                            console.error(err);
-                        }).then(function () {
-                            el.disabled = false;
-                            el.textContent = 'Render';
-                        });
+                if(sourceId?.trim().length){
+                    var sourceEl = document.getElementById(sourceId);
+                    previewEl.innerHTML = sourceEl.value;
+                    el.disabled = true;
+                    el.textContent = 'Please wait..';
+                    MathJax.texReset();
+                    MathJax.typesetClear();
+                    MathJax.typesetPromise([previewEl]).catch(function (err) {
+                        previewEl.innerHTML = '';
+                        previewEl.appendChild(document.createTextNode(err.message));
+                        console.error(err);
+                    }).then(function () {
+                        el.disabled = false;
+                        el.textContent = 'Render';
+                    });
+                } else {
+                    var name = el.getAttribute('data-name');
+                    for (var i = 0; i < appCkEditors.length; i++) {
+                        if(appCkEditors[i].name == name){
+                            var content = appCkEditors[i].editor.getData();
+                            previewEl.innerHTML = content;
+                            el.disabled = true;
+                            el.textContent = 'Please wait..';
+                            MathJax.texReset();
+                            MathJax.typesetClear();
+                            MathJax.typesetPromise([previewEl]).catch(function (err) {
+                                previewEl.innerHTML = '';
+                                previewEl.appendChild(document.createTextNode(err.message));
+                                console.error(err);
+                            }).then(function () {
+                                el.disabled = false;
+                                el.textContent = 'Render';
+                            });
+                        }
                     }
                 }
             } else {

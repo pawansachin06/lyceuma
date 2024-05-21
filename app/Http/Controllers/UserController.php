@@ -42,6 +42,28 @@ class UserController extends Controller
         return view('users.index', ['items' => $items, 'keyword'=> $keyword]);
     }
 
+    public function loginWithPhone(Request $req)
+    {
+        // code...
+    }
+
+    public function userByPhone(Request $req)
+    {
+        $phone = $req->phone;
+        if(empty($phone)){
+            return response()->json([
+                'success'=> false,
+                'message'=> 'Account not found with this phone number',
+            ]);
+        }
+        $user = User::where('phone', $phone)->first('id', 'name', 'phone');
+        return response()->json([
+            'success'=> true,
+            'token'=> $user->id,
+            'message'=> 'Account found with this phone',
+        ]);
+    }
+
 
     public function create(Request $req)
     {

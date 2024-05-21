@@ -365,8 +365,6 @@ class DatabaseSeeder extends Seeder
                     $table->string('answer_type')->nullable();
                     $table->uuid('chapter_id')->nullable();
                     $table->uuid('topic_id')->nullable();
-                    $table->uuid('course_id')->nullable();
-                    $table->uuid('difficulty_id')->nullable();
                     $table->text('source')->nullable();
                     $table->integer('order')->unsigned()->default(1);
                     $table->string('status')->default(ModelStatusEnum::DRAFT);
@@ -382,13 +380,13 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@test.com',
             'phone' => '8181040977',
         ]);
-        // User::factory()->withPersonalTeam()->create([
-        //     'name' => 'Admin',
-        //     'username' => 'admin',
-        //     'role' => UserRoleEnum::ADMIN,
-        //     'email' => 'admin@test.com',
-        //     'phone' => '9100091001',
-        // ]);
+        User::factory()->withPersonalTeam()->create([
+            'name' => 'Admin',
+            'username' => 'admin2',
+            'role' => UserRoleEnum::ADMIN,
+            'email' => 'admin2@test.com',
+            'phone' => '9984495055',
+        ]);
         User::factory()->create([
             'name' => 'Teacher',
             'username' => 'teacher',

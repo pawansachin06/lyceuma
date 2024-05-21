@@ -26,6 +26,9 @@ Route::get('/contactus', function () {
     return view('pages.contactUs');
 })->name('pages.contactUs');
 
+Route::post('/users/phone/otp', [
+    UserController::class, 'loginWithPhone'
+])->name('login.phone');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login/redirect/google', [

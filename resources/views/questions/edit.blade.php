@@ -136,7 +136,7 @@
                     <div class="flex flex-wrap gap-x-5 gap-y-1">
                         @foreach($courses as $course)
                             <label class="inline-flex gap-2 items-center cursor-pointer">
-                                <input type="radio" name="course_id" required value="{{ $course->id }}" <?= $course->id == $item->course_id ? 'checked' : '' ?> class="w-5 h-5 my-1 border-gray-500 text-primary-500 shadow-sm focus:ring-primary-500 border-solid" />
+                                <input type="checkbox" name="course_id[]" value="{{ $course->id }}" <?= in_array($course->id, $itemCourseIds) ? 'checked' : '' ?> class="rounded w-5 h-5 my-1 border-gray-500 text-primary-500 shadow-sm focus:ring-primary-500 border-solid" />
                                 <span>{{ $course->name }}</span>
                             </label>
                         @endforeach
@@ -149,7 +149,7 @@
                     <div class="flex flex-wrap gap-x-5 gap-y-1">
                         @foreach($difficulties as $difficulty)
                             <label class="inline-flex gap-2 items-center cursor-pointer">
-                                <input type="radio" name="difficulty_id" required value="{{ $difficulty->id }}" <?= $difficulty->id == $item->difficulty_id ? 'checked' : '' ?> class="w-5 h-5 my-1 border-gray-500 text-primary-500 shadow-sm focus:ring-primary-500 border-solid" />
+                                <input type="checkbox" name="difficulty_id[]" value="{{ $difficulty->id }}" <?= in_array($difficulty->id, $itemDifficultyIds) ? 'checked' : '' ?> class="rounded w-5 h-5 my-1 border-gray-500 text-primary-500 shadow-sm focus:ring-primary-500 border-solid" />
                                 <span>{{ $difficulty->name }}</span>
                             </label>
                         @endforeach

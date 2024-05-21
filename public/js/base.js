@@ -10,7 +10,7 @@ try {
     dev && console.log(e);
 }
 
-if (dev) console.log('%c DEV MODE ENABLED %c ---> Byvex.com <---', "background:#1565c0;color:#ffffff;;padding:4px 5px;border-radius:18px;", "");
+if (dev) console.log('%c DEV MODE ENABLED %c will be disabled on '+ targetDate, "background:#1565c0;color:#ffffff;;padding:4px 5px;border-radius:18px;", "");
 
 function getAxiosError(err) {
     let msg = 'An error occurred, try again.';

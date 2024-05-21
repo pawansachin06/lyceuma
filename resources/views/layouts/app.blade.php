@@ -63,6 +63,22 @@
         @endif
     @endforeach
 
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-auth.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBzkrQAcUfJ91J43vSONPAdRzucUNOumW8",
+            authDomain: "email-confirmation-238a7.firebaseapp.com",
+            databaseURL: "https://email-confirmation-238a7.firebaseio.com",
+            projectId: "email-confirmation-238a7",
+            storageBucket: "email-confirmation-238a7.appspot.com",
+            messagingSenderId: "59262427980",
+            appId: "1:59262427980:web:6fd74056013127e2c1e5e9",
+            measurementId: "G-41K634RF74"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+
     <script defer src="/js/lib/axios.min.js?v=1.6.8"></script>
     <script defer src="/js/base.js?v={{ $version }}"></script>
 </head>
@@ -85,6 +101,9 @@
             <script defer src="{{ $scriptPath }}"></script>
         @endif
     @endforeach
+    @if( !empty($scripts) )
+        {{ $scripts }}
+    @endif
 
     @livewireScripts
 </body>

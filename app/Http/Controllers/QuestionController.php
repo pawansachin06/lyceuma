@@ -32,7 +32,10 @@ class QuestionController extends Controller
         $this->validationRules = [
             'chapter_id' => ['required', Rule::exists(Chapter::class, 'id')],
             'topic_id' => ['required', Rule::exists(Chapter::class, 'id')],
-            'difficulty_id' => ['required', Rule::exists(Difficulty::class, 'id')],
+            'difficulty_id' => ['required'],
+            'difficulty_id.*' => ['required', Rule::exists(Difficulty::class, 'id')],
+            'course_id' => ['required'],
+            'course_id.*' => ['required', Rule::exists(Course::class, 'id')],
             'question' => ['required', 'string'],
             'option1' => ['nullable', 'string'],
             'option2' => ['nullable', 'string'],
@@ -177,9 +180,9 @@ class QuestionController extends Controller
             $tableId = $questionsTable->id;
             $table = $questionsTable->table;
             $query = DB::table($table);
-            if (!empty($courseId)) {
-                $query = $query->where('course_id', $courseId);
-            }
+            // if (!empty($courseId)) {
+            //     $query = $query->where('course_id', $courseId);
+            // }
 
             if (!empty($statusId)) {
                 $query = $query->where('status', $statusId);
@@ -242,7 +245,6 @@ class QuestionController extends Controller
         $rules = $this->validationRules;
         $rules['subject_id'] = ['required', Rule::exists(Subject::class, 'id')];
         $rules['classroom_id'] = ['required', Rule::exists(Classroom::class, 'id')];
-        $rules['course_id'] = ['required', Rule::exists(Course::class, 'id')];
 
         $input = $req->validate($rules, []);
 
@@ -256,6 +258,11 @@ class QuestionController extends Controller
                 ]);
             }
             $table = $questionTable->table;
+            $courseids = $input['course_id'];
+            $courseFirstId = @$courseids[0];
+            $difficultyIds = $input['difficulty_id'];
+            $difficultyFirstId = @$difficultyIds[0];
+
             unset($input['subject_id']);
             unset($input['classroom_id']);
             unset($input['question_image']);
@@ -265,12 +272,53 @@ class QuestionController extends Controller
             unset($input['option4_image']);
             unset($input['option5_image']);
             unset($input['option6_image']);
+            unset($input['subject_id']);
+            unset($input['course_id']);
+            unset($input['difficulty_id']);
+
             $quesId = DB::table($table)->insertGetId($input);
+
+            $questionPivotId = $questionTable->id . '__' . $quesId;
+
+            DB::transaction(function () use ($questionPivotId, $courseids) {
+                // Delete existing associations for the custom id
+                DB::table('question_pivot_course')->where('question_id', $questionPivotId)->delete();
+
+                // Prepare the data to be inserted
+                $pivotData = [];
+                foreach ($courseids as $courseId) {
+                    $pivotData[] = [
+                        'question_id' => $questionPivotId,
+                        'course_id' => $courseId,
+                    ];
+                }
+
+                // Insert the new data into the pivot table
+                DB::table('question_pivot_course')->insert($pivotData);
+            });
+
+            DB::transaction(function () use ($questionPivotId, $difficultyIds) {
+                // Delete existing associations for the custom id
+                DB::table('question_pivot_difficulty')->where('question_id', $questionPivotId)->delete();
+
+                // Prepare the data to be inserted
+                $pivotData = [];
+                foreach ($difficultyIds as $difficultyId) {
+                    $pivotData[] = [
+                        'question_id' => $questionPivotId,
+                        'difficulty_id' => $difficultyId,
+                    ];
+                }
+
+                // Insert the new data into the pivot table
+                DB::table('question_pivot_difficulty')->insert($pivotData);
+            });
+
             $this->saveFilesTrigger($req, $questionTable->id, $quesId);
             return response()->json([
                 'success' => true,
                 'redirect' => route('questions.index', [
-                    'courseId' => $req->course_id,
+                    'courseId' => $courseFirstId,
                     'classroomId' => $req->classroom_id,
                     'subjectId' => $req->subject_id,
                 ]),
@@ -303,7 +351,17 @@ class QuestionController extends Controller
         $questionsTable = QuestionTable::findOrFail($tableId, ['id', 'table', 'subject_id', 'classroom_id']);
         $table = $questionsTable->table;
         $item = DB::table($table)->where('id', $quesId)->first();
+
         if (empty($item)) abort(404);
+
+        $questionPivotId = $tableId . '__' . $quesId;
+        $itemCourseIds = DB::table('question_pivot_course')
+                    ->where('question_id', $questionPivotId)->pluck('course_id');
+        $itemCourseIds = count($itemCourseIds) ? $itemCourseIds->toArray() : [];
+
+        $itemDifficultyIds = DB::table('question_pivot_difficulty')
+                    ->where('question_id', $questionPivotId)->pluck('difficulty_id');
+        $itemDifficultyIds = count($itemDifficultyIds) ? $itemDifficultyIds->toArray() : [];
 
         $classroomId = $questionsTable->classroom_id;
         $subjectId = $questionsTable->subject_id;
@@ -344,6 +402,8 @@ class QuestionController extends Controller
         $imageDeleteRoute = route('questions.image.destroy');
         return view('questions.edit', [
             'item' => $item,
+            'itemCourseIds' => $itemCourseIds,
+            'itemDifficultyIds' => $itemDifficultyIds,
             'images' => $images,
             'classroomId' => $classroomId,
             'statuses' => $statuses,
@@ -378,6 +438,13 @@ class QuestionController extends Controller
                 ]);
             }
             $table = $questionTable->table;
+            $courseids = $input['course_id'];
+            $courseFirstId = @$courseids[0];
+            $difficultyIds = $input['difficulty_id'];
+            $difficultyFirstId = @$difficultyIds[0];
+
+            unset($input['course_id']);
+            unset($input['difficulty_id']);
             unset($input['question_image']);
             unset($input['option1_image']);
             unset($input['option2_image']);
@@ -386,6 +453,43 @@ class QuestionController extends Controller
             unset($input['option5_image']);
             unset($input['option6_image']);
             DB::table($table)->where('id', $quesId)->update($input);
+
+            $questionPivotId = $tableId . '__' . $quesId;
+
+            DB::transaction(function () use ($questionPivotId, $courseids) {
+                // Delete existing associations for the custom id
+                DB::table('question_pivot_course')->where('question_id', $questionPivotId)->delete();
+
+                // Prepare the data to be inserted
+                $pivotData = [];
+                foreach ($courseids as $courseId) {
+                    $pivotData[] = [
+                        'question_id' => $questionPivotId,
+                        'course_id' => $courseId,
+                    ];
+                }
+
+                // Insert the new data into the pivot table
+                DB::table('question_pivot_course')->insert($pivotData);
+            });
+
+            DB::transaction(function () use ($questionPivotId, $difficultyIds) {
+                // Delete existing associations for the custom id
+                DB::table('question_pivot_difficulty')->where('question_id', $questionPivotId)->delete();
+
+                // Prepare the data to be inserted
+                $pivotData = [];
+                foreach ($difficultyIds as $difficultyId) {
+                    $pivotData[] = [
+                        'question_id' => $questionPivotId,
+                        'difficulty_id' => $difficultyId,
+                    ];
+                }
+
+                // Insert the new data into the pivot table
+                DB::table('question_pivot_difficulty')->insert($pivotData);
+            });
+
             $this->saveFilesTrigger($req, $questionTable->id, $quesId);
             return response()->json([
                 'success' => true,

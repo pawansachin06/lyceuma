@@ -31,7 +31,7 @@
                 <div class="w-full sm:w-6/12 px-1 "></div>
                 <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div>Option 1</div>
-                    <textarea class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="option1"></textarea>
+                    <textarea id="question-option1-input" class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="option1"></textarea>
                 </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3 flex justify-between gap-2">
                     <div class="flex flex-col w-full grow">
@@ -42,9 +42,13 @@
                         <img src="/img/dummy/blank.png" id="preview-option1-image" class="w-full h-full rounded border border-solid border-gray-500 object-center object-cover" />
                     </div>
                 </div>
+                <div class="w-full px-1 mb-3">
+                    <x-button type="button" data-source-id="question-option1-input" data-name="option1" data-preview="mathjax-option1-preview" data-js="ckeditor-to-mathjax-btn" size="sm" class="mb-2">Render</x-button>
+                    <div id="mathjax-option1-preview" class="px-3 py-3 rounded-md bg-white shadow-sm"></div>
+                </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div>Option 2</div>
-                    <textarea class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="option2"></textarea>
+                    <textarea id="question-option2-input" class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="option2"></textarea>
                 </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3 flex justify-between gap-2">
                     <div class="flex flex-col w-full grow">
@@ -55,9 +59,13 @@
                         <img src="/img/dummy/blank.png" id="preview-option2-image" class="w-full h-full rounded border border-solid border-gray-500 object-center object-cover" />
                     </div>
                 </div>
+                <div class="w-full px-1 mb-3">
+                    <x-button type="button" data-source-id="question-option2-input" data-name="option2" data-preview="mathjax-option2-preview" data-js="ckeditor-to-mathjax-btn" size="sm" class="mb-2">Render</x-button>
+                    <div id="mathjax-option2-preview" class="px-3 py-3 rounded-md bg-white shadow-sm"></div>
+                </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div>Option 3</div>
-                    <textarea class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="option3"></textarea>
+                    <textarea id="question-option3-input" class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="option3"></textarea>
                 </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3 flex justify-between gap-2">
                     <div class="flex flex-col w-full grow">
@@ -68,9 +76,13 @@
                         <img src="/img/dummy/blank.png" id="preview-option3-image" class="w-full h-full rounded border border-solid border-gray-500 object-center object-cover" />
                     </div>
                 </div>
+                <div class="w-full px-1 mb-3">
+                    <x-button type="button" data-source-id="question-option3-input" data-name="option3" data-preview="mathjax-option3-preview" data-js="ckeditor-to-mathjax-btn" size="sm" class="mb-2">Render</x-button>
+                    <div id="mathjax-option3-preview" class="px-3 py-3 rounded-md bg-white shadow-sm"></div>
+                </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div>Option 4</div>
-                    <textarea class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="option4"></textarea>
+                    <textarea id="question-option4-input" class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="option4"></textarea>
                 </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3 flex justify-between gap-2">
                     <div class="flex flex-col w-full grow">
@@ -81,9 +93,13 @@
                         <img src="/img/dummy/blank.png" id="preview-option4-image" class="w-full h-full rounded border border-solid border-gray-500 object-center object-cover" />
                     </div>
                 </div>
+                <div class="w-full px-1 mb-3">
+                    <x-button type="button" data-source-id="question-option4-input" data-name="option4" data-preview="mathjax-option4-preview" data-js="ckeditor-to-mathjax-btn" size="sm" class="mb-2">Render</x-button>
+                    <div id="mathjax-option4-preview" class="px-3 py-3 rounded-md bg-white shadow-sm"></div>
+                </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div>Option 5</div>
-                    <textarea class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="option5"></textarea>
+                    <textarea id="question-option5-input" class="rounded w-full focus:border-primary-500 focus:ring-primary-400" name="option5"></textarea>
                 </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3 flex justify-between gap-2">
                     <div class="flex flex-col w-full grow">
@@ -93,6 +109,10 @@
                     <div class="w-20 h-20 relative flex-none">
                         <img src="/img/dummy/blank.png" id="preview-option5-image" class="w-full h-full rounded border border-solid border-gray-500 object-center object-cover" />
                     </div>
+                </div>
+                <div class="w-full px-1 mb-3">
+                    <x-button type="button" data-source-id="question-option5-input" data-name="option5" data-preview="mathjax-option5-preview" data-js="ckeditor-to-mathjax-btn" size="sm" class="mb-2">Render</x-button>
+                    <div id="mathjax-option5-preview" class="px-3 py-3 rounded-md bg-white shadow-sm"></div>
                 </div>
                 @if( !empty($subjects) )
                 <div class="w-full px-1 mb-3 select-none">
@@ -126,7 +146,7 @@
                     <div class="flex flex-wrap gap-x-5 gap-y-1">
                         @foreach($courses as $course)
                             <label class="inline-flex gap-2 items-center cursor-pointer">
-                                <input type="radio" name="course_id" required value="{{ $course->id }}" class="w-5 h-5 my-1 border-gray-500 text-primary-500 shadow-sm focus:ring-primary-500 border-solid" />
+                                <input type="checkbox" name="course_id[]" value="{{ $course->id }}" class="rounded w-5 h-5 my-1 border-gray-500 text-primary-500 shadow-sm focus:ring-primary-500 border-solid" />
                                 <span>{{ $course->name }}</span>
                             </label>
                         @endforeach
@@ -139,7 +159,7 @@
                     <div class="flex flex-wrap gap-x-5 gap-y-1">
                         @foreach($difficulties as $difficulty)
                             <label class="inline-flex gap-2 items-center cursor-pointer">
-                                <input type="radio" name="difficulty_id" required value="{{ $difficulty->id }}" class="w-5 h-5 my-1 border-gray-500 text-primary-500 shadow-sm focus:ring-primary-500 border-solid" />
+                                <input type="checkbox" name="difficulty_id[]" value="{{ $difficulty->id }}" class="rounded w-5 h-5 my-1 border-gray-500 text-primary-500 shadow-sm focus:ring-primary-500 border-solid" />
                                 <span>{{ $difficulty->name }}</span>
                             </label>
                         @endforeach

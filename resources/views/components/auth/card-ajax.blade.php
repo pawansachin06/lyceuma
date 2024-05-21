@@ -15,8 +15,37 @@
 </div>
 <div class="auth-card-body px-3 py-3 overflow-y-auto">
     <div id="auth-card-content-login">
+        <form id="auth-card-login-otp-form" action="{{ route('login.phone') }}" class="block">
+            <div id="auth-card-login-otp-form-step-1">
+                <span>Login with phone number</span>
+                <div class="my-1">
+                    <div class="grow relative font-medium">
+                        <span class="absolute px-2 top-0 bottom-0 inline-flex items-center tracking-widest">+91</span>
+                        <input type="number" name="phone" placeholder="987654321" class="w-full pl-12 tracking-widest rounded focus:border-primary-500 focus:ring-primary-200"  />
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <div id="auth-login-recaptcha-container"></div>
+                </div>
+            </div>
+            <div id="auth-card-login-otp-form-step-2" class="mb-3 hidden">
+                <div>Enter OTP</div>
+                <input type="number" name="otp" placeholder="******" class="w-full text-xl font-medium text-center tracking-widest rounded focus:border-primary-500 focus:ring-primary-200" />
+            </div>
+            <p id="auth-card-login-otp-form-status" class="hidden mb-2 font-semibold"></p>
+            <div class="">
+                <x-button id="auth-card-login-otp-form-btn" data-route="{{ route('api.users.phone') }}" disabled class="hidden w-full" type="submit">Send OTP</x-button>
+            </div>
+        </form>
+
+        <div class="text-sm flex items-center text-center my-4 select-none">
+            <span class="grow border-solid border-0 border-b border-gray-300"></span>
+            <span class="px-2">{{ __('or continue with Google') }}</span>
+            <span class="grow border-solid border-0 border-b border-gray-300"></span>
+        </div>
+
         <x-button.google />
-        <div class="text-sm flex items-center text-center mt-2 mb-4 select-none">
+        <div class="text-sm flex items-center text-center my-4 select-none">
             <span class="grow border-solid border-0 border-b border-gray-300"></span>
             <span class="px-2">{{ __('or continue with email') }}</span>
             <span class="grow border-solid border-0 border-b border-gray-300"></span>
@@ -48,7 +77,7 @@
     </div>
     <div id="auth-card-content-register">
         <x-button.google />
-        <div class="text-sm flex items-center text-center mt-2 mb-4 select-none">
+        <div class="text-sm flex items-center text-center my-4 select-none">
             <span class="grow border-solid border-0 border-b border-gray-300"></span>
             <span class="px-2">{{ __('or continue with email') }}</span>
             <span class="grow border-solid border-0 border-b border-gray-300"></span>

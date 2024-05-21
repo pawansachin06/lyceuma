@@ -6,7 +6,9 @@ enum ExamAnswerTypeEnum: string
 {
     case RADIO    = 'RADIO';
     case CHECKBOX = 'CHECKBOX';
-    case NUMBER   = 'NUMBER';
+    case INTEGERS   = 'INTEGER';
+    case PASSAGE   = 'TEXTAREA';
+    case STRINGS   = 'STRING';
 
     public static function toArray() : array {
         $arr = [];
@@ -20,7 +22,9 @@ enum ExamAnswerTypeEnum: string
         $arr = [];
         $arr[] = ['key'=> 'RADIO', 'value'=> 'Single Choice'];
         $arr[] = ['key'=> 'CHECKBOX', 'value'=> 'Multiple Choice'];
-        $arr[] = ['key'=> 'NUMBER', 'value'=> 'Number Type'];
+        $arr[] = ['key'=> 'INTEGER', 'value'=> 'Integer Type'];
+        $arr[] = ['key'=> 'TEXTAREA', 'value'=> 'Passage Type'];
+        $arr[] = ['key'=> 'STRING', 'value'=> 'Stem-type Type'];
         return $arr;
     }
 }

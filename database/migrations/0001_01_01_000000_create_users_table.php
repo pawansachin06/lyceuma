@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('phone_country')->nullable();
             $table->string('phone_prefix')->nullable();
             $table->string('phone')->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
             $table->rememberToken();
             $table->foreignUuid('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
