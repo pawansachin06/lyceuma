@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
 
 class UserController extends Controller
@@ -44,7 +45,23 @@ class UserController extends Controller
 
     public function loginWithPhone(Request $req)
     {
-        // code...
+        $userId = $req->deviceToken;
+        $phone = $req->phone;
+        $phone = str_replace('+91', '', $phone);
+        $user = User::where('id', $userId)->where('phone', $phone)->first();
+        if(!empty($user) && !empty($user->id)){
+            Auth::loginUsingId($user->id);
+            return response()->json([
+                'success'=> true,
+                'message'=> 'Refreshing...',
+                'redirect'=> route('dashboard'),
+            ]);
+        } else {
+            return response()->json([
+                'success'=> false,
+                'message'=> 'Account not found',
+            ]);
+        }
     }
 
     public function userByPhone(Request $req)

@@ -66,26 +66,24 @@
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-auth.js"></script>
     <script>
-        // var firebaseConfig = {
-        //     apiKey: "AIzaSyBzkrQAcUfJ91J43vSONPAdRzucUNOumW8",
-        //     authDomain: "email-confirmation-238a7.firebaseapp.com",
-        //     databaseURL: "https://email-confirmation-238a7.firebaseio.com",
-        //     projectId: "email-confirmation-238a7",
-        //     storageBucket: "email-confirmation-238a7.appspot.com",
-        //     messagingSenderId: "59262427980",
-        //     appId: "1:59262427980:web:6fd74056013127e2c1e5e9",
-        //     measurementId: "G-41K634RF74"
-        // };
         var firebaseConfig = {
-            apiKey: "AIzaSyDxDXSoFRdVJD8wnK7YOkL3lCTAo1Gj5Rw",
-            authDomain: "byxstage.firebaseapp.com",
-            // databaseURL: "https://email-confirmation-238a7.firebaseio.com",
-            projectId: "byxstage",
-            storageBucket: "byxstage.appspot.com",
-            messagingSenderId: "881177660369",
-            appId: "1:881177660369:web:38491f09b4b128ed0deef0",
-            // measurementId: "G-41K634RF74"
+            apiKey: "AIzaSyBzkrQAcUfJ91J43vSONPAdRzucUNOumW8",
+            authDomain: "email-confirmation-238a7.firebaseapp.com",
+            databaseURL: "https://email-confirmation-238a7.firebaseio.com",
+            projectId: "email-confirmation-238a7",
+            storageBucket: "email-confirmation-238a7.appspot.com",
+            messagingSenderId: "59262427980",
+            appId: "1:59262427980:web:6fd74056013127e2c1e5e9",
+            measurementId: "G-41K634RF74"
         };
+        // var firebaseConfig = {
+        //     apiKey: "AIzaSyDxDXSoFRdVJD8wnK7YOkL3lCTAo1Gj5Rw",
+        //     authDomain: "byxstage.firebaseapp.com",
+        //     projectId: "byxstage",
+        //     storageBucket: "byxstage.appspot.com",
+        //     messagingSenderId: "881177660369",
+        //     appId: "1:881177660369:web:38491f09b4b128ed0deef0",
+        // };
         firebase.initializeApp(firebaseConfig);
     </script>
 
