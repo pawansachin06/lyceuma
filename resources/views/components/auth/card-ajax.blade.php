@@ -15,7 +15,7 @@
 </div>
 <div class="auth-card-body px-3 py-3 overflow-y-auto">
     <div id="auth-card-content-login">
-        <form id="auth-card-login-otp-form" action="{{ route('login.phone') }}" class="block">
+        <div id="auth-card-login-otp-form" data-route="{{ route('login.phone') }}" class="block">
             <div id="auth-card-login-otp-form-step-1">
                 <span>Login with phone number</span>
                 <div class="my-1">
@@ -36,7 +36,7 @@
             <div class="">
                 <x-button id="auth-card-login-otp-form-btn" data-route="{{ route('api.users.phone') }}" disabled class="hidden w-full" type="submit">Send OTP</x-button>
             </div>
-        </form>
+        </div>
 
         <div class="text-sm flex items-center text-center my-4 select-none">
             <span class="grow border-solid border-0 border-b border-gray-300"></span>
