@@ -73,12 +73,15 @@ class UserController extends Controller
                 'message'=> 'Account not found with this phone number',
             ]);
         }
-        $user = User::where('phone', $phone)->first('id', 'name', 'phone');
-        return response()->json([
-            'success'=> true,
-            'token'=> $user->id,
-            'message'=> 'Account found with this phone',
-        ]);
+        $user = User::where('phone', $phone)->first();
+        if($user){
+            return response()->json([
+                'success'=> true,
+                'token'=> $user->id,
+                'message'=> 'Account found with this phone',
+            ]);
+        }
+        return response()->json(['success'=> false, 'message'=> 'Account not found, please register.']);
     }
 
 

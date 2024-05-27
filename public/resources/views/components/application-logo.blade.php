@@ -1,0 +1,1 @@
+<img src="https://dummyimage.com/255x60" alt="{{ config('app.name') }}" title="{{ config('app.name') }}" {{ $attributes->merge(['class' => '']) }} />
