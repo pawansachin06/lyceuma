@@ -1,8 +1,8 @@
-<x-admin-layout ckeditor="1" question="1" mathjax="1">
+<x-admin-layout ckeditor="1" question="1" mathjax="1" tippy="1">
     <div class="lg:container px-3 py-3">
         <div class="mb-2 flex flex-wrap justify-between items-center">
             <div class="">
-                <h1 class="text-2xl font-sans font-semibold">Edit Question</h1>
+                <h1 class="text-2xl font-sans font-semibold">Edit Question No. {{ $item->id }}</h1>
             </div>
             <div class="">
                 <x-button :href="route('questions.index', ['subjectId'=> $subjectId, 'classroomId'=> $classroomId, ])">Back</x-button>
@@ -202,6 +202,14 @@
                     <div>Answer</div>
                     <input type="text" name="answer" value="{{ $item->answer }}" required class="rounded w-full focus:border-primary-500 focus:ring-primary-400" />
                     <small>Please enter numerical eg:1(single choice) 2,3(multiple choice)</small>
+                </div>
+                <div class="w-full sm:w-6/12 px-1 mb-3">
+                    <div>Parent Question ID <span data-tippy-content="Enter the ID of question after which you want this question to show in exam. Leave empty for no connection with another question."><x-icons.info class="w-6 h-6" /></span></div>
+                    <input type="number" name="parent_id" value="{{ $item->parent_id }}" min="1" step="1" class="rounded w-full focus:border-primary-500 focus:ring-primary-400" />
+                </div>
+                <div class="w-full sm:w-6/12 px-1 mb-3">
+                    <div>Parent Question Order No. <span data-tippy-content="If there are multiple child questions connected to one question, then this order number will decide in which sequence the child questions should show in exam."><x-icons.info class="w-6 h-6" /></span></div>
+                    <input type="number" name="parent_order" value="{{ $item->parent_order }}" min="1" step="1" class="rounded w-full focus:border-primary-500 focus:ring-primary-400" />
                 </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div>Positive Marks</div>

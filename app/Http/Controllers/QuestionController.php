@@ -31,6 +31,8 @@ class QuestionController extends Controller
     {
         $this->validationRules = [
             'chapter_id' => ['required', Rule::exists(Chapter::class, 'id')],
+            'parent_id' => ['nullable'],
+            'parent_order' => ['nullable'],
             'topic_id' => ['required', Rule::exists(Chapter::class, 'id')],
             'difficulty_id' => ['required'],
             'difficulty_id.*' => ['required', Rule::exists(Difficulty::class, 'id')],
@@ -255,9 +257,20 @@ class QuestionController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Table not found for this subject and class',
-                ]);
+                ], 422);
             }
             $table = $questionTable->table;
+
+            // check if parent question ID exists
+            $question_parent_id = $input['parent_id'];
+            $parent_question = DB::table($table)->where('id', $question_parent_id)->first();
+            if(empty($parent_question)){
+                return response()->json([
+                    'success'=> false,
+                    'message'=> 'Parent question not found with ID '. $question_parent_id,
+                ], 422);
+            }
+
             $courseids = $input['course_id'];
             $courseFirstId = @$courseids[0];
             $difficultyIds = $input['difficulty_id'];
@@ -438,6 +451,25 @@ class QuestionController extends Controller
                 ]);
             }
             $table = $questionTable->table;
+
+            // check if parent question ID exists
+            $question_parent_id = $input['parent_id'];
+
+            if($question_parent_id == $quesId){
+                return response()->json([
+                    'success'=> false,
+                    'message'=> 'Can not use current question ID as parent question ID',
+                ], 422);
+            }
+
+            $parent_question = DB::table($table)->where('id', $question_parent_id)->first();
+            if(empty($parent_question)){
+                return response()->json([
+                    'success'=> false,
+                    'message'=> 'Parent question not found with ID '. $question_parent_id,
+                ], 422);
+            }
+
             $courseids = $input['course_id'];
             $courseFirstId = @$courseids[0];
             $difficultyIds = $input['difficulty_id'];

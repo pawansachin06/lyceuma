@@ -18,11 +18,11 @@
     "orientation": "portrait",
     "related_applications": [{
         "platform": "webapp",
-        "url": "https://lyceuma.freewebexperts.com/manifest.json"
+        "url": "https://www.lyceuma.com/manifest.json"
     }],
     "prefer_related_applications": true,
     "url_handlers": [
-        { "origin": "https://lyceuma.freewebexperts.com" },
+        { "origin": "https://www.lyceuma.com" },
         { "origin": "https://lyceuma.com" }
     ],
     "features": [

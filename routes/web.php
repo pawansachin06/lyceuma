@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\ExamCategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -127,6 +128,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('exams/questions/{exam}/{id}', [
         ExamController::class, 'destroyQuestion',
     ])->name('exams.destroy-question');
+
+
+    // backup
+    Route::post('/admin/download-backup', [
+        BackupController::class, 'downloadBackup'
+    ])->name('backup.download');
+
 });
 
 

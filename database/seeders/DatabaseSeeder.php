@@ -338,10 +338,11 @@ class DatabaseSeeder extends Seeder
 
         foreach ($newExamClasses as $newExamClass) {
             foreach ($newExamSubjects as $newExamSubject) {
+                $readable_name = $newExamClass->name .' '. $newExamSubject->name;
                 $table_name = 'ques_' . $newExamClass->name . '_' . $newExamSubject->name;
                 $table_name = Str::slug($table_name, '_', 'en', ['-' => '_']);
                 QuestionTable::factory()->create([
-                    'name' => $table_name,
+                    'name' => $readable_name,
                     'table' => $table_name,
                     'classroom_id' => $newExamClass->id,
                     'subject_id' => $newExamSubject->id,
@@ -349,6 +350,8 @@ class DatabaseSeeder extends Seeder
 
                 Schema::create($table_name, function (Blueprint $table) {
                     $table->id();
+                    $table->integer('parent_id')->unsigned()->nullable();
+                    $table->integer('parent_order')->unsigned()->nullable();
                     $table->string('name')->nullable();
                     $table->text('question');
                     $table->text('option1')->nullable();
