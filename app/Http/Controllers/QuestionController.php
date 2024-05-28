@@ -263,12 +263,14 @@ class QuestionController extends Controller
 
             // check if parent question ID exists
             $question_parent_id = $input['parent_id'];
-            $parent_question = DB::table($table)->where('id', $question_parent_id)->first();
-            if(empty($parent_question)){
-                return response()->json([
-                    'success'=> false,
-                    'message'=> 'Parent question not found with ID '. $question_parent_id,
-                ], 422);
+            if(!empty($question_parent_id)){
+                $parent_question = DB::table($table)->where('id', $question_parent_id)->first();
+                if(empty($parent_question)){
+                    return response()->json([
+                        'success'=> false,
+                        'message'=> 'Parent question not found with ID '. $question_parent_id,
+                    ], 422);
+                }
             }
 
             $courseids = $input['course_id'];
@@ -462,12 +464,14 @@ class QuestionController extends Controller
                 ], 422);
             }
 
-            $parent_question = DB::table($table)->where('id', $question_parent_id)->first();
-            if(empty($parent_question)){
-                return response()->json([
-                    'success'=> false,
-                    'message'=> 'Parent question not found with ID '. $question_parent_id,
-                ], 422);
+            if(!empty($question_parent_id)){
+                $parent_question = DB::table($table)->where('id', $question_parent_id)->first();
+                if(empty($parent_question)){
+                    return response()->json([
+                        'success'=> false,
+                        'message'=> 'Parent question not found with ID '. $question_parent_id,
+                    ], 422);
+                }
             }
 
             $courseids = $input['course_id'];
