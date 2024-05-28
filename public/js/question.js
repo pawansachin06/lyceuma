@@ -187,4 +187,30 @@
         });
     }
 
+
+
+    var questionAnswerTypeSelect = document.querySelector('[data-js="question-answer-type-select"]');
+    var questionParentIdBox = document.querySelector('[data-js="question-parent-id-box"]');
+    var questionParentOrderBox = document.querySelector('[data-js="question-parent-order-box"]');
+    var questionParentId = document.querySelector('[data-js="question-parent-id"]');
+    var questionParentOrder = document.querySelector('[data-js="question-parent-order"]');
+    if(questionAnswerTypeSelect){
+        function checkQuestionAnswerType(){
+            var value = questionAnswerTypeSelect.value;
+            if(value == 'PASSAGE' || value == 'MATRIX3'){
+                questionParentIdBox.classList.remove('hidden');
+                questionParentOrderBox.classList.remove('hidden');
+            } else {
+                questionParentIdBox.classList.add('hidden');
+                questionParentOrderBox.classList.add('hidden');
+                questionParentId.value = '';
+                questionParentOrder.value = '';
+            }
+        }
+        checkQuestionAnswerType();
+        questionAnswerTypeSelect.addEventListener('change', function(e){
+            checkQuestionAnswerType();
+        });
+    }
+
 })();

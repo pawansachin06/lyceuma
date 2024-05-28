@@ -185,7 +185,7 @@
                 @if(!empty($examAnswerTypes))
                     <div class="w-full sm:w-6/12 px-1 mb-3">
                         <div>Answer Type</div>
-                        <select name="answer_type" class="rounded focus:border-primary-500 focus:ring-primary-400 w-full">
+                        <select name="answer_type" data-js="question-answer-type-select" class="rounded focus:border-primary-500 focus:ring-primary-400 w-full">
                             @foreach($examAnswerTypes as $examAnswerType)
                                 <option value="{{ $examAnswerType['key'] }}">{{ $examAnswerType['value'] }} ({{ $examAnswerType['key'] }})</option>
                             @endforeach
@@ -197,13 +197,13 @@
                     <input type="text" name="answer" value="" required class="rounded w-full focus:border-primary-500 focus:ring-primary-400" />
                     <small>Please enter numerical eg:1(single choice) 2,3(multiple choice)</small>
                 </div>
-                <div class="w-full sm:w-6/12 px-1 mb-3">
+                <div data-js="question-parent-id-box" class="w-full sm:w-6/12 px-1 mb-3">
                     <div>Parent Question ID <span data-tippy-content="Enter the ID of question after which you want this question to show in exam. Leave empty for no connection with another question."><x-icons.info class="w-6 h-6" /></span></div>
-                    <input type="number" name="parent_id" value="" min="1" step="1" class="rounded w-full focus:border-primary-500 focus:ring-primary-400" />
+                    <input type="number" name="parent_id" value="" data-js="question-parent-id" min="1" step="1" class="rounded w-full focus:border-primary-500 focus:ring-primary-400" />
                 </div>
-                <div class="w-full sm:w-6/12 px-1 mb-3">
+                <div data-js="question-parent-order-box" class="w-full sm:w-6/12 px-1 mb-3">
                     <div>Parent Question Order No. <span data-tippy-content="If there are multiple child questions connected to one question, then this order number will decide in which sequence the child questions should show in exam."><x-icons.info class="w-6 h-6" /></span></div>
-                    <input type="number" name="parent_order" value="" min="1" step="1" class="rounded w-full focus:border-primary-500 focus:ring-primary-400" />
+                    <input type="number" name="parent_order" value="" data-js="question-parent-order" min="1" step="1" class="rounded w-full focus:border-primary-500 focus:ring-primary-400" />
                 </div>
                 <div class="w-full sm:w-6/12 px-1 mb-3">
                     <div>Positive Marks</div>
