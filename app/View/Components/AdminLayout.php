@@ -39,6 +39,20 @@ class AdminLayout extends Component
                 'show' => true,
             ],
             [
+                'route'=> 'exams.create',
+                'routes'=> ['exams.create'],
+                'icon'=> 'icons.fact-check',
+                'title'=> 'Create Exam',
+                'show'=> true,
+            ],
+            [
+                'route'=> 'exams.index',
+                'routes'=> ['exams.index'],
+                'icon'=> 'icons.fact-check',
+                'title'=> 'My Exams',
+                'show'=> true,
+            ],
+            [
                 'route' => 'users.index',
                 'routes' => ['users.index', 'users.create', 'users.edit'],
                 'icon' => 'icons.account-circle',

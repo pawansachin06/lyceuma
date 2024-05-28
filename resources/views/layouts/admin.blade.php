@@ -1,6 +1,7 @@
 @props([
     'aos' => 0,
     'exam' => 0,
+    'examsCreate' => 0,
     'swiper' => 0,
     'tippy' => 0,
     'tinymce' => 0,
@@ -154,6 +155,7 @@
         'popper' => !empty($tippy) ? '/js/lib/popper.min.js?v=2.11.8' : '',
         'tippy' => !empty($tippy) ? '/js/lib/tippy-bundle.umd.min.js?v=6.3.7' : '',
         'exam' => !empty($exam) ? '/js/exam.js?v='. $version : '',
+        'examsCreate' => !empty($examsCreate) ? '/js/exams.create.js?v='. $version : '',
         'mathjax-local' => !empty($mathjax) ? '/js/mathjax.js?v='. $version : '',
         'mathjax' => !empty($mathjax) ? 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js' : '',
         'global' => '/js/global.js?v='. $version,

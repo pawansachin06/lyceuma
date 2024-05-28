@@ -1,59 +1,22 @@
-<x-admin-layout sweetalert="1">
+<x-admin-layout sweetalert="1" tippy="1">
     <div class="lg:container px-3 py-3">
         <div class="mb-2 flex flex-wrap justify-between items-center">
             <div class="">
-                <h1 class="text-2xl font-sans font-semibold">Exams</h1>
+                <h1 class="text-2xl font-sans font-semibold">My Exams</h1>
             </div>
             <div class="">
                 <x-button href="{{ route('exams.create') }}">Add New Exam</x-button>
             </div>
         </div>
-        <form class="flex flex-wrap gap-2 mb-3">
-            @if( !empty($examCategories) )
-                <div class="w-auto">
-                    <select name="category_id" class="rounded py-1 focus:border-primary-500 focus:ring-primary-400">
-                        <option value="">All categories</option>
-                        @foreach($examCategories as $examCategory)
-                            <option value="{{ $examCategory->id }}" <?= $examCategory->id == $category_id ? 'selected' : '' ?>>{{ $examCategory->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
-
-            @if( !empty($examTypes) )
-                <div class="w-auto">
-                    <select name="type_id" class="rounded py-1 focus:border-primary-500 focus:ring-primary-400">
-                        <option value="">All types</option>
-                        @foreach($examTypes as $examType)
-                            <option value="{{ $examType->id }}" <?= $examType->id == $type_id ? 'selected' : '' ?>>{{ $examType->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
-
-            @if( !empty($examClasses) )
-                <div class="w-auto">
-                    <select name="class_id" class="rounded py-1 focus:border-primary-500 focus:ring-primary-400">
-                        <option value="">All classes</option>
-                        @foreach($examClasses as $examClass)
-                            <option value="{{ $examClass->id }}" <?= $examClass->id == $class_id ? 'selected' : '' ?>>{{ $examClass->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
-
-            <x-button type="submit" size="sm" class="px-4">Filter</x-button>
-        </form>
         @if( !empty($items) && count($items) )
             <div class="overflow-x-auto mb-3">
                 <table class="w-full bg-white">
                     <thead>
                         <tr class="border-solid border-b border-gray-200">
                             <th class="px-2 py-2">Name</th>
-                            <th class="px-2 py-2">Type</th>
-                            <th class="px-2 py-2">Category</th>
-                            <th class="px-2 py-2">Classes</th>
-                            <th class="px-2 py-2 text-center">Status</th>
+                            <th class="px-2 py-2">Course</th>
+                            <th class="px-2 py-2">Subjects</th>
+                            <!-- <th class="px-2 py-2 text-center">Status</th> -->
                             <th class="px-2 py-2">Action</th>
                         </tr>
                     </thead>
@@ -61,24 +24,21 @@
                         @foreach($items as $item)
                             <tr class="border border-b border-gray-100">
                                 <td class="px-2 py-2">{{ $item->name }}</td>
-                                <td class="px-2 py-2">{{ $item->type?->name }}</td>
-                                <td class="px-2 py-2">{{ $item->category?->name }}</td>
+                                <td class="px-2 py-2">{{ $item->course_name }}</td>
                                 <td class="px-2 py-2">
-                                    @if( !empty($item->classes) && is_iterable($item->classes) )
-                                        @foreach($item->classes as $item_class)
-                                            {{ !empty($item_class->name) ? $item_class->name . ($loop->last ? '' : ', ') : '' }}
-                                        @endforeach
+                                    @if( !empty($item->subjects) )
+                                        {{ implode(', ', $item->subjects) }}
                                     @endif
                                 </td>
-                                <td class="px-2 py-2 text-center">
+                                <!-- <td class="px-2 py-2 text-center">
                                     <x-status.icon :status="$item->status" />
-                                </td>
+                                </td> -->
                                 <td class="px-2 py-2">
                                     <div class="inline-flex flex items-center flex-wrap gap-1 justify-end">
-                                        <x-button href="{{ route('exams.edit', $item->id) }}" size="sm">Edit</x-button>
+                                        <x-button href="#!" size="sm">Attempt</x-button>
                                         <form action="{{ route('exams.destroy', $item->id) }}" method="post" data-js="app-delete-form">
                                             @method('DELETE')
-                                            <x-button type="submit" size="sm">Delete</x-button>
+                                            <x-button type="submit" variant="secondary" size="sm">Delete</x-button>
                                         </form>
                                     </div>
                                 </td>

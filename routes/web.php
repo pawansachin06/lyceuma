@@ -45,9 +45,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class, [
         'name' => 'users'
     ]);
-    Route::resource('exams', ExamController::class, [
-        'name' => 'exams'
-    ]);
     Route::resource('courses', CourseController::class, [
         'name' => 'courses'
     ]);
@@ -108,6 +105,14 @@ Route::middleware('auth')->group(function () {
         QuestionController::class, 'importUpload'
     ])->name('questions.import.upload');
 
+
+    Route::resource('exams', ExamController::class, [
+        'name' => 'exams'
+    ]);
+    // Route::get('/exams/create', [
+    //     ExamController::class, 'create'
+    // ])->name('exams.create');
+
     // Route::resource('questions', QuestionController::class, [
     //     'name'=> 'questions'
     // ]);
@@ -116,18 +121,18 @@ Route::middleware('auth')->group(function () {
     //     'name'=> 'question-tables',
     // ]);
 
-    Route::post('exams/questions/{exam}', [
-        ExamController::class, 'addQuestion'
-    ])->name('exams.add-question');
-    Route::get('exams/questions/{exam}/{id}', [
-        ExamController::class, 'editQuestion',
-    ])->name('exams.edit-question');
-    Route::put('exams/questions/{exam}/{id}', [
-        ExamController::class, 'updateQuestion',
-    ])->name('exams.update-question');
-    Route::delete('exams/questions/{exam}/{id}', [
-        ExamController::class, 'destroyQuestion',
-    ])->name('exams.destroy-question');
+    // Route::post('exams/questions/{exam}', [
+    //     ExamController::class, 'addQuestion'
+    // ])->name('exams.add-question');
+    // Route::get('exams/questions/{exam}/{id}', [
+    //     ExamController::class, 'editQuestion',
+    // ])->name('exams.edit-question');
+    // Route::put('exams/questions/{exam}/{id}', [
+    //     ExamController::class, 'updateQuestion',
+    // ])->name('exams.update-question');
+    // Route::delete('exams/questions/{exam}/{id}', [
+    //     ExamController::class, 'destroyQuestion',
+    // ])->name('exams.destroy-question');
 
 
     // backup
